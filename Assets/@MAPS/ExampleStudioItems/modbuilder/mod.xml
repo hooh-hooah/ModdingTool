@@ -1,0 +1,55 @@
+<packer type="studio">
+	<!-- This will be copied as manifest.xml -->
+	<guid>modbuilder.example.stditem</guid>
+	<name>MODBUILDER STUDIO ITEM EXAMPLE</name>
+	<version>1.0.0</version>
+	<author>hooh</author>
+	<description>This is house furniture pack.</description>
+
+	<!-- This section will contain bundle information -->
+	<bundles>
+		<!-- An assetbundle contains mesh objects. -->
+		<bundle path="hooh/furniture.unity3d">
+			<!-- generate fucking list. -->
+			<asset path="Painting_Large_A.prefab"/>
+			<asset path="Painting_Large_B.prefab"/>
+			<asset path="Painting_Large_C.prefab"/>
+			<asset path="Painting_Photo_A.prefab"/>
+			<asset path="Painting_Photo_B.prefab"/>
+			<asset path="Painting_Photo_C.prefab"/>
+			<asset path="Painting_Small_A.prefab"/>
+			<asset path="Painting_Small_B.prefab"/>
+			<asset path="Painting_Small_C.prefab"/>
+			<asset path="Painting_Stand_A.prefab"/>
+			<asset path="Painting_Stand_B.prefab"/>
+		</bundle>
+	</bundles>
+
+	<!-- This section will contain build information -->
+	<!-- Index is automatically generated. That means ORDER matters! -->
+	<build name="example_studiomod">
+		<!-- Big category name should contain some portion of guid name. Idk why but sideloader is designed like that don't point fingers at me. -->
+		<list type="bigcategory" path="abdata/studio/info/stditem/ItemGroup_stditem.csv">
+			<item id="1001" name="@Example"/>
+		</list>
+		<!-- List name should be ItemCategory_ID_BIGCATEGORYID or it will not work. in this case, bigcategory number is 1001 and category number is 10, so it's 10_1001-->
+		<list type="midcategory" path="abdata/studio/info/stditem/ItemCategory_10_1001.csv">
+			<item id="10" name="@Example Items"/>
+		</list>
+		<!-- List name should be ItemList_NUMBERS_MIDCATEGORY-->
+		<!-- So there items are in category 1001, and midcategory 10 so it's ANYNUMBER_1001_10 -->
+		<list type="studioitem" path="abdata/studio/info/stditem/ItemList_00_1001_10.csv">
+			<item big-category="1001" mid-category="10" name="@Example Item 00" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Large_A" />
+			<item big-category="1001" mid-category="10" name="@Example Item 01" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Large_B" />
+			<item big-category="1001" mid-category="10" name="@Example Item 02" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Large_C" />
+			<item big-category="1001" mid-category="10" name="@Example Item 03" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Photo_A" />
+			<item big-category="1001" mid-category="10" name="@Example Item 04" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Photo_B" />
+			<item big-category="1001" mid-category="10" name="@Example Item 05" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Photo_C" />
+			<item big-category="1001" mid-category="10" name="@Example Item 06" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Small_A" />
+			<item big-category="1001" mid-category="10" name="@Example Item 07" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Small_B" />
+			<item big-category="1001" mid-category="10" name="@Example Item 08" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Small_C" />
+			<item big-category="1001" mid-category="10" name="@Example Item 09" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Stand_A" />
+			<item big-category="1001" mid-category="10" name="@Example Item 10" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Stand_B" />
+		</list>
+	</build>
+</packer>

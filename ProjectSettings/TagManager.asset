@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - ObjSkinFace
+  - ObjEyebrow
+  - ObjEyeL
+  - ObjEyeR
+  - ObjEyeHi
+  - ObjNail
+  - ObjNip
+  - ObjUnderHair
+  - ObjSkinBody
+  - ObjHair
+  - ObjHairAcs
+  - ObjEyeW
+  - ObjEyelashes
+  - ObjColor
+  - SpriteTop
+  - ObjBeard
+  - BG2DCamera
+  - body
+  - Ground
+  - CoordinateCamera
+  - Camera3D
+  - raiseEffect
+  - PPaint
+  - projectile
+  - FxTemporaire
+  - senmenki
+  - Water
+  - Exploder
+  - explosion
+  - UseObject
+  - ground
+  - bath
+  - stand
+  - standfloor
+  - wall
+  - bed
+  - chair
+  - table
+  - stairs
+  - sofa
+  - FootStepSE_Sand
+  - FootStepSE_Soil
+  - FootStepSE_Grass
+  - FootStepSE_Rock
+  - FootStepSE_Metal
+  - FootStepSE_Wood
+  - FootStepSE_WoodFlooring
+  - FootStepSE_Wet
+  - FootStepSE_Water
+  - wasiki
+  - counter
+  - shower
+  - sofabed
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - PostProcessing
+  - 
+  - Chara
+  - Map
+  - MapNoShadow
+  - SEArea
+  - MapArea
+  - Fishing
+  - Minimap
+  - HArea
+  - 
+  - CameraCollision
+  - H_MetaBallA
+  - H_MetaBallB
+  - H_Camera
+  - ScreenCamera
+  - 
+  - Housing/Overlap
+  - Housing/Col
+  - 
+  - 
+  - 
+  - BackCardFrame
+  - Outline
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0

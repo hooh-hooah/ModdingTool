@@ -1,0 +1,82 @@
+// ***********************************************
+// 
+//   Automated Hair Material Replacer
+//   Author: hooh
+//   Contact: https://github.com/hooh-hooah 
+//   Support: https://www.patreon.com/hooh_hooah
+//   Special Help: enimaroah
+// 
+// ***********************************************
+
+// These texts will be replaced.
+meshPath = "@@PATH_MESH@@"
+texPath = "@@PATH_TEX@@"
+matPath = "@@PATH_MAT@@"
+
+LoadPlugin(PluginDirectory+"UnityPlugin.dll")
+
+// Open Unitypackages.
+meshParser = OpenUnity3d(path=meshPath)
+meshEditor = Unity3dEditor(parser=meshParser)
+meshEditor.GetAssetNames(filter=True)
+texParser = OpenUnity3d(path=texPath)
+texEditor = Unity3dEditor(parser=texParser)
+texEditor.GetAssetNames(filter=True)
+matParser = OpenUnity3d(path=matPath)
+matEditor = Unity3dEditor(parser=matParser)
+matEditor.GetAssetNames(filter=True)
+
+// Get and Initialize Animator and Animator Editor.
+compIdx = meshEditor.ComponentIndex(name="@@TARGET_OBJECT@@", clsIDname="Animator")
+texAnimator = AnimatorEditor(cabinet=texParser.Cabinet)
+matAnimator = AnimatorEditor(cabinet=matParser.Cabinet)
+meshAnimator = meshEditor.OpenAnimator(componentIndex=compIdx)
+meshAnimEditor = AnimatorEditor(parser=meshAnimator)
+texEditor.GetAssetNames(filter=True)
+
+// Transfer Materials
+meshEditor.BeginTransfer()
+	matIndex = matEditor.ComponentIndex(name="@@TARGET_MATERIAL@@", clsIDname="Material")
+	srcMat = matParser.Cabinet.Components[matIndex]
+	srcMat = matAnimator.AddMaterialToEditor(srcMat)
+	meshAnimEditor.MergeMaterial(mat=srcMat)
+	meshEditor.GetAssetNames(filter=True)
+meshEditor.EndTransfer()
+
+// Assign Material to HairObject.
+meshEditor.GetAssetNames(filter=True)
+copyMatCompIndex = meshEditor.ComponentIndex(name="@@TARGET_MATERIAL@@", clsIDname="Material")
+meshAnimEditor.AddMaterialToEditor(meshEditor.Parser.Cabinet.Components[copyMatCompIndex])
+meshEditor.GetAssetNames(filter=True)
+copyMatIndex = meshAnimEditor.GetMaterialId("@@TARGET_MATERIAL@@")
+meshAnimEditor.SetSubMeshMaterial(meshId=0, subMeshId=0, material=copyMatIndex)
+meshEditor.GetAssetNames(filter=True)
+
+// Refer Textures to material.
+normalCompIndex = texEditor.ComponentIndex(name="@@TEX_NORMAL@@", clsIDname="Texture2D")
+normalSourceTex = texParser.Cabinet.Components[normalCompIndex]
+normalAddTex = meshAnimEditor.AddTextureToEditor(normalSourceTex)
+colorMaskCompIndex = texEditor.ComponentIndex(name="@@TEX_COLORMASK@@", clsIDname="Texture2D")
+colorMaskSourceTex = texParser.Cabinet.Components[colorMaskCompIndex]
+colorMaskAddTex = meshAnimEditor.AddTextureToEditor(colorMaskSourceTex)
+noiseCompIndex = texEditor.ComponentIndex(name="@@TEX_NOISE@@", clsIDname="Texture2D")
+noiseSourceTex = texParser.Cabinet.Components[noiseCompIndex]
+noiseAddTex = meshAnimEditor.AddTextureToEditor(noiseSourceTex)
+diffuseCompIndex = texEditor.ComponentIndex(name="@@TEX_DIFFUSE@@", clsIDname="Texture2D")
+diffuseSourceTex = texParser.Cabinet.Components[diffuseCompIndex]
+diffuseAddTex = meshAnimEditor.AddTextureToEditor(diffuseSourceTex)
+aoCompIndex = texEditor.ComponentIndex(name="@@TEX_OCCLUSION@@", clsIDname="Texture2D")
+aoSourceTex = texParser.Cabinet.Components[aoCompIndex]
+aoAddTex = meshAnimEditor.AddTextureToEditor(aoSourceTex)
+
+texAnimator.InitLists()
+meshAnimEditor.SetMaterialTexture(id=copyMatIndex, index=0, editor=texEditor, texIndex=texAnimator.GetTextureId("@@TEX_NORMAL@@"))
+meshAnimEditor.SetMaterialTexture(id=copyMatIndex, index=1, editor=texEditor, texIndex=texAnimator.GetTextureId("@@TEX_COLORMASK@@"))
+meshAnimEditor.SetMaterialTexture(id=copyMatIndex, index=2, editor=texEditor, texIndex=texAnimator.GetTextureId("@@TEX_NOISE@@"))
+meshAnimEditor.SetMaterialTexture(id=copyMatIndex, index=3, editor=texEditor, texIndex=texAnimator.GetTextureId("@@TEX_DIFFUSE@@"))
+meshAnimEditor.SetMaterialTexture(id=copyMatIndex, index=4, editor=texEditor, texIndex=texAnimator.GetTextureId("@@TEX_OCCLUSION@@"))
+meshAnimEditor.SetMaterialValue(id=copyMatIndex, name="_DetailScale", value=@@DETAIL_STRENGTH@@)
+
+// Save files.
+meshEditor.SaveUnity3d(keepBackup=False, backupExtension=".unit-y3d", background=False, clearMainAsset=True, pathIDsMode=-1)
+meshEditor.GetAssetNames(filter=True)

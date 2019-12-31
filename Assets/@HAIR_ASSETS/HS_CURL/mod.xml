@@ -1,0 +1,58 @@
+<packer type="hair">
+	<!-- This will be copied as manifest.xml -->
+	<guid>com.hooh.hssetcurl</guid>
+	<name>HS Set Hair - Curly</name>
+	<version>1.0.0</version>
+	<author>hooh</author>
+	<description>Another hooh hair pack: automated.</description>
+
+	<!-- This section will contain bundle information -->
+	<bundles>
+		<!-- An assetbundle contains mesh objects. -->
+		<bundle path="example/hair_mesh.unity3d">
+			<asset path="hairobject.prefab"/>
+			<asset path="tempmat.mat"/>
+		</bundle>
+		<!-- An assetbundle contains textures. -->
+		<bundle path="example/hair_tex.unity3d">
+			<asset path="ao.png"/>
+			<asset path="colormask.psd"/>
+			<asset path="diffuse.psd"/>
+			<asset path="noise.png"/>
+			<asset path="normal.png"/>
+		</bundle>
+		<!-- An assetbudnle contains thumbnail. -->
+		<bundle path="example/hair_thumb.unity3d">
+			<asset path="thumb_image.psd"/>
+		</bundle>
+	</bundles>
+
+	<matswap>
+		<!-- mat-bundle WILL ONLY reference from PROJECT/_AIResources. -->
+		<!-- Each target only can swap one materials. don't look at me, it's SB3 Script mode's structural limit. -->
+		<target 
+			mesh-bundle="example/hair_mesh.unity3d" mesh-object="hairobject"
+			tex-bundle="example/hair_tex.unity3d" mat-bundle="ext_hairmaterial.unity3d" mat-name="hairmat"
+		>
+			<texture slot="asset-ao" tex-name="ao"/>
+			<texture slot="asset-colormask" tex-name="colormask"/>
+			<texture slot="asset-diffuse" tex-name="diffuse"/>
+			<texture slot="asset-noise" tex-name="noise"/>
+			<texture slot="asset-normal" tex-name="normal"/>
+			<matvalue slot="mat-detail" value="0.4"/>
+		</target>
+	</matswap>
+
+	<!-- This section will contain build information -->
+	<build name="@example_hair">
+		<list type="hairback">
+			<item
+				kind="2" possess="1" name="@@EXAMPLE_HAIR" en_us="" 
+				mesh-manifest="abdata" mesh-bundle="example/hair_mesh.unity3d" mesh-a="hairobject" mesh-b="0"
+				weights="0" ringoff="0"
+				tex-manifest="abdata" tex-bundle="example/hair_tex.unity3d" tex-a="diffuse" tex-b="diffuse"
+				thumb-bundle="example/hair_thumb.unity3d" thumb="thumb_image"
+			/>
+		</list>
+	</build>
+</packer>
