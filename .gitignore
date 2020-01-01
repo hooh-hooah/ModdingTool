@@ -13,8 +13,10 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Mm]emoryCaptures/
+/_[Dd]eploy/*
 /_[Tt]emporary/*
 /_[Bb]undleCache/abdata/*
+!/_[Bb]undleCache/abdata/README.md
 
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
