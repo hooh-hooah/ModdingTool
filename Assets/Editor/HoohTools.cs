@@ -48,13 +48,13 @@ public class HoohTools : EditorWindow {
         {
             // help
             var titleStyle = new GUIStyle();
-                titleStyle.fontSize = 15;
-                titleStyle.margin = new RectOffset(10, 10, 0, 10);
+            titleStyle.fontSize = 15;
+            titleStyle.margin = new RectOffset(10, 10, 0, 10);
 
             DrawUILine(new Color(0, 0, 0));
             GUILayout.Label("Element Generator", titleStyle);
 
-            EditorPrefs.SetInt("hoohTool_category", int.Parse(EditorGUILayout.TextField("Big Category Number: ", category.ToString()))); 
+            EditorPrefs.SetInt("hoohTool_category", int.Parse(EditorGUILayout.TextField("Big Category Number: ", category.ToString())));
             EditorPrefs.SetInt("hoohTool_categorysmall", int.Parse(EditorGUILayout.TextField("Mid Category Number: ", categorySmall.ToString())));
             EditorPrefs.SetString("hoohTool_sideloadString", EditorGUILayout.TextField("Game Assetbundle Path: ", sideloaderString));
             EditorPrefs.SetString("hoohTool_manifest", EditorGUILayout.TextField("Manifest(?): ", manifest));
@@ -75,7 +75,7 @@ public class HoohTools : EditorWindow {
             GUILayout.Label("Quick Unity Macros", titleStyle);
 
             gap = EditorGUILayout.IntField("Showcase Gap: ", gap);
-            cols =  EditorGUILayout.IntField("Showcase Columns: ", cols);
+            cols = EditorGUILayout.IntField("Showcase Columns: ", cols);
             if (GUILayout.Button("Showcase Mode")) {
                 if (Selection.objects.Length <= 0)
                     EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
@@ -135,8 +135,8 @@ public class HoohTools : EditorWindow {
                     FindAssist findAssist = new FindAssist();
                     findAssist.Initialize(hairComponent.transform);
                     hairComponent.rendHair = (from x in hairComponent.GetComponentsInChildren<Renderer>(true)
-                                     where !x.name.Contains("_acs")
-                                     select x).ToArray<Renderer>();
+                                              where !x.name.Contains("_acs")
+                                              select x).ToArray<Renderer>();
                     DynamicBone[] components = hairComponent.GetComponents<DynamicBone>();
                     KeyValuePair<string, GameObject> keyValuePair = findAssist.dictObjName.FirstOrDefault((KeyValuePair<string, GameObject> x) => x.Key.Contains("_top"));
                     if (keyValuePair.Equals(default(KeyValuePair<string, GameObject>))) {
@@ -186,11 +186,11 @@ public class HoohTools : EditorWindow {
                     findAssist = new FindAssist();
                     findAssist.Initialize(hairComponent.transform);
                     hairComponent.rendAccessory = (from s in findAssist.dictObjName
-                                          where s.Key.Contains("_acs")
-                                          select s into x
-                                          select x.Value.GetComponent<Renderer>() into r
-                                          where null != r
-                                          select r).ToArray<Renderer>();
+                                                   where s.Key.Contains("_acs")
+                                                   select s into x
+                                                   select x.Value.GetComponent<Renderer>() into r
+                                                   where null != r
+                                                   select r).ToArray<Renderer>();
 
 
                     Renderer[] renderers = hairObject.GetComponentsInChildren<Renderer>();
@@ -246,11 +246,11 @@ public class HoohTools : EditorWindow {
                     clotheComponent.objBotDef = findAssist.GetObjectFromName("n_bot_a");
                     clotheComponent.objBotHalf = findAssist.GetObjectFromName("n_bot_b");
                     clotheComponent.objOpt01 = (from x in findAssist.dictObjName
-                                     where x.Key.StartsWith("op1")
-                                     select x.Value).ToArray<GameObject>();
+                                                where x.Key.StartsWith("op1")
+                                                select x.Value).ToArray<GameObject>();
                     clotheComponent.objOpt02 = (from x in findAssist.dictObjName
-                                     where x.Key.StartsWith("op2")
-                                     select x.Value).ToArray<GameObject>();
+                                                where x.Key.StartsWith("op2")
+                                                select x.Value).ToArray<GameObject>();
 
                     Renderer[] renderers = clotheObject.GetComponentsInChildren<Renderer>();
                     clotheComponent.rendCheckVisible = new Renderer[renderers.Length];
@@ -260,6 +260,37 @@ public class HoohTools : EditorWindow {
                         clotheComponent.useColorN01 = true;
                         clotheComponent.rendCheckVisible[i] = renderers[i];
                         clotheComponent.rendNormal01[i] = renderers[i];
+                    }
+                }
+            }
+
+            if (GUILayout.Button("Make Studio Item Colorable")) {
+                GameObject studioItemObject = (GameObject)Selection.activeObject;
+                studioItemObject.layer = 10;
+
+                if (studioItemObject != null) {
+                    Studio.ItemComponent itemComponent = studioItemObject.GetComponent<Studio.ItemComponent>();
+                    if (itemComponent == null)
+                        itemComponent = studioItemObject.AddComponent<Studio.ItemComponent>();
+
+                    Renderer[] renderers = studioItemObject.GetComponentsInChildren<Renderer>();
+                    itemComponent.rendererInfos = new Studio.ItemComponent.RendererInfo[renderers.Length];
+                    for (int i = 0; i < renderers.Length; i++) {
+                        Renderer renderer = renderers[i];
+                        renderer.gameObject.layer = 10;
+                        itemComponent.rendererInfos[i] = new Studio.ItemComponent.RendererInfo();
+                        itemComponent.rendererInfos[i].renderer = renderer;
+                        itemComponent.rendererInfos[i].materials = new Studio.ItemComponent.MaterialInfo[renderer.sharedMaterials.Length];
+                        Studio.ItemComponent.MaterialInfo[] materials = itemComponent.rendererInfos[i].materials;
+                        for (int k = 0; k < renderer.sharedMaterials.Length; k++) {
+                            itemComponent.rendererInfos[i].materials[k] = new Studio.ItemComponent.MaterialInfo();
+                            itemComponent.rendererInfos[i].materials[k].isColor1 = true;
+                        }
+                    }
+                    itemComponent.info = new Studio.ItemComponent.Info[3];
+                    for (int i = 0; i < 3; i++) {
+                        itemComponent.info[i] = new Studio.ItemComponent.Info();
+                        itemComponent.info[i].defColor = Color.white;
                     }
                 }
             }
@@ -406,7 +437,7 @@ public class HoohTools : EditorWindow {
     public static void ShowcaseMode() {
         for (int i = 0; i < Selection.objects.Length; i++) {
             GameObject currentObject = (GameObject)Selection.objects[i];
-            int curRow = (int) Mathf.Floor(i / cols);
+            int curRow = (int)Mathf.Floor(i / cols);
             int curCol = i % cols;
 
             if (currentObject != null) {
