@@ -52,7 +52,7 @@ public class HoohTools : EditorWindow {
                 titleStyle.margin = new RectOffset(10, 10, 0, 10);
 
             DrawUILine(new Color(0, 0, 0));
-            GUILayout.Label("CSV Generator", titleStyle);
+            GUILayout.Label("Element Generator", titleStyle);
 
             EditorPrefs.SetInt("hoohTool_category", int.Parse(EditorGUILayout.TextField("Big Category Number: ", category.ToString()))); 
             EditorPrefs.SetInt("hoohTool_categorysmall", int.Parse(EditorGUILayout.TextField("Mid Category Number: ", categorySmall.ToString())));
