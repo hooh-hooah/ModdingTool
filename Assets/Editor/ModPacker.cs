@@ -10,7 +10,7 @@ using UnityEditor;
 using Debug = UnityEngine.Debug;
 
 public class ModPacker {
-    public static string SB3UtilityPath = Path.Combine(Directory.GetCurrentDirectory(), "External\\sb3\\SB3UtilityScript");
+    public static string SB3UtilityPath = Path.Combine(Directory.GetCurrentDirectory(), "External\\sb3\\SB3UtilityScript").Replace("\\", "/");
 
     public static void Announce(bool isSuccess = true, string message = "Please check the console the see error.") {
         if (isSuccess)
@@ -46,8 +46,8 @@ public class ModPacker {
     }
 
     public static void PackMod(string exportGamePath, string mode) {
-        string currentDirectory = Path.Combine(Directory.GetCurrentDirectory(), GetProjectPath().Replace("/", "\\"));
-        string assetPackageInfo = Path.Combine(currentDirectory, "mod.xml");
+        string assetPackageInfo = Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), GetProjectPath()), "mod.xml").Replace("\\", "/");
+
         // TODO: get target output shits?
         Debug.Log(assetPackageInfo);
         XDocument parsedModInfo = ParseModXML(assetPackageInfo);
@@ -81,10 +81,10 @@ public class ModPacker {
     }
 
     public class ModPackInfo {
-        public static string bundleCacheName = "_BundleCache\\abdata";
-        public static string bundleCachePath = Path.Combine(Directory.GetCurrentDirectory(), bundleCacheName);
-        public static string aiBundlePath = Path.Combine(Directory.GetCurrentDirectory(), "_AIResources");
-        public static string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "_Temporary");
+        public static string bundleCacheName = "_BundleCache/abdata";
+        public static string bundleCachePath = Path.Combine(Directory.GetCurrentDirectory(), bundleCacheName).Replace("\\", "/");
+        public static string aiBundlePath = Path.Combine(Directory.GetCurrentDirectory(), "_AIResources").Replace("\\", "/");
+        public static string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "_Temporary").Replace("\\", "/");
         public CSVBuilder[] csvBuilders;
         private string[] assetBundleNames = null;
         private string[][] assetNames = null;
@@ -103,7 +103,7 @@ public class ModPacker {
         private Dictionary<string, string> modFolderInfo = new Dictionary<string, string>();
 
         public void SetupModFolder() {
-            string zipPath = Path.Combine(tempFolder, modFolderInfo["modname"]);
+            string zipPath = Path.Combine(tempFolder, modFolderInfo["modname"]).Replace("\\", "/");
             try {
                 DirectoryInfo info = new DirectoryInfo(zipPath);
                 foreach (var subDirectory in info.GetDirectories())
@@ -123,17 +123,17 @@ public class ModPacker {
             manifestText += string.Format("\t<author>{0}</author>\n", modFolderInfo["author"]);
             manifestText += string.Format("\t<description>{0}</description>\n", modFolderInfo["description"]);
             manifestText += "</manifest>";
-            File.WriteAllText(Path.Combine(zipPath, "manifest.xml"), manifestText);
+            File.WriteAllText(Path.Combine(zipPath, "manifest.xml").Replace("\\", "/"), manifestText);
 
             // Copy shits from folder.
             for (int i = 0; i < assetBundleNames.Length; i++) {
-                string source = Path.Combine(bundleCachePath, assetBundleNames[i]);
-                string dest = Path.Combine(zipPath, "abdata\\" + assetBundleNames[i]);
+                string source = Path.Combine(bundleCachePath, assetBundleNames[i]).Replace("\\", "/");
+                string dest = Path.Combine(zipPath, "abdata\\" + assetBundleNames[i]).Replace("\\", "/");
 
                 Directory.CreateDirectory(Path.Combine(
                     zipPath,
                     Path.GetDirectoryName("abdata\\" + assetBundleNames[i])
-                ));
+                ).Replace("\\", "/"));
                 File.Copy(source, dest);
             }
 
@@ -141,9 +141,9 @@ public class ModPacker {
                 string path = "";
                 if (builder.valid) {
                     if (builder.listPath != null)
-                        path = Path.Combine(zipPath, builder.listPath);
+                        path = Path.Combine(zipPath, builder.listPath).Replace("\\", "/");
                     else
-                        path = Path.Combine(zipPath, builder.typeInfo.listPath);
+                        path = Path.Combine(zipPath, builder.typeInfo.listPath).Replace("\\", "/");
                 } else
                     continue;
 
@@ -153,11 +153,11 @@ public class ModPacker {
         }
 
         public void DeployZipMod(string targetpath) {
-            string zipPath = Path.Combine(tempFolder, modFolderInfo["modname"]);
+            string zipPath = Path.Combine(tempFolder, modFolderInfo["modname"]).Replace("\\", "/");
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.FileName = "C:\\Program Files\\Bandizip\\Bandizip.exe";
-            p.StartInfo.Arguments = string.Format("c -y \"{0}\" \"{1}\"", Path.Combine(targetpath, modFolderInfo["modname"] + ".zipmod"), zipPath);
+            p.StartInfo.Arguments = string.Format("c -y \"{0}\" \"{1}\"", Path.Combine(targetpath, modFolderInfo["modname"] + ".zipmod").Replace("\\", "/"), zipPath);
             p.Start();
             p.WaitForExit();
         }
@@ -192,7 +192,7 @@ public class ModPacker {
 
                         string[] assetArray = new string[assets.Count()];
                         foreach (var asset in assets) {
-                            assetArray[assetIndex] = Path.Combine(currentDirectory, asset.Attribute("path").Value);
+                            assetArray[assetIndex] = Path.Combine(currentDirectory, asset.Attribute("path").Value).Replace("\\", "/");
                             assetIndex++;
                         }
 
@@ -212,9 +212,9 @@ public class ModPacker {
                     foreach (var target in swapTargets) {
                         matswapTargets[index] = new Dictionary<string, string>();
 
-                        matswapTargets[index].Add("mesh-bundle", Path.Combine(bundleCachePath, target.Attribute("mesh-bundle").Value));
-                        matswapTargets[index].Add("tex-bundle", Path.Combine(bundleCachePath, target.Attribute("tex-bundle").Value));
-                        matswapTargets[index].Add("mat-bundle", Path.Combine(aiBundlePath, target.Attribute("mat-bundle").Value));
+                        matswapTargets[index].Add("mesh-bundle", Path.Combine(bundleCachePath, target.Attribute("mesh-bundle").Value).Replace("\\", "/"));
+                        matswapTargets[index].Add("tex-bundle", Path.Combine(bundleCachePath, target.Attribute("tex-bundle").Value).Replace("\\", "/"));
+                        matswapTargets[index].Add("mat-bundle", Path.Combine(aiBundlePath, target.Attribute("mat-bundle").Value).Replace("\\", "/"));
                         matswapTargets[index].Add("mesh-object", target.Attribute("mesh-object").Value);
                         matswapTargets[index].Add("mat-name", target.Attribute("mat-name").Value);
 
@@ -266,16 +266,16 @@ public class ModPacker {
 
     // This shit build script for SB3Utility.
     private class ScriptBuilder {
-        private static string scriptTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "_SBTemplates");
-        private static string runnerPath = Path.Combine(Directory.GetCurrentDirectory(), "_External\\sb3\\SB3UtilityScript.exe");
-        private static string temporaryScriptPath = Path.Combine(Directory.GetCurrentDirectory(), "_Temporary\\__temp__.txt");
+        private static string scriptTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "_SBTemplates").Replace("\\", "/");
+        private static string runnerPath = Path.Combine(Directory.GetCurrentDirectory(), "_External\\sb3\\SB3UtilityScript.exe").Replace("\\", "/");
+        private static string temporaryScriptPath = Path.Combine(Directory.GetCurrentDirectory(), "_Temporary\\__temp__.txt").Replace("\\", "/");
         public string buffer = "";
 
         public ScriptBuilder() {
         }
 
         public void SetupHairSwapScript(Dictionary<string, string> matswapInfo) {
-            string templateString = File.ReadAllText(Path.Combine(scriptTemplatePath, "__material_swap.txt"));
+            string templateString = File.ReadAllText(Path.Combine(scriptTemplatePath, "__material_swap.txt").Replace("\\", "/"));
 
             // Okay fuck nugget, I'll solve this issue later, so can you fuck off?
             templateString = templateString.Replace("@@PATH_MESH@@", Path.Combine(ModPackInfo.bundleCachePath, matswapInfo["mesh-bundle"].Replace("/", "\\")));
