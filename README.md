@@ -64,9 +64,15 @@ This is automatically applied to all fbx files that meets certain criteria:
 
 ### Mod Building Error
 
+#### System.IO.FileNotFoundException
+
+Check if your assetbundle path contains uppercase. Unity Editor AssetBundle Creator seems don't like any uppercase in assetbundle path.
+
 #### DirectoryNotFoundException: Could not find a part of...
 
-This error mostly occurs when your assetbundle is not valid.
+This error mostly occurs when your assetbundle is not valid. 
+
+Check if you included all the files correctly in assetbundle.
 
 #### Cannot find index of *
 
