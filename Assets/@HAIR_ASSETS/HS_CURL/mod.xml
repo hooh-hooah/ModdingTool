@@ -46,12 +46,17 @@
 	<!-- This section will contain build information -->
 	<build name="@example_hair">
 		<list type="hairback">
+			<!--
+				New update - 2020-01-07 - 0.1.0
+				Now you can skip specific keys. like en_us and all kinds of manifest.
+				Now you don't have to specify bundle if asset is declared in this asset.
+				Automatic assignment only works if target bundle has unique name.
+				if you have to reference other bundle, you can just add replace last dash part to bundle
+				ex) mesh-a => mesh-bundle, tex-a => tex-bundle    
+			-->
 			<item
-				kind="2" possess="1" name="@@EXAMPLE_HAIR" en_us="" 
-				mesh-manifest="abdata" mesh-bundle="example/hair_mesh.unity3d" mesh-a="hairobject" mesh-b="0"
-				weights="0" ringoff="0"
-				tex-manifest="abdata" tex-bundle="example/hair_tex.unity3d" tex-a="diffuse" tex-b="diffuse"
-				thumb-bundle="example/hair_thumb.unity3d" thumb="thumb_image"
+				kind="2" possess="1" name="@@EXAMPLE_HAIR" mesh-a="hairobject" mesh-b="0"
+				weights="0" ringoff="0" tex-a="diffuse" tex-b="diffuse" thumb="thumb_image"
 			/>
 		</list>
 	</build>
