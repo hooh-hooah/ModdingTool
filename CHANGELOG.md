@@ -4,6 +4,7 @@
 
 ### 2019-01-07
 
+- Now you can build mod with ONE button.
 - Changed CSVBuilder Structure: Now it's using key-based delegates instead of category based delegates. 
 - Changed FBXAssetProcessor: Added few name targets. 
 - Enhanced Hair Component Initialization Tool.
