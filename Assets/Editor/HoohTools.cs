@@ -17,6 +17,13 @@ public class HoohTools : EditorWindow {
     public static int gap = 10;
     public static int cols = 10;
 
+    bool foldoutElement = true;
+    bool foldoutMacros = true;
+    bool foldoutProbeset = true;
+    bool foldoutScaffolding = true;
+    bool foldoutMod = true;
+    bool foldoutBundler = true;
+
     public void OnEnable() {
         category = EditorPrefs.GetInt("hoohTool_category"); // this is mine tho
         sideloaderString = EditorPrefs.GetString("hoohTool_sideloadString");
@@ -39,13 +46,14 @@ public class HoohTools : EditorWindow {
 
     private void OnGUI() {
         if (GUILayout.Button("Check Updates")) {
-            Application.OpenURL("https://github.com/hooh-hooah/AI_ModTools/releases");
+            Application.OpenURL("https://github.com/hooh-hooah/ModdingTool/tree/release/");
         }
 
         if (GUILayout.Button("How to make mods for AI?")) {
             Application.OpenURL("https://github.com/hooh-hooah/AI_Tips");
         }
 
+        DrawUILine(new Color(0, 0, 0));
         EditorGUILayout.BeginVertical();
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(0), GUILayout.Height(0));
         {
@@ -54,105 +62,112 @@ public class HoohTools : EditorWindow {
             titleStyle.fontSize = 15;
             titleStyle.margin = new RectOffset(10, 10, 0, 10);
 
-            DrawUILine(new Color(0, 0, 0));
-            GUILayout.Label("Element Generator", titleStyle);
+            var foldoutStyle = new GUIStyle(EditorStyles.foldout);
+            foldoutStyle.fontSize = 15;
+            foldoutStyle.margin = new RectOffset(10, 10, 0, 10);
 
-            EditorPrefs.SetInt("hoohTool_category", int.Parse(EditorGUILayout.TextField("Big Category Number: ", category.ToString())));
-            EditorPrefs.SetInt("hoohTool_categorysmall", int.Parse(EditorGUILayout.TextField("Mid Category Number: ", categorySmall.ToString())));
-            EditorPrefs.SetString("hoohTool_sideloadString", EditorGUILayout.TextField("Game Assetbundle Path: ", sideloaderString));
-            EditorPrefs.SetString("hoohTool_manifest", EditorGUILayout.TextField("Manifest(?): ", manifest));
+            foldoutElement = EditorGUILayout.Foldout(foldoutElement, "Element Generator", true, foldoutStyle);
+            if (foldoutElement) {
+                EditorPrefs.SetInt("hoohTool_category", int.Parse(EditorGUILayout.TextField("Big Category Number: ", category.ToString())));
+                EditorPrefs.SetInt("hoohTool_categorysmall", int.Parse(EditorGUILayout.TextField("Mid Category Number: ", categorySmall.ToString())));
+                EditorPrefs.SetString("hoohTool_sideloadString", EditorGUILayout.TextField("Game Assetbundle Path: ", sideloaderString));
+                EditorPrefs.SetString("hoohTool_manifest", EditorGUILayout.TextField("Manifest(?): ", manifest));
 
-            category = EditorPrefs.GetInt("hoohTool_category"); // this is mine tho
-            sideloaderString = EditorPrefs.GetString("hoohTool_sideloadString");
-            categorySmall = EditorPrefs.GetInt("hoohTool_categorysmall"); // this is mine tho
-            manifest = EditorPrefs.GetString("hoohTool_manifest");
+                category = EditorPrefs.GetInt("hoohTool_category"); // this is mine tho
+                sideloaderString = EditorPrefs.GetString("hoohTool_sideloadString");
+                categorySmall = EditorPrefs.GetInt("hoohTool_categorysmall"); // this is mine tho
+                manifest = EditorPrefs.GetString("hoohTool_manifest");
 
-            if (GUILayout.Button("Generate Item List")) {
-                if (Selection.objects.Length <= 0)
-                    EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
-                else
-                    GenerateCSV();
+                if (GUILayout.Button("Generate Item List")) {
+                    if (Selection.objects.Length <= 0)
+                        EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
+                    else
+                        GenerateCSV();
+                }
             }
 
-            DrawUILine(new Color(0, 0, 0));
-            GUILayout.Label("Quick Unity Macros", titleStyle);
+            foldoutMacros = EditorGUILayout.Foldout(foldoutMacros, "Quick Unity Macros", true, foldoutStyle);
+            if (foldoutMacros) {
+                gap = EditorGUILayout.IntField("Showcase Gap: ", gap);
+                cols = EditorGUILayout.IntField("Showcase Columns: ", cols);
+                if (GUILayout.Button("Showcase Mode")) {
+                    if (Selection.objects.Length <= 0)
+                        EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
+                    else
+                        ShowcaseMode();
+                }
 
-            gap = EditorGUILayout.IntField("Showcase Gap: ", gap);
-            cols = EditorGUILayout.IntField("Showcase Columns: ", cols);
-            if (GUILayout.Button("Showcase Mode")) {
-                if (Selection.objects.Length <= 0)
-                    EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
-                else
-                    ShowcaseMode();
+                if (GUILayout.Button("Randomize Rotation")) {
+                    if (Selection.objects.Length <= 0)
+                        EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
+                    else
+                        RandomizeRotation();
+                }
+
+                if (GUILayout.Button("Wrap Object with new GameObject and Scale")) {
+                    if (Selection.objects.Length <= 0)
+                        EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
+                    else
+                        WrapObjectScale();
+                }
+
+                if (GUILayout.Button("Wrap Object with new GameObject")) {
+                    if (Selection.objects.Length <= 0)
+                        EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
+                    else
+                        WrapObject();
+                }
+                if (GUILayout.Button("Create Prefab from Selected Objects")) {
+                    if (Selection.objects.Length <= 0)
+                        EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
+                    else
+                        CreatePrefab();
+                }
+
+                lightScaleSize = EditorGUILayout.FloatField("Light Scale Size: ", lightScaleSize);
+                if (GUILayout.Button("Scale Lights and Probes")) {
+                    if (Selection.objects.Length <= 0)
+                        EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
+                    else
+                        ScaleLightsAndProbes();
+                }
             }
 
-            if (GUILayout.Button("Randomize Rotation")) {
-                if (Selection.objects.Length <= 0)
-                    EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
-                else
-                    RandomizeRotation();
+            foldoutScaffolding = EditorGUILayout.Foldout(foldoutScaffolding, "Mod Scaffolding", true, foldoutStyle);
+            if (foldoutScaffolding) {
+                if (GUILayout.Button("Initialize Hair")) {
+                    AIObjectHelper.InitializeHair((GameObject)Selection.activeObject);
+                }
+
+                if (GUILayout.Button("Initialize Accessory")) {
+                    AIObjectHelper.InitializeAccessory((GameObject)Selection.activeObject);
+                }
+
+                if (GUILayout.Button("Initialize Clothes")) {
+                    AIObjectHelper.InitializeClothes((GameObject)Selection.activeObject);
+                }
+
+                if (GUILayout.Button("Initialize Studio Item (If it has more info)")) {
+                    AIObjectHelper.InitializeItem((GameObject)Selection.activeObject);
+                }
             }
 
-            if (GUILayout.Button("Wrap Object with new GameObject and Scale")) {
-                if (Selection.objects.Length <= 0)
-                    EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
-                else
-                    WrapObjectScale();
+            foldoutMod = EditorGUILayout.Foldout(foldoutMod, "Build Mod", true, foldoutStyle);
+            if (foldoutMod) {
+                EditorPrefs.SetString("hoohTool_exportPath", EditorGUILayout.TextField("Zipmod Destination: ", gameExportPath));
+                gameExportPath = EditorPrefs.GetString("hoohTool_exportPath");
+
+                if (GUILayout.Button("Build Mod")) {
+                    ModPacker.PackMod(gameExportPath);
+                }
             }
 
-            if (GUILayout.Button("Wrap Object with new GameObject")) {
-                if (Selection.objects.Length <= 0)
-                    EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
-                else
-                    WrapObject();
-            }
-            if (GUILayout.Button("Create Prefab from Selected Objects")) {
-                if (Selection.objects.Length <= 0)
-                    EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
-                else
-                    CreatePrefab();
-            }
 
-            lightScaleSize = EditorGUILayout.FloatField("Light Scale Size: ", lightScaleSize);
-            if (GUILayout.Button("Scale Lights and Probes")) {
-                if (Selection.objects.Length <= 0)
-                    EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
-                else
-                    ScaleLightsAndProbes();
-            }
-
-            DrawUILine(new Color(0, 0, 0));
-            GUILayout.Label("Mod Scaffolding", titleStyle);
-
-            if (GUILayout.Button("Initialize Hair")) {
-                AIObjectHelper.InitializeHair((GameObject)Selection.activeObject);
-            }
-
-            if (GUILayout.Button("Initialize Accessory")) {
-                AIObjectHelper.InitializeAccessory((GameObject)Selection.activeObject);
-            }
-
-            if (GUILayout.Button("Initialize Clothes")) {
-                AIObjectHelper.InitializeClothes((GameObject)Selection.activeObject);
-            }
-
-            if (GUILayout.Button("Initialize Studio Item (If it has more info)")) {
-                AIObjectHelper.InitializeItem((GameObject)Selection.activeObject);
-            }
-
-            DrawUILine(new Color(0, 0, 0));
-            GUILayout.Label("Build Mod", titleStyle);
-            EditorPrefs.SetString("hoohTool_exportPath", EditorGUILayout.TextField("Zipmod Destination: ", gameExportPath));
-            gameExportPath = EditorPrefs.GetString("hoohTool_exportPath");
-
-            if (GUILayout.Button("Build Mod")) {
-                ModPacker.PackMod(gameExportPath);
-            }
-
-            DrawUILine(new Color(0, 0, 0));
-            GUILayout.Label("Assetbundle Builder", titleStyle);
-            if (GUILayout.Button("Build All Assetbundles")) {
-                BuildAllAssetBundles();
+            foldoutBundler = EditorGUILayout.Foldout(foldoutBundler, "Assetbundle Builder", true, foldoutStyle);
+            if (foldoutBundler) {
+                if (GUILayout.Button("Build All Assetbundles")) {
+                    BuildAllAssetBundles();
+                }
             }
         }
         EditorGUILayout.EndScrollView();
