@@ -13,10 +13,21 @@ public class ModPacker {
     public static string SB3UtilityPath = Path.Combine(Directory.GetCurrentDirectory(), "External\\sb3\\SB3UtilityScript").Replace("\\", "/");
 
     public static void Announce(bool isSuccess = true, string message = "Please check the console the see error.") {
-        if (isSuccess)
-            EditorUtility.DisplayDialog("SUCCESS!", "Successfully Built Mod!", "Dismiss");
-        else
+        if (isSuccess) {
+            if (EditorUtility.DisplayDialog("Alert", "Build Successful!", "Open Folder", "Okay")) {
+                if (Directory.Exists(HoohTools.gameExportPath)) {
+                    Process process = new Process();
+                    ProcessStartInfo startInfo = new ProcessStartInfo();
+                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.Arguments = string.Format("/C start explorer.exe {0}", HoohTools.gameExportPath);
+                    process.StartInfo = startInfo;
+                    process.Start();
+                }
+            }
+        } else {
             EditorUtility.DisplayDialog("FAILED!", message, "Dismiss");
+        }
     }
 
     public static string GetProjectPath() {
