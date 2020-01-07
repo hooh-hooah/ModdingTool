@@ -5,8 +5,10 @@ using UnityEditor;
 using UnityEngine;
 
 public class HoohTools : EditorWindow {
+
     // TODO: Make these moddable with windows.
     public static int category = 0;
+
     public static string sideloaderString = "";
     public static int categorySmall = 0;
     public static string manifest = "";
@@ -33,7 +35,8 @@ public class HoohTools : EditorWindow {
         EditorGUI.DrawRect(r, color);
     }
 
-    Vector2 scrollPos;
+    private Vector2 scrollPos;
+
     private void OnGUI() {
         if (GUILayout.Button("Check Updates")) {
             Application.OpenURL("https://github.com/hooh-hooah/AI_ModTools/releases");
@@ -48,13 +51,13 @@ public class HoohTools : EditorWindow {
         {
             // help
             var titleStyle = new GUIStyle();
-                titleStyle.fontSize = 15;
-                titleStyle.margin = new RectOffset(10, 10, 0, 10);
+            titleStyle.fontSize = 15;
+            titleStyle.margin = new RectOffset(10, 10, 0, 10);
 
             DrawUILine(new Color(0, 0, 0));
             GUILayout.Label("Element Generator", titleStyle);
 
-            EditorPrefs.SetInt("hoohTool_category", int.Parse(EditorGUILayout.TextField("Big Category Number: ", category.ToString()))); 
+            EditorPrefs.SetInt("hoohTool_category", int.Parse(EditorGUILayout.TextField("Big Category Number: ", category.ToString())));
             EditorPrefs.SetInt("hoohTool_categorysmall", int.Parse(EditorGUILayout.TextField("Mid Category Number: ", categorySmall.ToString())));
             EditorPrefs.SetString("hoohTool_sideloadString", EditorGUILayout.TextField("Game Assetbundle Path: ", sideloaderString));
             EditorPrefs.SetString("hoohTool_manifest", EditorGUILayout.TextField("Manifest(?): ", manifest));
@@ -75,7 +78,7 @@ public class HoohTools : EditorWindow {
             GUILayout.Label("Quick Unity Macros", titleStyle);
 
             gap = EditorGUILayout.IntField("Showcase Gap: ", gap);
-            cols =  EditorGUILayout.IntField("Showcase Columns: ", cols);
+            cols = EditorGUILayout.IntField("Showcase Columns: ", cols);
             if (GUILayout.Button("Showcase Mode")) {
                 if (Selection.objects.Length <= 0)
                     EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
@@ -129,15 +132,43 @@ public class HoohTools : EditorWindow {
                     if (hairComponent == null)
                         hairComponent = hairObject.AddComponent<AIChara.CmpHair>();
 
-
-
-
                     FindAssist findAssist = new FindAssist();
                     findAssist.Initialize(hairComponent.transform);
-                    hairComponent.rendHair = (from x in hairComponent.GetComponentsInChildren<Renderer>(true)
-                                     where !x.name.Contains("_acs")
-                                     select x).ToArray<Renderer>();
+                    hairComponent.rendHair = (from x in hairComponent.GetComponentsInChildren<Renderer>(true) where !x.name.Contains("_acs") select x).ToArray();
+
+                    // remove all dynamic bones. smh...
                     DynamicBone[] components = hairComponent.GetComponents<DynamicBone>();
+                    foreach (var comp in components) {
+                        DestroyImmediate(comp);
+                    }
+
+                    DevPreviewHair previewComp = hairObject.GetComponent<DevPreviewHair>();
+                    if (previewComp == null)
+                        previewComp = hairObject.AddComponent<DevPreviewHair>();
+                    previewComp.hairTexturePath = ModPacker.GetProjectPath().Replace("Assets/", "");
+
+                    var dynBones = (from x in findAssist.dictObjName where x.Value.transform.name.Contains("_s") select x.Value).ToArray();
+                    foreach (GameObject bone in dynBones) {
+                        DynamicBone dynBone = hairObject.AddComponent<DynamicBone>();
+                        dynBone.m_Root = bone.transform;
+                        dynBone.m_UpdateRate = 60;
+                        dynBone.m_UpdateMode = DynamicBone.UpdateMode.AnimatePhysics;
+                        dynBone.m_Damping = 0.102f;
+                        dynBone.m_Elasticity = 0.019f;
+                        dynBone.m_ElasticityDistrib = new AnimationCurve();
+                        dynBone.m_ElasticityDistrib.AddKey(0f, 0.969f);
+                        dynBone.m_ElasticityDistrib.AddKey(1f, 0.603f);
+                        dynBone.m_Stiffness = 0.144f;
+                        dynBone.m_Inert = 0.072f;
+                        dynBone.m_Radius = 0.1f;
+                        dynBone.m_RadiusDistrib = new AnimationCurve();
+                        dynBone.m_RadiusDistrib.AddKey(0f, 1f);
+                        dynBone.m_RadiusDistrib.AddKey(1f, 0.5f);
+                        dynBone.m_EndLength = 0f;
+                        dynBone.m_Force = new Vector3(0, -0.005f, 0);
+                    }
+                    components = hairComponent.GetComponents<DynamicBone>();
+
                     KeyValuePair<string, GameObject> keyValuePair = findAssist.dictObjName.FirstOrDefault((KeyValuePair<string, GameObject> x) => x.Key.Contains("_top"));
                     if (keyValuePair.Equals(default(KeyValuePair<string, GameObject>))) {
                         return;
@@ -186,20 +217,17 @@ public class HoohTools : EditorWindow {
                     findAssist = new FindAssist();
                     findAssist.Initialize(hairComponent.transform);
                     hairComponent.rendAccessory = (from s in findAssist.dictObjName
-                                          where s.Key.Contains("_acs")
-                                          select s into x
-                                          select x.Value.GetComponent<Renderer>() into r
-                                          where null != r
-                                          select r).ToArray<Renderer>();
-
+                                                   where s.Key.Contains("_acs")
+                                                   select s into x
+                                                   select x.Value.GetComponent<Renderer>() into r
+                                                   where null != r
+                                                   select r).ToArray<Renderer>();
 
                     Renderer[] renderers = hairObject.GetComponentsInChildren<Renderer>();
                     hairComponent.rendCheckVisible = new Renderer[renderers.Length];
-                    hairComponent.rendHair = new Renderer[renderers.Length];
                     for (int i = 0; i < renderers.Length; i++) {
                         renderers[i].gameObject.layer = 10;
                         hairComponent.rendCheckVisible[i] = renderers[i];
-                        hairComponent.rendHair[i] = renderers[i];
                     }
                 }
             }
@@ -246,11 +274,11 @@ public class HoohTools : EditorWindow {
                     clotheComponent.objBotDef = findAssist.GetObjectFromName("n_bot_a");
                     clotheComponent.objBotHalf = findAssist.GetObjectFromName("n_bot_b");
                     clotheComponent.objOpt01 = (from x in findAssist.dictObjName
-                                     where x.Key.StartsWith("op1")
-                                     select x.Value).ToArray<GameObject>();
+                                                where x.Key.StartsWith("op1")
+                                                select x.Value).ToArray<GameObject>();
                     clotheComponent.objOpt02 = (from x in findAssist.dictObjName
-                                     where x.Key.StartsWith("op2")
-                                     select x.Value).ToArray<GameObject>();
+                                                where x.Key.StartsWith("op2")
+                                                select x.Value).ToArray<GameObject>();
 
                     Renderer[] renderers = clotheObject.GetComponentsInChildren<Renderer>();
                     clotheComponent.rendCheckVisible = new Renderer[renderers.Length];
@@ -300,28 +328,8 @@ public class HoohTools : EditorWindow {
             EditorPrefs.SetString("hoohTool_exportPath", EditorGUILayout.TextField("Zipmod Destination: ", gameExportPath));
             gameExportPath = EditorPrefs.GetString("hoohTool_exportPath");
 
-            if (GUILayout.Button("Build Hair Mod")) {
-                ModPacker.PackMod(gameExportPath, "hair");
-            }
-
-            if (GUILayout.Button("Build Studio Mod")) {
-                ModPacker.PackMod(gameExportPath, "studio");
-            }
-
-            if (GUILayout.Button("Build Map Mod")) {
-                ModPacker.PackMod(gameExportPath, "map");
-            }
-
-            if (GUILayout.Button("Build Female Clothes")) {
-                ModPacker.PackMod(gameExportPath, "fclothe");
-            }
-
-            if (GUILayout.Button("Build Male Clothes")) {
-                ModPacker.PackMod(gameExportPath, "mclothe");
-            }
-
-            if (GUILayout.Button("Build Accessory")) {
-                ModPacker.PackMod(gameExportPath, "acc");
+            if (GUILayout.Button("Build Mod")) {
+                ModPacker.PackMod(gameExportPath);
             }
 
             DrawUILine(new Color(0, 0, 0));
@@ -417,6 +425,7 @@ public class HoohTools : EditorWindow {
     public static bool randomizeX = true;
     public static bool randomizeY = true;
     public static bool randomizeZ = true;
+
     // Pretty useful to make stuffs look randomized
     [MenuItem("hooh Tools/Randomize Rotation", false)]
     public static void RandomizeRotation() {
@@ -437,7 +446,7 @@ public class HoohTools : EditorWindow {
     public static void ShowcaseMode() {
         for (int i = 0; i < Selection.objects.Length; i++) {
             GameObject currentObject = (GameObject)Selection.objects[i];
-            int curRow = (int) Mathf.Floor(i / cols);
+            int curRow = (int)Mathf.Floor(i / cols);
             int curCol = i % cols;
 
             if (currentObject != null) {

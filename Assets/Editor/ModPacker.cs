@@ -45,7 +45,7 @@ public class ModPacker {
         return null;
     }
 
-    public static void PackMod(string exportGamePath, string mode) {
+    public static void PackMod(string exportGamePath) {
         string assetPackageInfo = Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), GetProjectPath()), "mod.xml").Replace("\\", "/");
 
         // TODO: get target output shits?
@@ -58,17 +58,10 @@ public class ModPacker {
                 return;
             }
 
-            string xmlType = parsedModInfo.Root.Attribute("type").Value;
-            if (xmlType != null && xmlType != "" && xmlType != mode) {
-                Debug.LogError(string.Format("Mod Type Mismatch! Expected: {0}, Got: {1}", mode, xmlType));
-                return;
-            }
-
             try {
                 ModPackInfo modInfo = new ModPackInfo(parsedModInfo);
                 modInfo.BuildAssetBundles();
-                if (mode == "hair")
-                    modInfo.HairSwapMaterial();
+                modInfo.HairSwapMaterial();
                 modInfo.SetupModFolder();
                 modInfo.DeployZipMod(exportGamePath);
                 Announce();
@@ -86,17 +79,19 @@ public class ModPacker {
         public static string aiBundlePath = Path.Combine(Directory.GetCurrentDirectory(), "_AIResources").Replace("\\", "/");
         public static string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "_Temporary").Replace("\\", "/");
         public CSVBuilder[] csvBuilders;
-        private string[] assetBundleNames = null;
-        private string[][] assetNames = null;
+        public string[] assetBundleNames = null;
+        public string[][] assetNames = null;
         private CSVBuilder[] builders;
         private Dictionary<string, string>[] matswapTargets;
 
         public void HairSwapMaterial() {
-            for (int i = 0; i < matswapTargets.Length; i++) {
-                ScriptBuilder builder = new ScriptBuilder();
-                builder.SetupHairSwapScript(matswapTargets[i]);
-                builder.Execute();
-                builder.CleanUp();
+            if (matswapTargets != null) {
+                for (int i = 0; i < matswapTargets.Length; i++) {
+                    ScriptBuilder builder = new ScriptBuilder();
+                    builder.SetupHairSwapScript(matswapTargets[i]);
+                    builder.Execute();
+                    builder.CleanUp();
+                }
             }
         }
 
@@ -108,6 +103,8 @@ public class ModPacker {
                 DirectoryInfo info = new DirectoryInfo(zipPath);
                 foreach (var subDirectory in info.GetDirectories())
                     subDirectory.Delete(true);
+            } catch (DirectoryNotFoundException e) {
+                // creating new folder.
             } catch (Exception e) {
                 Debug.Log(e);
             } finally {
@@ -170,7 +167,6 @@ public class ModPacker {
                 assetBuildList[i].assetNames = assetNames[i];
             }
 
-            // Because fuck you, that's why
             BuildPipeline.BuildAssetBundles(bundleCacheName, assetBuildList, BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows64);
         }
 
@@ -247,9 +243,9 @@ public class ModPacker {
 
                         if (CSVBuilder.listTypeInfo.ContainsKey(type)) {
                             if (CSVBuilder.listTypeInfo[type].isStudioMod)
-                                csvBuilders[csvIndex] = new CSVBuilder(type, list.Attribute("path").Value);
+                                csvBuilders[csvIndex] = new CSVBuilder(type, list.Attribute("path").Value, this);
                             else
-                                csvBuilders[csvIndex] = new CSVBuilder(type);
+                                csvBuilders[csvIndex] = new CSVBuilder(type, this);
                         } else {
                             Debug.LogError(string.Format("Type \"{0}\" is an invalid list category.", type));
                         }

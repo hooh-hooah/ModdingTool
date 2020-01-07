@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 public class BlenderAssetProcessor : AssetPostprocessor {
 
-    List<string> changeTargets = new List<string>() { "clothmesh.fbx" };
+    List<string> changeTargets = new List<string>() { "clothmesh_sub.fbx", "clothmesh.fbx", "accmesh.fbx" };
     public void OnPostprocessModel(GameObject obj) {
 
         //only perform corrections with blender files
