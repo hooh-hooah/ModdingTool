@@ -161,10 +161,11 @@ public class ModPacker {
             string extPath = Path.Combine(targetpath, fileName + ".zipmod").Replace("\\", "/");
             string zipExec = Path.Combine(Directory.GetCurrentDirectory(), "_External\\7za.exe").Replace("\\", "/");
 
+
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.FileName = zipExec;
-            p.StartInfo.Arguments = string.Format("a \"{0}\" \"{1}\"", extPath, srcPath);
+            p.StartInfo.Arguments = string.Format("a -tzip -aoa \"{0}\" \"{1}\"", extPath, srcPath);
             p.Start();
             p.WaitForExit();
         }
