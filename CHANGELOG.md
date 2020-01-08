@@ -2,12 +2,12 @@
 
 ## 0.2.0
 
-### 2019-01-09
+### 2020-01-09
 
 - Moved Light Probe Intensity tool to hooh Modding Tool Window.
 - Now Foldout status are being saved after closing editor/updating code.
 
-### 2019-01-08
+### 2020-01-08
 
 **Hair mod.xml template has been changed! be aware.**
 
@@ -27,7 +27,7 @@
 
 ## 0.1.0
 
-### 2019-01-07
+### 2020-01-07
 
 - Now you can build mod with ONE button.
 - Changed CSVBuilder Structure: Now it's using key-based delegates instead of category based delegates. 
