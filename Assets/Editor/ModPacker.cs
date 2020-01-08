@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Media;
 using System.Reflection;
 using System.Text;
 using System.Xml;
@@ -16,6 +17,7 @@ public class ModPacker {
 
     public static void Announce(bool isSuccess = true, string message = "Please check the console the see error.") {
         if (isSuccess) {
+            EditorApplication.Beep();
             if (EditorUtility.DisplayDialog("Alert", "Build Successful!", "Open Folder", "Okay")) {
                 if (Directory.Exists(HoohTools.gameExportPath)) {
                     Process process = new Process();
@@ -85,6 +87,8 @@ public class ModPacker {
                 Announce();
             } catch (Exception e) {
                 Debug.LogError(e);
+                SystemSounds.Exclamation.Play();
+                EditorUtility.DisplayDialog("Error!", "Failed to build mod!\nCheck the Console!", "Dismiss");
             }
         } else {
             Debug.LogError("Failed to parse mod information.");
@@ -157,17 +161,18 @@ public class ModPacker {
 
         public void DeployZipMod(string targetpath) {
             // TODO: Make it modular.
-            string srcPath = Path.Combine(tempFolder, fileName).Replace("\\", "/");
+            string srcPath = Path.Combine(tempFolder, Path.Combine(fileName, "*")).Replace("\\", "/");
             string extPath = Path.Combine(targetpath, fileName + ".zipmod").Replace("\\", "/");
             string zipExec = Path.Combine(Directory.GetCurrentDirectory(), "_External\\7za.exe").Replace("\\", "/");
-
 
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.FileName = zipExec;
-            p.StartInfo.Arguments = string.Format("a -tzip -aoa \"{0}\" \"{1}\"", extPath, srcPath);
+            p.StartInfo.Arguments = $"a -tzip -aoa -w{System.Environment.GetEnvironmentVariable("TEMP")} \"{extPath}\" \"{srcPath}\"";
             p.Start();
             p.WaitForExit();
+            if (p.ExitCode != 0)
+                throw new Exception("Failed to make zip file.");
         }
 
         public void BuildAssetBundles() {
