@@ -1,7 +1,7 @@
 # Changelog
 
-## 0.1.0
 
+## 0.2.0
 
 ### 2019-01-08
 
@@ -20,6 +20,8 @@
 - Now alerts you when there is no mod.xml in current Project Folder.
 - Made Probe Intensitry public. It's going to be combined in same menu.
 - Added a lot of examples.
+
+## 0.1.0
 
 ### 2019-01-07
 
