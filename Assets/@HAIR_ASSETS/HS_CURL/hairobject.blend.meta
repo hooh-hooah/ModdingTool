@@ -40,6 +40,12 @@ ModelImporter:
     100068: cf_O_hairfront_82_04_0
     100070: cf_O_hairfront_82_05_0
     100072: //RootNode
+    100074: back_s
+    100076: font_side02_s
+    100078: front_side01_s
+    100080: hairs
+    100082: root_top
+    100084: side_s
     400000: Armature
     400002: cf_J_hairB_top
     400004: cf_J_hairBC_00
@@ -77,8 +83,16 @@ ModelImporter:
     400068: cf_O_hairfront_82_04_0
     400070: cf_O_hairfront_82_05_0
     400072: //RootNode
+    400074: back_s
+    400076: font_side02_s
+    400078: front_side01_s
+    400080: hairs
+    400082: root_top
+    400084: side_s
     2100000: unnamed
     2100002: None__Hair_OPACITY_png
+    2300000: cf_O_hairfront_82_03_0
+    3300000: cf_O_hairfront_82_03_0
     4300000: cf_O_hairback_82_01_0
     4300002: cf_O_hairfront_82_03_0
     4300004: cf_O_hairback_82_06_0
@@ -109,7 +123,12 @@ ModelImporter:
     13700022: cf_O_hairfront_82_03_0
     13700024: cf_O_hairfront_82_04_0
     13700026: cf_O_hairfront_82_05_0
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: None__Hair_OPACITY_png
+    second: {fileID: 2100000, guid: 149e1346ecc2e2441994d7185160b4fb, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

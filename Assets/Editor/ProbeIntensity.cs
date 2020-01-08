@@ -65,7 +65,7 @@ public class ProbeIntensity : EditorWindow {
     }
 
 
-    unsafe private static void StoreProbeData() {
+    unsafe public static void StoreProbeData() {
         if (LightmapSettings.lightProbes != null) {
             var probes = LightmapSettings.lightProbes.bakedProbes;
             var probeType = typeof(UnityEngine.Rendering.SphericalHarmonicsL2);
@@ -92,7 +92,7 @@ public class ProbeIntensity : EditorWindow {
         }
     }
 
-    unsafe private static void ResetProbeData() {
+    unsafe public static void ResetProbeData() {
         DisplayWarning();
         var probes = LightmapSettings.lightProbes.bakedProbes;
         var probeType = typeof(UnityEngine.Rendering.SphericalHarmonicsL2);
