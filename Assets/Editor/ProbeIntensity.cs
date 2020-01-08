@@ -33,13 +33,13 @@ public class ProbeIntensity : EditorWindow {
         }
     }
 
-    unsafe private static void ScaleLightProbeData(float scale) {
+    unsafe public static void ScaleLightProbeData(float scale) {
         DisplayWarning();
         inputValues.Add(scale);
 
-        var probes = LightmapSettings.lightProbes.bakedProbes;
+        var probes = LightmapSettings.lightProbes ? LightmapSettings.lightProbes.bakedProbes : null;
         if (probes == null) {
-            Debug.LogError("No probes in the scene!");
+            Debug.LogError("There is no light probe in the scene.");
             return;
         }
 
@@ -123,84 +123,7 @@ public class ProbeIntensity : EditorWindow {
         inputValues.Clear();
 
     }
-
-    [MenuItem("Tools/Light Probe Intensity")]
-    public static void ShowWindow() {
-        EditorWindow window = GetWindow(typeof(ProbeIntensity));
-        window.Show();
-    }
-
-    public void OnGUI() {
-        if (inputNumber > 5.0f) {
-            sliderValue = 5.0f;
-        } else if (inputNumber < 1) {
-            sliderValue = 1;
-        }
-
-        InitStyles();
-        GUILayout.Label(" Adjust the brightness of light probes");
-
-        string inputText = " ";
-
-        // Wrap everything in the designated GUI Area
-        GUILayout.BeginArea(new Rect(10, 20, 260, 60));
-
-        // Begin the singular Horizontal Group
-        GUILayout.BeginHorizontal();
-
-        GUILayout.Box("Scale Value ", currentStyle);
-
-        if (inputNumber != sliderValue) {
-            if (Single.TryParse(inputText, out inputNumber)) {
-                sliderValue = Mathf.Clamp(inputNumber, minSliderValue, maxSliderValue);
-            } else if (inputText == " ") {
-                inputNumber = sliderValue;
-            }
-        }
-
-        sliderValue = EditorGUILayout.Slider(sliderValue, minSliderValue, maxSliderValue);
-
-        // End the Groups and Area
-        GUILayout.EndHorizontal();
-        GUILayout.EndArea();
-        GUILayout.Space(70);
-        GUILayout.BeginArea(new Rect(10, 60, 260, 60));
-
-        GUILayout.BeginHorizontal();
-
-        if (GUILayout.Button("Increase Intensity")) {
-
-            ScaleLightProbeData(sliderValue);
-            DisplayWarning();
-        }
-
-        if (GUILayout.Button("Decrease Intensity")) {
-            ScaleLightProbeData(1 / Mathf.Abs(sliderValue));
-        }
-
-        GUILayout.EndHorizontal();
-        GUILayout.EndArea();
-        GUILayout.BeginArea(new Rect(10, 80, 260, 60));
-        GUILayout.BeginHorizontal();
-
-        if (GUILayout.Button("Reset Intensity")) {
-            ResetProbeData();
-            DisplayWarning();
-        }
-
-        GUILayout.EndHorizontal();
-        GUILayout.EndArea();
-
-    }
-
-    private void InitStyles() {
-        if (currentStyle == null) {
-            currentStyle = new GUIStyle(GUI.skin.box);
-            currentStyle.alignment = TextAnchor.MiddleLeft;
-            currentStyle.normal.textColor = textColor;
-        }
-    }
-
+       
     private Texture2D MakeTex(int width, int height, Color col) {
         Color[] pix = new Color[width * height];
         for (int i = 0; i < pix.Length; ++i) {

@@ -1,13 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 public class HoohTools : EditorWindow {
 
+
     // TODO: Make these moddable with windows.
     public static int category = 0;
+
+    private GUIStyle foldoutStyle;
+    private GUIStyle titleStyle;
+    private float sliderValue;
+    private float inputNumber;
+    private float maxSliderValue = 5.0f;
+    private float minSliderValue = 1.0f;
 
     public static string sideloaderString = "";
     public static int categorySmall = 0;
@@ -25,11 +36,13 @@ public class HoohTools : EditorWindow {
     bool foldoutBundler = true;
 
     public void OnEnable() {
+
         category = EditorPrefs.GetInt("hoohTool_category"); // this is mine tho
         sideloaderString = EditorPrefs.GetString("hoohTool_sideloadString");
         categorySmall = EditorPrefs.GetInt("hoohTool_categorysmall"); // this is mine tho
         manifest = EditorPrefs.GetString("hoohTool_manifest");
         gameExportPath = EditorPrefs.GetString("hoohTool_exportPath");
+        sliderValue = EditorPrefs.GetFloat("hoohTool_probeStrength");
         lightScaleSize = 9f;
     }
 
@@ -51,8 +64,18 @@ public class HoohTools : EditorWindow {
         }
         return true;
     }
+    void InitStyle() {
+        titleStyle = new GUIStyle();
+        titleStyle.fontSize = 15;
+        titleStyle.margin = new RectOffset(10, 10, 0, 10);
+        foldoutStyle = new GUIStyle(EditorStyles.foldout);
+        foldoutStyle.fontSize = 15;
+        foldoutStyle.margin = new RectOffset(10, 10, 0, 10);
+    }
 
     private void OnGUI() {
+        InitStyle();
+
         if (GUILayout.Button("Check Updates")) {
             Application.OpenURL("https://github.com/hooh-hooah/ModdingTool/tree/release/");
         }
@@ -65,15 +88,6 @@ public class HoohTools : EditorWindow {
         EditorGUILayout.BeginVertical();
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(0), GUILayout.Height(0));
         {
-            // help
-            var titleStyle = new GUIStyle();
-            titleStyle.fontSize = 15;
-            titleStyle.margin = new RectOffset(10, 10, 0, 10);
-
-            var foldoutStyle = new GUIStyle(EditorStyles.foldout);
-            foldoutStyle.fontSize = 15;
-            foldoutStyle.margin = new RectOffset(10, 10, 0, 10);
-
             foldoutElement = EditorGUILayout.Foldout(foldoutElement, "Element Generator", true, foldoutStyle);
             if (foldoutElement) {
                 EditorPrefs.SetInt("hoohTool_category", int.Parse(EditorGUILayout.TextField("Big Category Number: ", category.ToString())));
@@ -123,6 +137,42 @@ public class HoohTools : EditorWindow {
                 if (GUILayout.Button("Scale Lights and Probes")) {
                     if (CheckGoodSelection())
                         ScaleLightsAndProbes();
+                }
+            }
+
+            foldoutProbeset = EditorGUILayout.Foldout(foldoutProbeset, "LightProbe Adjustment", true, foldoutStyle);
+            if (foldoutProbeset) {
+                if (inputNumber > 5.0f) {
+                    sliderValue = 5.0f;
+                } else if (inputNumber < 1) {
+                    sliderValue = 1;
+                }
+
+                string inputText = " ";
+                sliderValue = EditorGUILayout.Slider(sliderValue, minSliderValue, maxSliderValue);
+
+                if (inputNumber != sliderValue) {
+                    if (Single.TryParse(inputText, out inputNumber)) {
+                        sliderValue = Mathf.Clamp(inputNumber, minSliderValue, maxSliderValue);
+                    } else if (inputText == " ") {
+                        inputNumber = sliderValue;
+                    }
+                }
+
+                EditorPrefs.SetFloat("hoohTool_probeStrength", sliderValue);
+
+                if (GUILayout.Button("Increase Intensity")) {
+                    ProbeIntensity.ScaleLightProbeData(sliderValue);
+                    ProbeIntensity.DisplayWarning();
+                }
+
+                if (GUILayout.Button("Decrease Intensity")) {
+                    ProbeIntensity.ScaleLightProbeData(1 / Mathf.Abs(sliderValue));
+                }
+
+                if (GUILayout.Button("Reset Intensity")) {
+                    ProbeIntensity.ResetProbeData();
+                    ProbeIntensity.DisplayWarning();
                 }
             }
 
