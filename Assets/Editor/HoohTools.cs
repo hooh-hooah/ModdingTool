@@ -36,6 +36,12 @@ public class HoohTools : EditorWindow {
     bool foldoutBundler = true;
 
     public void OnEnable() {
+        foldoutElement = EditorPrefs.GetBool("hoohTool_foldoutElement", true);
+        foldoutMacros = EditorPrefs.GetBool("hoohTool_foldoutMacros", true);
+        foldoutProbeset = EditorPrefs.GetBool("hoohTool_foldoutProbeset", true);
+        foldoutScaffolding = EditorPrefs.GetBool("hoohTool_foldoutScaffolding", true);
+        foldoutMod = EditorPrefs.GetBool("hoohTool_foldoutMod", true);
+        foldoutBundler = EditorPrefs.GetBool("hoohTool_foldoutBundler", true);
 
         category = EditorPrefs.GetInt("hoohTool_category"); // this is mine tho
         sideloaderString = EditorPrefs.GetString("hoohTool_sideloadString");
@@ -217,6 +223,14 @@ public class HoohTools : EditorWindow {
                 }
             }
         }
+
+        EditorPrefs.SetBool("hoohTool_foldoutElement", foldoutElement);
+        EditorPrefs.SetBool("hoohTool_foldoutMacros", foldoutMacros);
+        EditorPrefs.SetBool("hoohTool_foldoutProbeset", foldoutProbeset);
+        EditorPrefs.SetBool("hoohTool_foldoutScaffolding", foldoutScaffolding);
+        EditorPrefs.SetBool("hoohTool_foldoutMod", foldoutMod);
+        EditorPrefs.SetBool("hoohTool_foldoutBundler", foldoutBundler);
+
         EditorGUILayout.EndScrollView();
         EditorGUILayout.EndVertical();
     }

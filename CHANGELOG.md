@@ -1,11 +1,11 @@
 # Changelog
 
-
 ## 0.2.0
 
 ### 2019-01-09
 
 - Moved Light Probe Intensity tool to hooh Modding Tool Window.
+- Now Foldout status are being saved after closing editor/updating code.
 
 ### 2019-01-08
 
