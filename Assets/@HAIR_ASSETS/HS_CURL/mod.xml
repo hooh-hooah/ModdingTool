@@ -34,11 +34,11 @@
 			mesh-bundle="example/hair_mesh.unity3d" mesh-object="hairobject"
 			tex-bundle="example/hair_tex.unity3d" mat-bundle="ext_hairmaterial.unity3d" mat-name="hairmat"
 		>
-			<texture slot="asset-ao" tex-name="ao"/>
-			<texture slot="asset-colormask" tex-name="colormask"/>
-			<texture slot="asset-diffuse" tex-name="diffuse"/>
-			<texture slot="asset-noise" tex-name="noise"/>
-			<texture slot="asset-normal" tex-name="normal"/>
+			<texture mat-slot="0" tex-name="normal"/>
+			<texture mat-slot="1" tex-name="colormask"/>
+			<texture mat-slot="2" tex-name="noise"/>
+			<texture mat-slot="3" tex-name="diffuse"/>
+			<texture mat-slot="4" tex-name="ao"/>
 			<matvalue slot="mat-detail" value="0.4"/>
 		</target>
 	</matswap>

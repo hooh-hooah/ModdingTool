@@ -2,6 +2,24 @@
 
 ## 0.1.0
 
+
+### 2019-01-08
+
+**Hair mod.xml template has been changed! be aware.**
+
+- Changed FBXAssetProcessor: Added few name targets. 
+  - "shoesmesh.fbx"
+- Added Foldout sections. Now you can fold stuffs
+- Moved Mod Scaffolding into separate class.
+- Combined error messages that you get when you try to execute modding tool function without selecting anything.
+- Moved Manifest Building into separate class.
+- Now hooh Modding Tool supports Heelz Mod. You can make heels mode with hooh Modding Tool
+- Removed Bandizip Dependency. Now you don't have to use bandizip to build mods. Good Riddance.
+- Moved Material Swapping into separate class. 
+- Now texture swap is optional.
+- Now alerts you when there is no mod.xml in current Project Folder.
+- Made Probe Intensitry public. It's going to be combined in same menu.
+
 ### 2019-01-07
 
 - Now you can build mod with ONE button.
@@ -21,3 +39,4 @@
   - You can use Opaque Shader when you're making non-transparent clothes that will not torn. useful things like socks or small clothes.
   - Now Glossiness and Metalic adjustments are working.
 - Added Changelogs.
+

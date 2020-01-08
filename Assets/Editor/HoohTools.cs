@@ -44,6 +44,14 @@ public class HoohTools : EditorWindow {
 
     private Vector2 scrollPos;
 
+    bool CheckGoodSelection() {
+        if (Selection.objects.Length <= 0) {
+            EditorUtility.DisplayDialog("Error!", "You need to select at least one or more objects.", "Dismiss");
+            return false;
+        }
+        return true;
+    }
+
     private void OnGUI() {
         if (GUILayout.Button("Check Updates")) {
             Application.OpenURL("https://github.com/hooh-hooah/ModdingTool/tree/release/");
@@ -79,9 +87,7 @@ public class HoohTools : EditorWindow {
                 manifest = EditorPrefs.GetString("hoohTool_manifest");
 
                 if (GUILayout.Button("Generate Item List")) {
-                    if (Selection.objects.Length <= 0)
-                        EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
-                    else
+                    if (CheckGoodSelection())
                         GenerateCSV();
                 }
             }
@@ -91,44 +97,31 @@ public class HoohTools : EditorWindow {
                 gap = EditorGUILayout.IntField("Showcase Gap: ", gap);
                 cols = EditorGUILayout.IntField("Showcase Columns: ", cols);
                 if (GUILayout.Button("Showcase Mode")) {
-                    if (Selection.objects.Length <= 0)
-                        EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
-                    else
+                    if (CheckGoodSelection())
                         ShowcaseMode();
                 }
 
                 if (GUILayout.Button("Randomize Rotation")) {
-                    if (Selection.objects.Length <= 0)
-                        EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
-                    else
+                    if (CheckGoodSelection())
                         RandomizeRotation();
                 }
 
                 if (GUILayout.Button("Wrap Object with new GameObject and Scale")) {
-                    if (Selection.objects.Length <= 0)
-                        EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
-                    else
+                    if (CheckGoodSelection())
                         WrapObjectScale();
                 }
 
                 if (GUILayout.Button("Wrap Object with new GameObject")) {
-                    if (Selection.objects.Length <= 0)
-                        EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
-                    else
+                    if (CheckGoodSelection())
                         WrapObject();
                 }
                 if (GUILayout.Button("Create Prefab from Selected Objects")) {
-                    if (Selection.objects.Length <= 0)
-                        EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
-                    else
+                    if (CheckGoodSelection())
                         CreatePrefab();
                 }
-
                 lightScaleSize = EditorGUILayout.FloatField("Light Scale Size: ", lightScaleSize);
                 if (GUILayout.Button("Scale Lights and Probes")) {
-                    if (Selection.objects.Length <= 0)
-                        EditorUtility.DisplayDialog("Error!", "You have to select at least one or more objects to generate studio item CSV.", "Yee, boi");
-                    else
+                    if (CheckGoodSelection())
                         ScaleLightsAndProbes();
                 }
             }
@@ -136,19 +129,23 @@ public class HoohTools : EditorWindow {
             foldoutScaffolding = EditorGUILayout.Foldout(foldoutScaffolding, "Mod Scaffolding", true, foldoutStyle);
             if (foldoutScaffolding) {
                 if (GUILayout.Button("Initialize Hair")) {
-                    AIObjectHelper.InitializeHair((GameObject)Selection.activeObject);
+                    if (CheckGoodSelection())
+                        AIObjectHelper.InitializeHair((GameObject)Selection.activeObject);
                 }
 
                 if (GUILayout.Button("Initialize Accessory")) {
-                    AIObjectHelper.InitializeAccessory((GameObject)Selection.activeObject);
+                    if (CheckGoodSelection())
+                        AIObjectHelper.InitializeAccessory((GameObject)Selection.activeObject);
                 }
 
                 if (GUILayout.Button("Initialize Clothes")) {
-                    AIObjectHelper.InitializeClothes((GameObject)Selection.activeObject);
+                    if (CheckGoodSelection())
+                        AIObjectHelper.InitializeClothes((GameObject)Selection.activeObject);
                 }
 
                 if (GUILayout.Button("Initialize Studio Item (If it has more info)")) {
-                    AIObjectHelper.InitializeItem((GameObject)Selection.activeObject);
+                    if (CheckGoodSelection())
+                        AIObjectHelper.InitializeItem((GameObject)Selection.activeObject);
                 }
             }
 

@@ -8,7 +8,6 @@ public class ListType {
     public List<string> studioKeys = new List<string>() { "-1", "-2", "-3", "-5" };
     public string catNum = "";
     public string headerText = "";
-
     public string[] keys;
     public bool isStudioMod {
         get {
