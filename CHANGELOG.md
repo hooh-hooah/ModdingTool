@@ -3,6 +3,10 @@
 
 ## 0.2.0
 
+### 2019-01-09
+
+- Moved Light Probe Intensity tool to hooh Modding Tool Window.
+
 ### 2019-01-08
 
 **Hair mod.xml template has been changed! be aware.**

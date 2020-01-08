@@ -152,7 +152,7 @@ public class HoohTools : EditorWindow {
                 sliderValue = EditorGUILayout.Slider(sliderValue, minSliderValue, maxSliderValue);
 
                 if (inputNumber != sliderValue) {
-                    if (Single.TryParse(inputText, out inputNumber)) {
+                    if (float.TryParse(inputText, out inputNumber)) {
                         sliderValue = Mathf.Clamp(inputNumber, minSliderValue, maxSliderValue);
                     } else if (inputText == " ") {
                         inputNumber = sliderValue;
