@@ -168,11 +168,11 @@ public class ModPacker {
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.FileName = zipExec;
-            p.StartInfo.Arguments = $"a -tzip -aoa -w{System.Environment.GetEnvironmentVariable("TEMP")} \"{extPath}\" \"{srcPath}\"";
+            p.StartInfo.Arguments = $"a -tzip -aoa -w{Environment.GetEnvironmentVariable("TEMP")} \"{extPath}\" \"{srcPath}\"";
             p.Start();
             p.WaitForExit();
             if (p.ExitCode != 0)
-                throw new Exception("Failed to make zip file.");
+                throw new Exception("Failed to make zip file. (" + p.ExitCode + ")");
         }
 
         public void BuildAssetBundles() {
