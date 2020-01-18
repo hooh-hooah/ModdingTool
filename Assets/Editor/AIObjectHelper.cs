@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public class AIObjectHelper {
@@ -187,10 +188,38 @@ public class AIObjectHelper {
             clotheComponent.objBotHalf = findAssist.GetObjectFromName("n_bot_b");
             clotheComponent.objOpt01 = (from x in findAssist.dictObjName
                                         where x.Key.StartsWith("op1")
-                                        select x.Value).ToArray<GameObject>();
+                                        select x.Value).ToArray();
             clotheComponent.objOpt02 = (from x in findAssist.dictObjName
                                         where x.Key.StartsWith("op2")
-                                        select x.Value).ToArray<GameObject>();
+                                        select x.Value).ToArray();
+
+            // remove all dynamic bones. smh...
+            DynamicBone[] components = clotheComponent.GetComponents<DynamicBone>();
+            foreach (var comp in components) {
+                Object.DestroyImmediate(comp);
+            }
+
+            Regex rgx = new Regex(@"cf_J_Legsk_[0-9]{2}_00");
+            var dynBones = (from x in findAssist.dictObjName where rgx.IsMatch(x.Value.transform.name) select x.Value).ToArray();
+            foreach (GameObject bone in dynBones) {
+                DynamicBone dynBone = clotheObject.AddComponent<DynamicBone>();
+                dynBone.m_Root = bone.transform;
+                dynBone.m_UpdateRate = 60;
+                dynBone.m_UpdateMode = DynamicBone.UpdateMode.AnimatePhysics;
+                dynBone.m_Damping = 0.102f;
+                dynBone.m_Elasticity = 0.119f;
+                dynBone.m_ElasticityDistrib = new AnimationCurve();
+                dynBone.m_ElasticityDistrib.AddKey(0f, 0.969f);
+                dynBone.m_ElasticityDistrib.AddKey(1f, 0.603f);
+                dynBone.m_Stiffness = 0.144f;
+                dynBone.m_Inert = 0.072f;
+                dynBone.m_Radius = 0.1f;
+                dynBone.m_RadiusDistrib = new AnimationCurve();
+                dynBone.m_RadiusDistrib.AddKey(0f, 1f);
+                dynBone.m_RadiusDistrib.AddKey(1f, 0.5f);
+                dynBone.m_EndLength = 0f;
+                dynBone.m_Force = new Vector3(0, 0, 0);
+            }
 
             Renderer[] renderers = clotheObject.GetComponentsInChildren<Renderer>();
             clotheComponent.rendCheckVisible = new Renderer[renderers.Length];
