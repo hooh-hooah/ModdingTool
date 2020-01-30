@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.1
+
+### 2020-01-30
+
+- Fixed Hair Render Object setup fuckery
+- Now SB3U ScriptBuilder will include shader value adjustment.
+- Added Deploy Mode for ModPacker (good for just checking things and debugging)
+- Now you can add bone informations for your items.
+- Now List Generator automatically put list items in mod.xml
+
 ## 0.2.0
 
 ### 2020-01-09
