@@ -105,8 +105,8 @@ public class AIObjectHelper {
                                            where null != r
                                            select r).ToArray<Renderer>();
 
-            Renderer[] renderers = hairObject.GetComponentsInChildren<Renderer>();
-            hairComponent.rendCheckVisible = new Renderer[renderers.Length];
+            SkinnedMeshRenderer[] renderers = hairObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+            hairComponent.rendCheckVisible = new SkinnedMeshRenderer[renderers.Length];
             for (int i = 0; i < renderers.Length; i++) {
                 renderers[i].gameObject.layer = 10;
                 hairComponent.rendCheckVisible[i] = renderers[i];
