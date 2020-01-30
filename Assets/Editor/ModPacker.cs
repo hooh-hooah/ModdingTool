@@ -60,7 +60,7 @@ public class ModPacker {
         return null;
     }
 
-    public static void PackMod(string exportGamePath) {
+    public static void PackMod(string exportGamePath, bool doDeploy = true) {
         string assetPackageInfo = Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), GetProjectPath()), "mod.xml").Replace("\\", "/");
 
         // TODO: get target output shits?
@@ -83,8 +83,12 @@ public class ModPacker {
                 modInfo.BuildAssetBundles();
                 modInfo.SwapMaterial();
                 modInfo.SetupModFolder();
-                modInfo.DeployZipMod(exportGamePath);
-                Announce();
+                if (doDeploy) {
+                    modInfo.DeployZipMod(exportGamePath);
+                    Announce();
+                } else {
+                    EditorApplication.Beep();
+                }
             } catch (Exception e) {
                 Debug.LogError(e);
                 SystemSounds.Exclamation.Play();
