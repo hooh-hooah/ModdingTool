@@ -116,6 +116,10 @@ public class AutoCSVKeys {
         return "abdata,";
     }
 
+    private static string BoneText(int index, string key, string parameter, XElement item, CSVBuilder instance) {
+        return item.Value;
+    }
+
     public static Dictionary<string, KeyDelegate> specialKeys = new Dictionary<string, KeyDelegate>() {
         {"scene", new KeyDelegate(GetBundleFromAsset)},
         {"object", new KeyDelegate(GetBundleFromAsset)},
@@ -131,7 +135,8 @@ public class AutoCSVKeys {
         {"manifest", new KeyDelegate(InsertManifest)},
         {"index", new KeyDelegate(InsertIndex)},
         {"set-hair", new KeyDelegate(InsertNull)},
-        {"en-us", new KeyDelegate(InsertNull)}
+        {"en-us", new KeyDelegate(InsertNull)},
+        {"bones", new KeyDelegate(BoneText)}
     };
 }
 
@@ -172,6 +177,7 @@ public class CSVBuilder {
         { "bigcategory", new ListType("-1", "", "ID,Name", new string[] {"id", "name"} )},
         { "midcategory", new ListType("-2", "", "ID,Name", new string[] {"id", "name"} )},
         { "studioitem", new ListType("-3", "", itemHeader, new string[] {"index", "big-category", "mid-category", "name", "manifest", "object" } ) }, // ✅ TESTED AND PROVEN
+        { "studiobones", new ListType("-5", "", "ID,Bones", new string[] {"index", "bones"})},
         // Male Parts
         { "mhead", new ListType("110", "abdata\\list\\characustom\\00\\mo_head_00.csv", headHeader, headKeys)}, // ❎ NOT DONE
         { "mskinf", new ListType("111", "abdata\\list\\characustom\\00\\mt_skin_f_00.csv", skinFaceHeader, skinFaceKeys)}, // ❎ NOT DONE
