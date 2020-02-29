@@ -85,17 +85,23 @@ public class AutoCSVKeys {
         string[][] assetNames = instance.packData.assetNames;
         string[] bundleNames = instance.packData.assetBundleNames;
 
+        // TODO: Improve asset auto assignment search algorithms 
+        // 1. reduce search string to essential parts such as filename or first part of directory.
+        // 2. cache found filenames to avoid same filename traps.
+        // 3. research about shitty case of search algorithms (similar names, fucky situations (like url parsing you fucker))
         for (int i = 0; i < bundleNames.Length; i++)
-            foreach (string name in assetNames[i]) 
-                if (name.Contains(assetName)) 
+            foreach (string name in assetNames[i]) {
+                string fuckingshit = name.Substring(name.LastIndexOf('/')); // yeah fuckoff you fucking cunt
+                if (fuckingshit.Contains(assetName)) {
                     bundleName = bundleNames[i];
+                }
+            }
 
         //Debug.Log(string.Format("{0}: {1}", key, bundleName));
         if (bundleName == "0") {
             try {
                 int dashIndex = key.LastIndexOf('-') < 0 ? key.Length : key.LastIndexOf('-');
                 string bundleKey = key.Substring(0, dashIndex) + "-bundle";
-                Debug.Log(bundleKey);
                 bundleName = item.Attribute(bundleKey) != null ? item.Attribute(bundleKey).Value : "0";
             } catch (Exception e) {
                 Debug.LogWarning("Could not catch shits.");
