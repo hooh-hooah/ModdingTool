@@ -1,17 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 public class HoohTools : EditorWindow {
-
     // TODO: Make these moddable with windows.
     public static int category = 0;
 
+    private GUIStyle foldoutStyle;
+    private GUIStyle titleStyle;
+    private float sliderValue;
+    private float inputNumber;
+    private float maxSliderValue = 5.0f;
+    private float minSliderValue = 1.0f;
+
     public static string sideloaderString = "";
     public static int categorySmall = 0;
-    public static string manifest = "";
     public static float lightScaleSize = 9f;
     public static string gameExportPath = "";
     public static int gap = 10;
@@ -25,11 +34,18 @@ public class HoohTools : EditorWindow {
     bool foldoutBundler = true;
 
     public void OnEnable() {
+        foldoutElement = EditorPrefs.GetBool("hoohTool_foldoutElement", true);
+        foldoutMacros = EditorPrefs.GetBool("hoohTool_foldoutMacros", true);
+        foldoutProbeset = EditorPrefs.GetBool("hoohTool_foldoutProbeset", true);
+        foldoutScaffolding = EditorPrefs.GetBool("hoohTool_foldoutScaffolding", true);
+        foldoutMod = EditorPrefs.GetBool("hoohTool_foldoutMod", true);
+        foldoutBundler = EditorPrefs.GetBool("hoohTool_foldoutBundler", true);
+
         category = EditorPrefs.GetInt("hoohTool_category"); // this is mine tho
         sideloaderString = EditorPrefs.GetString("hoohTool_sideloadString");
         categorySmall = EditorPrefs.GetInt("hoohTool_categorysmall"); // this is mine tho
-        manifest = EditorPrefs.GetString("hoohTool_manifest");
         gameExportPath = EditorPrefs.GetString("hoohTool_exportPath");
+        sliderValue = EditorPrefs.GetFloat("hoohTool_probeStrength");
         lightScaleSize = 9f;
     }
 
@@ -51,8 +67,18 @@ public class HoohTools : EditorWindow {
         }
         return true;
     }
+    void InitStyle() {
+        titleStyle = new GUIStyle();
+        titleStyle.fontSize = 15;
+        titleStyle.margin = new RectOffset(10, 10, 0, 10);
+        foldoutStyle = new GUIStyle(EditorStyles.foldout);
+        foldoutStyle.fontSize = 15;
+        foldoutStyle.margin = new RectOffset(10, 10, 0, 10);
+    }
 
     private void OnGUI() {
+        InitStyle();
+
         if (GUILayout.Button("Check Updates")) {
             Application.OpenURL("https://github.com/hooh-hooah/ModdingTool/tree/release/");
         }
@@ -65,30 +91,51 @@ public class HoohTools : EditorWindow {
         EditorGUILayout.BeginVertical();
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(0), GUILayout.Height(0));
         {
-            // help
-            var titleStyle = new GUIStyle();
-            titleStyle.fontSize = 15;
-            titleStyle.margin = new RectOffset(10, 10, 0, 10);
-
-            var foldoutStyle = new GUIStyle(EditorStyles.foldout);
-            foldoutStyle.fontSize = 15;
-            foldoutStyle.margin = new RectOffset(10, 10, 0, 10);
-
             foldoutElement = EditorGUILayout.Foldout(foldoutElement, "Element Generator", true, foldoutStyle);
             if (foldoutElement) {
                 EditorPrefs.SetInt("hoohTool_category", int.Parse(EditorGUILayout.TextField("Big Category Number: ", category.ToString())));
                 EditorPrefs.SetInt("hoohTool_categorysmall", int.Parse(EditorGUILayout.TextField("Mid Category Number: ", categorySmall.ToString())));
                 EditorPrefs.SetString("hoohTool_sideloadString", EditorGUILayout.TextField("Game Assetbundle Path: ", sideloaderString));
-                EditorPrefs.SetString("hoohTool_manifest", EditorGUILayout.TextField("Manifest(?): ", manifest));
 
                 category = EditorPrefs.GetInt("hoohTool_category"); // this is mine tho
                 sideloaderString = EditorPrefs.GetString("hoohTool_sideloadString");
                 categorySmall = EditorPrefs.GetInt("hoohTool_categorysmall"); // this is mine tho
-                manifest = EditorPrefs.GetString("hoohTool_manifest");
 
-                if (GUILayout.Button("Generate Item List")) {
-                    if (CheckGoodSelection())
-                        GenerateCSV();
+                if (GUILayout.Button("Generate And Fill Item List in mod.xml")) {
+                    if (CheckGoodSelection()) {
+                        try {
+                            GameObject[] selections = Selection.gameObjects;
+                            string path = Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), ModPacker.GetProjectPath()), "mod.xml").Replace("\\", "/");
+
+                            XDocument document = TouchXML.GetXMLObject(path);
+                            TouchXML.GenerateObjectString(document, selections);
+                            TouchXML.GenerateBundleString(document, selections);
+                            Debug.Log(path);
+                            document.Save(path);
+                        } catch (InvalidCastException e) {
+                            Debug.LogError("You've selected wrong kind of object. You should only select prefabs!");
+                        } catch (Exception e) {
+                            Debug.LogError(e);
+                        }
+                    }
+                }
+
+                if (GUILayout.Button("Add Bone Information of this object")) {
+                    if (CheckGoodSelection()) {
+                        try {
+                            GameObject[] selections = Selection.gameObjects;
+                            string path = Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), ModPacker.GetProjectPath()), "mod.xml").Replace("\\", "/");
+
+                            XDocument document = TouchXML.GetXMLObject(path);
+                            TouchXML.GenerateBoneString(document, selections);
+                            Debug.Log(path);
+                            document.Save(path);
+                        } catch (InvalidCastException e) {
+                            Debug.LogError("You've selected wrong kind of object. You should only select prefabs!");
+                        } catch (Exception e) {
+                            Debug.LogError(e);
+                        }
+                    }
                 }
             }
 
@@ -123,6 +170,42 @@ public class HoohTools : EditorWindow {
                 if (GUILayout.Button("Scale Lights and Probes")) {
                     if (CheckGoodSelection())
                         ScaleLightsAndProbes();
+                }
+            }
+
+            foldoutProbeset = EditorGUILayout.Foldout(foldoutProbeset, "LightProbe Adjustment", true, foldoutStyle);
+            if (foldoutProbeset) {
+                if (inputNumber > 5.0f) {
+                    sliderValue = 5.0f;
+                } else if (inputNumber < 1) {
+                    sliderValue = 1;
+                }
+
+                string inputText = " ";
+                sliderValue = EditorGUILayout.Slider(sliderValue, minSliderValue, maxSliderValue);
+
+                if (inputNumber != sliderValue) {
+                    if (float.TryParse(inputText, out inputNumber)) {
+                        sliderValue = Mathf.Clamp(inputNumber, minSliderValue, maxSliderValue);
+                    } else if (inputText == " ") {
+                        inputNumber = sliderValue;
+                    }
+                }
+
+                EditorPrefs.SetFloat("hoohTool_probeStrength", sliderValue);
+
+                if (GUILayout.Button("Increase Intensity")) {
+                    ProbeIntensity.ScaleLightProbeData(sliderValue);
+                    ProbeIntensity.DisplayWarning();
+                }
+
+                if (GUILayout.Button("Decrease Intensity")) {
+                    ProbeIntensity.ScaleLightProbeData(1 / Mathf.Abs(sliderValue));
+                }
+
+                if (GUILayout.Button("Reset Intensity")) {
+                    ProbeIntensity.ResetProbeData();
+                    ProbeIntensity.DisplayWarning();
                 }
             }
 
@@ -167,6 +250,14 @@ public class HoohTools : EditorWindow {
                 }
             }
         }
+
+        EditorPrefs.SetBool("hoohTool_foldoutElement", foldoutElement);
+        EditorPrefs.SetBool("hoohTool_foldoutMacros", foldoutMacros);
+        EditorPrefs.SetBool("hoohTool_foldoutProbeset", foldoutProbeset);
+        EditorPrefs.SetBool("hoohTool_foldoutScaffolding", foldoutScaffolding);
+        EditorPrefs.SetBool("hoohTool_foldoutMod", foldoutMod);
+        EditorPrefs.SetBool("hoohTool_foldoutBundler", foldoutBundler);
+
         EditorGUILayout.EndScrollView();
         EditorGUILayout.EndVertical();
     }
@@ -211,44 +302,6 @@ public class HoohTools : EditorWindow {
     [MenuItem("Assets/Build AssetBundles!")]
     private static void BuildAllAssetBundles() {
         BuildPipeline.BuildAssetBundles("Assets/Assetbundles", BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows64);
-    }
-
-    [MenuItem("Assets/Generate Item List")]
-    public static void GenerateCSV() {
-        string path = Path.Combine(ModPacker.GetProjectPath(), "generated.txt").Replace("\\", "/");
-
-        // Generate CSV files.
-        if (File.Exists(path))
-            File.Delete(path);
-        StreamWriter writer = new StreamWriter(path, true);
-
-        Object[] selections = Selection.objects;
-        List<Object> beforeList = new List<Object>(selections);
-        List<Object> list = beforeList.OrderBy(o => o.name).ToList();
-
-        for (int i = 0; i < list.Count; i++) {
-            Object currentObject = list[i];
-            string niceString = currentObject.name;
-            niceString = niceString.Replace('-', ' ');
-            niceString = niceString.Replace('_', ' ');
-
-            string toWrite = string.Format("<asset path=\"{0}\"/>", currentObject.name + ".prefab");
-            writer.WriteLine(toWrite);
-            //Debug.Log(toWrite);
-        }
-
-        for (int i = 0; i < list.Count; i++) {
-            Object currentObject = list[i];
-            string niceString = currentObject.name;
-            niceString = niceString.Replace('-', ' ');
-            niceString = niceString.Replace('_', ' ');
-
-            string toWrite = string.Format("<item big-category=\"{1}\" mid-category=\"{2}\" name=\"{3}\" manifest=\"{4}\" bundle=\"{5}.unity3d\" object=\"{6}\" />", i, category, categorySmall, niceString, manifest, sideloaderString, currentObject.name);
-            writer.WriteLine(toWrite);
-            //Debug.Log(toWrite);
-        }
-        writer.Close();
-        Debug.Log("CSV has been generated to " + path);
     }
 
     public static bool randomizeX = true;

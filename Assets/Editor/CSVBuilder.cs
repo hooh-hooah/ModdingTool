@@ -85,17 +85,23 @@ public class AutoCSVKeys {
         string[][] assetNames = instance.packData.assetNames;
         string[] bundleNames = instance.packData.assetBundleNames;
 
+        // TODO: Improve asset auto assignment search algorithms 
+        // 1. reduce search string to essential parts such as filename or first part of directory.
+        // 2. cache found filenames to avoid same filename traps.
+        // 3. research about shitty case of search algorithms (similar names, fucky situations (like url parsing you fucker))
         for (int i = 0; i < bundleNames.Length; i++)
-            foreach (string name in assetNames[i]) 
-                if (name.Contains(assetName)) 
+            foreach (string name in assetNames[i]) {
+                string fuckingshit = name.Substring(name.LastIndexOf('/')); // yeah fuckoff you fucking cunt
+                if (fuckingshit.Contains(assetName)) {
                     bundleName = bundleNames[i];
+                }
+            }
 
         //Debug.Log(string.Format("{0}: {1}", key, bundleName));
         if (bundleName == "0") {
             try {
                 int dashIndex = key.LastIndexOf('-') < 0 ? key.Length : key.LastIndexOf('-');
                 string bundleKey = key.Substring(0, dashIndex) + "-bundle";
-                Debug.Log(bundleKey);
                 bundleName = item.Attribute(bundleKey) != null ? item.Attribute(bundleKey).Value : "0";
             } catch (Exception e) {
                 Debug.LogWarning("Could not catch shits.");
@@ -116,6 +122,10 @@ public class AutoCSVKeys {
         return "abdata,";
     }
 
+    private static string BoneText(int index, string key, string parameter, XElement item, CSVBuilder instance) {
+        return item.Value;
+    }
+
     public static Dictionary<string, KeyDelegate> specialKeys = new Dictionary<string, KeyDelegate>() {
         {"scene", new KeyDelegate(GetBundleFromAsset)},
         {"object", new KeyDelegate(GetBundleFromAsset)},
@@ -131,7 +141,8 @@ public class AutoCSVKeys {
         {"manifest", new KeyDelegate(InsertManifest)},
         {"index", new KeyDelegate(InsertIndex)},
         {"set-hair", new KeyDelegate(InsertNull)},
-        {"en-us", new KeyDelegate(InsertNull)}
+        {"en-us", new KeyDelegate(InsertNull)},
+        {"bones", new KeyDelegate(BoneText)}
     };
 }
 
@@ -172,6 +183,7 @@ public class CSVBuilder {
         { "bigcategory", new ListType("-1", "", "ID,Name", new string[] {"id", "name"} )},
         { "midcategory", new ListType("-2", "", "ID,Name", new string[] {"id", "name"} )},
         { "studioitem", new ListType("-3", "", itemHeader, new string[] {"index", "big-category", "mid-category", "name", "manifest", "object" } ) }, // ✅ TESTED AND PROVEN
+        { "studiobones", new ListType("-5", "", "ID,Bones", new string[] {"index", "bones"})},
         // Male Parts
         { "mhead", new ListType("110", "abdata\\list\\characustom\\00\\mo_head_00.csv", headHeader, headKeys)}, // ❎ NOT DONE
         { "mskinf", new ListType("111", "abdata\\list\\characustom\\00\\mt_skin_f_00.csv", skinFaceHeader, skinFaceKeys)}, // ❎ NOT DONE

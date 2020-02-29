@@ -97,6 +97,16 @@ class SBUScriptBuilder {
             }
             builder.AppendLine();
             #endregion
+            #region Assign Material Values
+            foreach (var matvalue in target.Elements("matvalue")) {
+                var key = matvalue.Attribute("key");
+                var value = matvalue.Attribute("value");
+
+                if (key != null && value != null) {
+                    builder.AppendLine($"meshAnimEditor{index}.SetMaterialValue(id=copyMatIndex{index}, name=\"{key.Value}\", value={value.Value})");
+                }
+            }
+            #endregion
 
             if (!uniqueBundles.ContainsKey(meshPath)) uniqueBundles.Add(meshPath, index);
             index++;
