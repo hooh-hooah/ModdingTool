@@ -183,9 +183,19 @@ public class AIObjectHelper {
             FindAssist findAssist = new FindAssist();
             findAssist.Initialize(clotheComponent.transform);
             clotheComponent.objTopDef = findAssist.GetObjectFromName("n_top_a");
+            if (clotheComponent.objTopDef == null)
+                clotheComponent.objTopDef = findAssist.GetObjectFromName("top_00_a");
             clotheComponent.objTopHalf = findAssist.GetObjectFromName("n_top_b");
+            if (clotheComponent.objTopHalf == null)
+                clotheComponent.objTopHalf = findAssist.GetObjectFromName("top_00_b");
             clotheComponent.objBotDef = findAssist.GetObjectFromName("n_bot_a");
+            if (clotheComponent.objBotDef == null)
+                clotheComponent.objBotDef = findAssist.GetObjectFromName("bot_00_a");
             clotheComponent.objBotHalf = findAssist.GetObjectFromName("n_bot_b");
+            if (clotheComponent.objBotHalf == null)
+                clotheComponent.objBotHalf = findAssist.GetObjectFromName("bot_00_b");
+
+
             clotheComponent.objOpt01 = (from x in findAssist.dictObjName
                                         where x.Key.StartsWith("op1")
                                         select x.Value).ToArray();
@@ -199,26 +209,48 @@ public class AIObjectHelper {
                 Object.DestroyImmediate(comp);
             }
 
-            Regex rgx = new Regex(@"cf_J_Legsk_[0-9]{2}_00");
+            Regex rgx = new Regex(@"^cf_J_Legsk_[0-9]{2}_00$"); // fuck off _dam bones
             var dynBones = (from x in findAssist.dictObjName where rgx.IsMatch(x.Value.transform.name) select x.Value).ToArray();
             foreach (GameObject bone in dynBones) {
                 DynamicBone dynBone = clotheObject.AddComponent<DynamicBone>();
                 dynBone.m_Root = bone.transform;
                 dynBone.m_UpdateRate = 60;
                 dynBone.m_UpdateMode = DynamicBone.UpdateMode.AnimatePhysics;
-                dynBone.m_Damping = 0.102f;
-                dynBone.m_Elasticity = 0.119f;
-                dynBone.m_ElasticityDistrib = new AnimationCurve();
-                dynBone.m_ElasticityDistrib.AddKey(0f, 0.969f);
-                dynBone.m_ElasticityDistrib.AddKey(1f, 0.603f);
-                dynBone.m_Stiffness = 0.144f;
-                dynBone.m_Inert = 0.072f;
-                dynBone.m_Radius = 0.1f;
+                dynBone.m_Damping = 0.430f;
+                dynBone.m_DampingDistrib = new AnimationCurve();
+                dynBone.m_DampingDistrib.AddKey(1f, 0.3f);
+                dynBone.m_DampingDistrib.AddKey(0f, 0.4f);
+                dynBone.m_Elasticity = 0.038f;
+                dynBone.m_Stiffness = 0.669f;
+                dynBone.m_Inert = 0.244f;
+                dynBone.m_Radius = 0.2f;
                 dynBone.m_RadiusDistrib = new AnimationCurve();
                 dynBone.m_RadiusDistrib.AddKey(0f, 1f);
-                dynBone.m_RadiusDistrib.AddKey(1f, 0.5f);
+                dynBone.m_RadiusDistrib.AddKey(1f, 1.5f);
                 dynBone.m_EndLength = 0f;
-                dynBone.m_Force = new Vector3(0, 0, 0);
+                dynBone.m_Force = new Vector3(0, -0.0025f, 0);
+            }
+
+            Regex rgx2 = new Regex(@"^cf_J_sk_[0-9]{2}_00$"); // fuck you _dam bones
+            var dynBones2 = (from x in findAssist.dictObjName where rgx2.IsMatch(x.Value.transform.name) select x.Value).ToArray();
+            foreach (GameObject bone in dynBones2) {
+                DynamicBone dynBone = clotheObject.AddComponent<DynamicBone>();
+                dynBone.m_Root = bone.transform;
+                dynBone.m_UpdateRate = 60;
+                dynBone.m_UpdateMode = DynamicBone.UpdateMode.AnimatePhysics;
+                dynBone.m_Damping = 0.430f;
+                dynBone.m_DampingDistrib = new AnimationCurve();
+                dynBone.m_DampingDistrib.AddKey(1f, 0.3f);
+                dynBone.m_DampingDistrib.AddKey(0f, 0.4f);
+                dynBone.m_Elasticity = 0.038f;
+                dynBone.m_Stiffness = 0.669f;
+                dynBone.m_Inert = 0.244f;
+                dynBone.m_Radius = 0.2f;
+                dynBone.m_RadiusDistrib = new AnimationCurve();
+                dynBone.m_RadiusDistrib.AddKey(0f, 1f);
+                dynBone.m_RadiusDistrib.AddKey(1f, 1.5f);
+                dynBone.m_EndLength = 0f;
+                dynBone.m_Force = new Vector3(0, -0.0025f, 0);
             }
 
             Renderer[] renderers = clotheObject.GetComponentsInChildren<Renderer>();
