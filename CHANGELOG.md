@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.3.0
+
+### 2020-02-29
+
+- Changed Clothing Initializer's Class Target to SkinnedMeshRenderer from MeshRenderer
+- Added new targets for Clothing Targets 
+    - TODO: Make it modular to make users can customize targets with regex support.
+- Added Automatic Dynamic Bone Initializer 
+    - WARNING: It will remove existing dynamic bones of the object automatically.
+    - TODO: Make it only remove automatically added dynamic bones.
+- Resolved CSVBuilder's Same-named Asset Naviation Issue.
+- Added FK Bone List support for CSVBuilder.
+- Changed UI Little Bit
+- Added Animation List Generator. It will fill out ItemComponent's Animation List based on Object's Animation Controllers.
+- Added ModPack Testing method.
+- Changed Temporary Folder location for zipping mod.
+- WIP: XML Inspector...
+- Merged Light Probe Intensity Adjustment into hooh's Tool Window.
+- Material generation for hair mods is changed.
+- Added XML Touch Tool for mod.xml Manipulation.
+- Changed few shader's name.
+- Added few shaders.
+    - Colorable Objects
+
 ## 0.2.1
 
 ### 2020-01-30
