@@ -1,0 +1,10 @@
+{
+    "name": "AI_Hooah",
+    "references": [
+        "Unity.Postprocessing.Runtime"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true
+}
