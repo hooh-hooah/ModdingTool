@@ -19,7 +19,13 @@
 - Added Bunch of Macros and UI Improvements
 - Initial Support for HS2 In-game Map Components - It works technically.
 - Added Anisotrophic shader alpha.
-- 
+
+#### What's about to come?
+
+- **Complete Animation Workflow**
+- **Migrating mod configuration into ScriptableObject from mod.xml**
+- **Better UI**
+- **All-in-one Editor Preview System that almost identical to ILLUSION's Loading Code.**
 
 ## 0.3.0
 
