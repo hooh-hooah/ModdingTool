@@ -4,7 +4,7 @@
 
 ### 2020-06-28
 
-- Updated Engine's Version to HS2's Unity Engine Version (2018.4.21f)
+- Updated Engine's Version to HS2's Unity Engine Version (2018.4.11f)
   - **Do not upgrade version with unity's feature. re-import everything so your stuffs are not going to break.**
 - Added Preview Alpha 
   - Now you can preview your right without launching the game with binding helper.
@@ -19,6 +19,7 @@
 - Added Bunch of Macros and UI Improvements
 - Initial Support for HS2 In-game Map Components - It works technically.
 - Added Anisotrophic shader alpha.
+- Removed unused and big files from the project.
 
 #### What's about to come?
 
