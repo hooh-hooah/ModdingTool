@@ -1,0 +1,34 @@
+<packer type="fclothe">
+	<!-- This will be copied as manifest.xml -->
+	<guid>modbuilder.example.suit</guid>
+	<name>MODBUILDER SUIT EXAMPLE</name>
+	<version>1.0.0</version>
+	<author>hooh</author>
+	<description>This is modbuilder example.</description>
+
+	<!-- This section will contain bundle information -->
+	<bundles>
+		<bundle path="example/bodysuit.unity3d">
+			<asset path="clothmesh.prefab"/>
+			<asset path="single_suit.mat"/>
+			<asset path="diffuse.png"/>
+			<asset path="colormask.png"/>
+		</bundle>
+		<bundle path="example/bodysuit_thumb.unity3d">
+			<asset path="thumb_image.psd"/>
+		</bundle>
+	</bundles>
+
+	<!-- This section will contain build information -->
+	<build name="@example_bodysuit">
+		<list type="fintop">
+			<item
+				kind="0" possess="1" name="[hooh] clothmesh Test" en_us="0" 
+				mesh-manifest="abdata" mesh-bundle="example/bodysuit.unity3d" mesh-a="clothmesh" state="1"
+				coordinate="1" overbra-type="0" bodymask-bundle="0" bodymask-tex="0"
+            	tex-main="diffuse" tex-mask="colormask" tex-main2="0" tex-mask2="0" hide-bottom="0"
+				thumb-bundle="example/bodysuit_thumb.unity3d" thumb="thumb_image"
+			/>
+		</list>
+	</build>
+</packer>

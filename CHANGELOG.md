@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.4.0 - alpha
+
+### 2020-06-28
+
+- Updated Engine's Version to HS2's Unity Engine Version (2018.4.21f)
+  - **Do not upgrade version with unity's feature. re-import everything so your stuffs are not going to break.**
+- Added Preview Alpha 
+  - Now you can preview your right without launching the game with binding helper.
+  - Binding helper will be combined with skin preview components.
+  - In the end it will be all-in-one preview system in one or two months.
+- Re-designed Component Inspector
+  - Now it's more easier to manage your mod's component.
+- Reduced Human Error with more automated tasks
+- Moved Mod Component Initializing into Tranform Component Inspector. 
+- Added and refined the examples
+- Added Animation Example (Warning, it's really rough atm)
+- Added Bunch of Macros and UI Improvements
+- Initial Support for HS2 In-game Map Components - It works technically.
+- Added Anisotrophic shader alpha.
+- 
+
 ## 0.3.0
 
 ### 2020-02-29
