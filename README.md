@@ -16,7 +16,7 @@ This modding tool's base has been created by roy12 and I added some nice easy-to
 
    You need to open this project with Unity Editor in order to make your mods. If you don't have Unity Editor yet I suggest you to download **Specific Version of Unity Editor** to use it.
 
-   AI-Shoujo is currently using *2018.2.21f1* Version of Unity Engine. 
+   AI-Shoujo is currently using *2018.4.11f1* Version of Unity Engine. 
 
 3. Try Examples
 
