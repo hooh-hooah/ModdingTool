@@ -7,7 +7,7 @@ public partial class HoohTools
 {
     public void DrawUnityUtility(SerializedObject serializedObject)
     {
-        foldoutMacros = EditorGUILayout.Foldout(foldoutMacros, "Quick Unity Macros", true, foldoutStyle);
+        foldoutMacros = EditorGUILayout.Foldout(foldoutMacros, "Quick Unity Macros", true, _styles.Foldout);
         if (foldoutMacros)
         {
             // Starts a horizontal group
@@ -16,20 +16,20 @@ public partial class HoohTools
             Gap = EditorGUILayout.IntField("Showcase Gap: ", Gap);
             Cols = EditorGUILayout.IntField("Showcase Columns: ", Cols);
             GUILayout.EndVertical();
-            if (GUILayout.Button("Showcase Mode"))
+            if (GUILayout.Button("Showcase Mode", _styles.Button))
                 if (CheckGoodSelection())
                     ShowcaseMode();
             GUILayout.EndHorizontal();
 
             GUILayout.Space(5);
             GUILayout.BeginVertical("box");
-            if (GUILayout.Button("Wrap Object with new GameObject and Scale"))
+            if (GUILayout.Button("Wrap Object with new GameObject and Scale", _styles.Button))
                 if (CheckGoodSelection())
                     WrapObjectScale();
-            if (GUILayout.Button("Wrap Object with new GameObject"))
+            if (GUILayout.Button("Wrap Object with new GameObject", _styles.Button))
                 if (CheckGoodSelection())
                     WrapObject();
-            if (GUILayout.Button("Create Prefab from Selected Objects"))
+            if (GUILayout.Button("Create Prefab from Selected Objects", _styles.Button))
                 if (CheckGoodSelection())
                     CreatePrefab();
             GUILayout.EndVertical();
@@ -40,10 +40,10 @@ public partial class HoohTools
             LightScaleSize = EditorGUILayout.FloatField("Light Scale Size: ", LightScaleSize);
 
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Scale Lights and Probes"))
+            if (GUILayout.Button("Scale Lights and Probes", _styles.Button))
                 if (CheckGoodSelection())
                     ScaleLightsAndProbes();
-            if (GUILayout.Button("Reset Lightmap Scale"))
+            if (GUILayout.Button("Reset Lightmap Scale", _styles.Button))
             {
                 var meshes = Resources.FindObjectsOfTypeAll<MeshRenderer>();
                 foreach (var mesh in meshes)
@@ -60,7 +60,7 @@ public partial class HoohTools
             GUILayout.Space(5);
             GUILayout.BeginHorizontal("box");
             fuckyouCunt = (GameObject) EditorGUILayout.ObjectField("Target Object", fuckyouCunt, typeof(GameObject), true);
-            if (GUILayout.Button("Move Selected to Clutter"))
+            if (GUILayout.Button("Move Selected to Clutter", _styles.Button))
                 if (CheckGoodSelection())
                 {
                     var clutter = fuckyouCunt ?? GameObject.Find("Clutters") ?? new GameObject("Clutters");
@@ -78,12 +78,16 @@ public partial class HoohTools
             GUILayout.BeginVertical("box");
             PrepostString = EditorGUILayout.TextField("Pre/Postfix Text", PrepostString);
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Add to Front") && CheckGoodSelection())
+            if (GUILayout.Button("Add to Front", _styles.Button) && CheckGoodSelection())
                 UnityMacros.AddPrefixOnName(PrepostString);
-            if (GUILayout.Button("Add to End") && CheckGoodSelection())
+            if (GUILayout.Button("Add to End", _styles.Button) && CheckGoodSelection())
                 UnityMacros.AddPostfixOnName(PrepostString);
-            if (GUILayout.Button("Remove") && CheckGoodSelection())
+            if (GUILayout.Button("Remove", _styles.Button) && CheckGoodSelection())
                 UnityMacros.ReplaceTextOfName(PrepostString, "");
+            if (GUILayout.Button("SetTo", _styles.Button) && CheckGoodSelection())
+                UnityMacros.SetName(PrepostString);
+            if (GUILayout.Button("Sequence", _styles.Button) && CheckGoodSelection())
+                UnityMacros.SetNameSequence(PrepostString);
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
         }
@@ -113,10 +117,11 @@ public partial class HoohTools
         for (var i = 0; i < Selection.objects.Length; i++)
         {
             var currentObject = (GameObject) Selection.objects[i];
-
+            var parent = currentObject.transform.parent;
             if (currentObject != null)
             {
                 var wrapObject = new GameObject(currentObject.name);
+                wrapObject.transform.SetParent(parent, false);
                 currentObject.transform.SetParent(wrapObject.transform);
             }
         }
@@ -128,12 +133,14 @@ public partial class HoohTools
         for (var i = 0; i < Selection.objects.Length; i++)
         {
             var currentObject = (GameObject) Selection.objects[i];
-
+            var parent = currentObject.transform.parent;
             if (currentObject != null)
             {
                 currentObject.transform.localScale = new Vector3(9, 9, 9);
                 var wrapObject = new GameObject(currentObject.name);
+                wrapObject.transform.parent = parent;
                 currentObject.transform.SetParent(wrapObject.transform);
+                wrapObject.transform.position = Vector3.zero;
             }
         }
     }

@@ -14,7 +14,7 @@ public partial class HoohTools
     {
         SerializedProperty packingObjectsField = serializedObject.FindProperty("packingObjects");
         
-        foldoutMod = EditorGUILayout.Foldout(foldoutMod, "Build Mod", true, foldoutStyle);
+        foldoutMod = EditorGUILayout.Foldout(foldoutMod, "Build Mod", true, _styles.Foldout);
         if (foldoutMod)
         {
             GUILayout.BeginVertical("box");

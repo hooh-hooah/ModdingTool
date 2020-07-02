@@ -22,12 +22,21 @@ internal class UnityMacros
         foreach (var gameObject in selections) gameObject.name = gameObject.name.Replace(search, to);
     }
 
-    public static void ReplaceTextOnName(Regex searchRegex, string to)
+    public static void SetName(string name)
     {
+        var selections = Selection.gameObjects;
+        foreach (var gameObject in selections) gameObject.name = name;
     }
 
-    public static void WrapObject()
+    public static void SetNameSequence(string name)
     {
+        var selections = Selection.gameObjects;
+        int index = 0;
+        foreach (var gameObject in selections)
+        {
+            gameObject.name = name + index;
+            index++;
+        }
     }
 
     public static void WrapObjectWithScale()

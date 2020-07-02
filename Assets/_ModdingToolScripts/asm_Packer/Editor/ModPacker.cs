@@ -105,42 +105,48 @@ public class ModPacker
             return;
         }
 
-        foreach (var textAsset in assets)
-        {
-            var parsedModInfo = ParseModXML(textAsset);
+        var modInfos = assets.Select(x => new KeyValuePair<TextAsset, XDocument>(x, ParseModXML(x))).ToList();
+        var modPackInfos = new List<ModPackInfo>();
 
-            if (parsedModInfo != null)
+        modInfos.ForEach(pairs =>
+        {
+            var modPackInfo = new ModPackInfo(pairs.Value, AssetDatabase.GetAssetPath(pairs.Key));
+            if (pairs.Value != null && modPackInfo.ConvertBundles())
             {
-                try
-                {
-                    var modInfo = new ModPackInfo(parsedModInfo, AssetDatabase.GetAssetPath(textAsset));
-                    modInfo.BuildAssetBundles();
-                    modInfo.SwapMaterial();
-                    modInfo.SetupModFolder();
-                    if (doDeploy)
-                    {
-                        modInfo.DeployZipMod(exportGamePath);
-                        Announce();
-                    }
-                    else
-                    {
-                        EditorApplication.Beep();
-                    }
-                }
-                catch (Exception e)
-                {
-                    Debug.Log(e.StackTrace);
-                    Debug.LogError(e);
-                    SystemSounds.Exclamation.Play();
-                    EditorUtility.DisplayDialog("Error!", "An error occured while the tool is building the mod.\nCheck console for more detailed information.", "Dismiss");
-                    return;
-                }
+                modPackInfos.Add(modPackInfo);
             }
             else
             {
-                return;
+                SystemSounds.Exclamation.Play();
+                EditorUtility.DisplayDialog("Error!", "Failed to parse bundle information.\nCheck console for more detailed information.", "YES");
+                throw new Exception("Failed to parse bundles.");
             }
-        }
+        });
+        
+        modPackInfos.ForEach(modInfo =>
+        {
+            try
+            {
+                modInfo.BuildAssetBundles();
+                modInfo.SwapMaterial();
+                modInfo.SetupModFolder();
+                if (doDeploy)
+                {
+                    modInfo.DeployZipMod(exportGamePath);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.StackTrace);
+                Debug.LogError(e);
+                SystemSounds.Exclamation.Play();
+                EditorUtility.DisplayDialog("Error!", "An error occured while the tool is building the mod.\nCheck console for more detailed information.", "Dismiss");
+                throw new Exception("Failed to build bundles.");
+            }
+        });
+        
+        if (doDeploy) Announce();
+        else EditorApplication.Beep();
     }
 
     public class ModPackInfo
@@ -310,6 +316,28 @@ public class ModPacker
                 throw new Exception("Failed to make zip file. (" + p.ExitCode + ")");
         }
 
+                
+        public bool ConvertBundles()
+        {
+            var assetBuildList = new AssetBundleBuild[AssetBundleNames.Count()];
+
+            for (var i = 0; i < assetBuildList.Count(); i++)
+            {
+                assetBuildList[i].assetBundleName = AssetBundleNames[i];
+                assetBuildList[i].assetNames = AssetNames[i];
+                if (!AssetNames[i].Any(x => string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(x)))) continue;
+                
+                Debug.LogError("Mod Packer was not able to find following assets from folder.");
+                foreach (var s in AssetNames[i].Where(x => string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(x))))
+                    Debug.LogError($">> {s}");
+                return false;
+            }
+
+            convertedBundlesList = assetBuildList;
+            return true;
+        }
+
+        private AssetBundleBuild[] convertedBundlesList;
         public void BuildAssetBundles()
         {
             var assetBuildList = new AssetBundleBuild[AssetBundleNames.Count()];

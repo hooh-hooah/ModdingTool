@@ -29,8 +29,6 @@ public partial class HoohTools : EditorWindow
     private bool foldoutProbeset = true;
     private bool foldoutScaffolding = true;
 
-    private GUIStyle foldoutStyle;
-
     public GameObject fuckyouCunt;
     private GUIStyle headerStyle;
     private float inputNumber;
@@ -73,12 +71,7 @@ public partial class HoohTools : EditorWindow
             margin = new RectOffset(5, 0, 0, 0)
         };
         headerStyle = new GUIStyle {fontSize = 12};
-        titleStyle = titleStyle ?? new GUIStyle()
-        {
-            fontSize = 15,
-            margin = new RectOffset(10, 10, 0, 10)
-        };
-        foldoutStyle = foldoutStyle ?? new GUIStyle(EditorStyles.foldout)
+        titleStyle = new GUIStyle()
         {
             fontSize = 15,
             margin = new RectOffset(10, 10, 0, 10)
@@ -136,9 +129,9 @@ public partial class HoohTools : EditorWindow
         // Draw Scroll Positions
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(0), GUILayout.Height(0));
         {
-            DrawXMLHelper(serializedObject);
             DrawLightProbeSetting(serializedObject);
             DrawUnityUtility(serializedObject);
+            DrawXMLHelper(serializedObject);
             DrawModBuilder(serializedObject);
         }
         EditorGUILayout.EndScrollView();

@@ -18,7 +18,6 @@
       <Path>.vs</Path>
       <Path>Library</Path>
       <Path>Logs</Path>
-      <Path>Temp</Path>
       <Path>_AIResources</Path>
       <Path>_BundleCache</Path>
       <Path>_Deploy</Path>
