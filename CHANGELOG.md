@@ -2,6 +2,15 @@
 
 ## 0.4.0 - alpha
 
+### 2020-07-02
+
+- Improved Asset Building w/ Validating Assets in .xml files.
+- Added SetName, SetNameSequence for Unity Macro.
+- Now Wrap Object with Parent respects target's parent.
+- Fixed Foldout Style Fuckery.
+- Updated Hair Preview - Now you can preview your hair and texutres in Editor.
+- Added BaseBoneNavigator.
+
 ### 2020-06-28
 
 - Updated Engine's Version to HS2's Unity Engine Version (2018.4.11f)
