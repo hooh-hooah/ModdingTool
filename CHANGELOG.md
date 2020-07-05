@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.0 - beta
+
+### 2020-07-05
+
+- Added Thumbnail Generator.
+- Reworked XML Helper and it's less confusing now.
+- Added Accessory Component Custom Inspector.
+- Fixed ItemComponents are being weird.
+- Reworked Mod Files Validator.
+
 ## 0.4.0 - alpha
 
 ### 2020-07-02
