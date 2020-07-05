@@ -4,6 +4,7 @@
 
 ### 2020-07-05
 
+- Reworked ColorableObjects shader. It's now can be used for Accessory and Studio Items.
 - Added Thumbnail Generator.
 - Reworked XML Helper and it's less confusing now.
 - Added Accessory Component Custom Inspector.
