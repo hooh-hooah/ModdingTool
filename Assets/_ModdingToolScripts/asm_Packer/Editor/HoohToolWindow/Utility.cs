@@ -23,6 +23,7 @@ public partial class HoohTools
 
             GUILayout.Space(5);
             GUILayout.BeginVertical("box");
+            GUILayout.Label("Easy Macros", _styles.Header);
             if (GUILayout.Button("Wrap Object with new GameObject and Scale", _styles.Button))
                 if (CheckGoodSelection())
                     WrapObjectScale();
@@ -63,7 +64,7 @@ public partial class HoohTools
             if (GUILayout.Button("Move Selected to Clutter", _styles.Button))
                 if (CheckGoodSelection())
                 {
-                    var clutter = fuckyouCunt ?? GameObject.Find("Clutters") ?? new GameObject("Clutters");
+                    var clutter = fuckyouCunt ? fuckyouCunt : GameObject.Find("Clutters") ?? new GameObject("Clutters");
 
                     foreach (var select in Selection.objects)
                     {
@@ -76,6 +77,7 @@ public partial class HoohTools
 
             GUILayout.Space(5);
             GUILayout.BeginVertical("box");
+            GUILayout.Label("Multi-Rename", _styles.Header);
             PrepostString = EditorGUILayout.TextField("Pre/Postfix Text", PrepostString);
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Add to Front", _styles.Button) && CheckGoodSelection())

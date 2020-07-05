@@ -114,12 +114,10 @@ public class AutoCSVKeys
     private static string GetBundleFromAsset(int index, string key, string assetName, XElement item, CSVBuilder instance)
     {
         var bundleName = "0";
-
-        var assetNames = instance.packData.AssetNames;
-        var bundleNames = instance.packData.AssetBundleNames;
-
+        var bundles = instance.packData.AssetBundleList;
         var dashIndex = key.LastIndexOf('-') < 0 ? key.Length : key.LastIndexOf('-');
         var bundleKey = key.Substring(0, dashIndex) + "-bundle";
+
         if (item.Attribute(bundleKey) != null)
         {
             bundleName = item.Attribute(bundleKey).Value;
@@ -132,8 +130,9 @@ public class AutoCSVKeys
             // 3. research about shitty case of search algorithms (similar names, fucky situations (like url parsing you fucker))
 
             var diffLength = 1000000;
-            for (var i = 0; i < bundleNames.Length; i++)
-                foreach (var name in assetNames[i])
+            bundles.ForEach(bundleInfo =>
+            {
+                foreach (var name in bundleInfo.assetNames)
                 {
                     var fuckingshit = name.Substring(name.LastIndexOf('/')); // yeah fuckoff you fucking cunt
                     if (fuckingshit.Contains(assetName))
@@ -142,16 +141,17 @@ public class AutoCSVKeys
                         if (diffLength > length)
                         {
                             diffLength = length;
-                            bundleName = bundleNames[i];
+                            bundleName = bundleInfo.assetBundleName;
                         }
                     }
                 }
 
-            //Debug.Log(string.Format("{0}: {1}", key, bundleName));
-            if (bundleName == "0")
-            {
-                //throw new Exception("Cannot find bundle that includes " + assetName);
-            }
+                //Debug.Log(string.Format("{0}: {1}", key, bundleName));
+                if (bundleName == "0")
+                {
+                    //throw new Exception("Cannot find bundle that includes " + assetName);
+                }
+            });
         }
 
         return string.Format("{0},{1},", bundleName, assetName);

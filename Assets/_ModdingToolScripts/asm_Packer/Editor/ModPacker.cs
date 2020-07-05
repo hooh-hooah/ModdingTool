@@ -12,7 +12,7 @@ using UnityEditor;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-public class ModPacker
+public partial class ModPacker
 {
     public static void Announce(bool isSuccess = true, string message = "Please check the console the see error.")
     {
@@ -105,24 +105,19 @@ public class ModPacker
             return;
         }
 
-        var modInfos = assets.Select(x => new KeyValuePair<TextAsset, XDocument>(x, ParseModXML(x))).ToList();
-        var modPackInfos = new List<ModPackInfo>();
+        List<ModPackInfo> modPackInfos = null;
 
-        modInfos.ForEach(pairs =>
+        try
         {
-            var modPackInfo = new ModPackInfo(pairs.Value, AssetDatabase.GetAssetPath(pairs.Key));
-            if (pairs.Value != null && modPackInfo.ConvertBundles())
-            {
-                modPackInfos.Add(modPackInfo);
-            }
-            else
-            {
-                SystemSounds.Exclamation.Play();
-                EditorUtility.DisplayDialog("Error!", "Failed to parse bundle information.\nCheck console for more detailed information.", "YES");
-                throw new Exception("Failed to parse bundles.");
-            }
-        });
-        
+            modPackInfos = assets.Select(x => new ModPackInfo(ParseModXML(x), AssetDatabase.GetAssetPath(x))).ToList();
+        }
+        catch (Exception e)
+        {
+            SystemSounds.Exclamation.Play();
+            EditorUtility.DisplayDialog("Error!", "Failed to parse bundle information.\nCheck console for more detailed information.", "YES");
+            throw new Exception("Failed to parse bundles.");
+        }
+
         modPackInfos.ForEach(modInfo =>
         {
             try
@@ -130,10 +125,7 @@ public class ModPacker
                 modInfo.BuildAssetBundles();
                 modInfo.SwapMaterial();
                 modInfo.SetupModFolder();
-                if (doDeploy)
-                {
-                    modInfo.DeployZipMod(exportGamePath);
-                }
+                if (doDeploy) modInfo.DeployZipMod(exportGamePath);
             }
             catch (Exception e)
             {
@@ -144,223 +136,9 @@ public class ModPacker
                 throw new Exception("Failed to build bundles.");
             }
         });
-        
+
         if (doDeploy) Announce();
         else EditorApplication.Beep();
-    }
-
-    public class ModPackInfo
-    {
-        public static string BundleCacheName = "_BundleCache/abdata";
-        public static string BundleCachePath = Path.Combine(Directory.GetCurrentDirectory(), BundleCacheName).Replace("\\", "/");
-        public static string AiBundlePath = Path.Combine(Directory.GetCurrentDirectory(), "_AIResources").Replace("\\", "/");
-        public static string TempFolder = Path.Combine(Directory.GetCurrentDirectory(), "_Temporary").Replace("\\", "/");
-        public string[] AssetBundleNames;
-        public string[][] AssetNames;
-        public CSVBuilder[] CsvBuilders;
-        public string path;
-        private readonly string _fileName;
-        private readonly ManifestBuilder _manifestBuilder;
-        private Dictionary<string, string>[] _matswapTargets;
-        private readonly SBUScriptBuilder _sbuScriptBuilder;
-
-        public ModPackInfo(XDocument documentInfo, string path)
-        {
-            this.path = System.IO.Path.GetDirectoryName(path);
-            var currentDirectory = GetProjectPath().Replace("/", "\\");
-
-            if (documentInfo != null)
-            {
-                #region Build AssetBundle Target Array
-
-                var bundleTargets = documentInfo.Root.Element("bundles").Elements("bundle");
-                AssetBundleNames = new string[bundleTargets.Count()];
-                AssetNames = new string[bundleTargets.Count()][];
-
-                var index = 0; // lmao
-
-                foreach (var bundle in bundleTargets)
-                {
-                    var assets = bundle.Elements("asset");
-                    var assetIndex = 0;
-
-                    var assetArray = new string[assets.Count()];
-                    foreach (var asset in assets)
-                    {
-                        assetArray[assetIndex] = Path.Combine(this.path, asset.Attribute("path").Value).Replace("\\", "/");
-                        assetIndex++;
-                    }
-
-                    AssetBundleNames[index] = bundle.Attribute("path").Value;
-                    AssetNames[index] = assetArray;
-
-                    index++;
-                }
-
-                #endregion
-
-                #region Build Material Swap Script
-
-                if (documentInfo.Root.Element("matswap") != null)
-                    _sbuScriptBuilder = new SBUScriptBuilder(documentInfo.Root.Element("matswap"));
-
-                #endregion
-
-                #region Build Manifest Buffer
-
-                _fileName = documentInfo.Root.Element("build")?.Attribute("name")?.Value;
-                _manifestBuilder = new ManifestBuilder(documentInfo);
-
-                #endregion
-
-                #region Build CSV Buffer
-
-                var buildLists = documentInfo.Root.Element("build")?.Elements("list");
-                CsvBuilders = new CSVBuilder[buildLists.Count()];
-                var csvIndex = 0;
-                foreach (var list in buildLists)
-                {
-                    var type = list.Attribute("type")?.Value;
-
-                    if (CSVBuilder.listTypeInfo.ContainsKey(type))
-                    {
-                        if (CSVBuilder.listTypeInfo[type].isStudioMod)
-                            CsvBuilders[csvIndex] = new CSVBuilder(type, list.Attribute("path")?.Value, this);
-                        else
-                            CsvBuilders[csvIndex] = new CSVBuilder(type, this);
-                    }
-                    else
-                    {
-                        Debug.LogError($"Type \"{type}\" is an invalid list category.");
-                    }
-
-                    CsvBuilders[csvIndex].Generate(list.Elements("item"));
-                    csvIndex++;
-                }
-
-                #endregion
-            }
-            else
-            {
-                Debug.LogError("Invalid XML Document.");
-            }
-        }
-
-        public void SwapMaterial()
-        {
-            _sbuScriptBuilder?.Execute();
-        }
-
-        public void SetupModFolder()
-        {
-            var zipPath = Path.Combine(TempFolder, _fileName).Replace("\\", "/");
-            try {
-                var info = new DirectoryInfo(zipPath);
-                foreach (var subDirectory in info.GetDirectories())
-                    subDirectory.Delete(true);
-            }
-            catch (DirectoryNotFoundException e) { }
-            catch (Exception e){ Debug.Log(e); }
-            finally { Directory.CreateDirectory(zipPath); }
-
-            File.WriteAllText(Path.Combine(zipPath, "manifest.xml").Replace("\\", "/"), _manifestBuilder.Generate());
-
-            foreach (var bundle in AssetBundleNames)
-            {
-                var source = Path.Combine(BundleCachePath, bundle).Replace("\\", "/");
-                var dest = Path.Combine(zipPath, "abdata\\" + bundle).Replace("\\", "/");
-
-                Directory.CreateDirectory(Path.Combine(
-                    zipPath,
-                    Path.GetDirectoryName("abdata\\" + bundle)
-                ).Replace("\\", "/"));
-                File.Copy(source, dest);
-            }
-
-            foreach (var builder in CsvBuilders)
-            {
-                var path = "";
-                if (builder.valid)
-                {
-                    path = builder.listPath != null
-                        ? Path.Combine(zipPath, builder.listPath).Replace("\\", "/")
-                        : Path.Combine(zipPath, builder.typeInfo.listPath).Replace("\\", "/");
-                }
-                else
-                {
-                    continue;
-                }
-
-                Directory.CreateDirectory(Path.GetDirectoryName(path));
-                File.WriteAllText(path, builder.buffer);
-            }
-        }
-
-        public void DeployZipMod(string targetPath)
-        {
-            // TODO: Make it modular.
-            var srcPath = Path.Combine(TempFolder, Path.Combine(_fileName, "*")).Replace("\\", "/");
-            var extPath = Path.Combine(targetPath, _fileName + ".zipmod").Replace("\\", "/");
-            var zipExec = Path.Combine(Directory.GetCurrentDirectory(), "_External\\7za.exe").Replace("\\", "/");
-
-            var p = new Process
-            {
-                StartInfo =
-                {
-                    UseShellExecute = false, FileName = zipExec, Arguments = $"a -tzip -aoa -w{Environment.GetEnvironmentVariable("TEMP")} \"{extPath}\" \"{srcPath}\""
-                }
-            };
-            p.Start();
-            p.WaitForExit();
-            if (p.ExitCode != 0)
-                throw new Exception("Failed to make zip file. (" + p.ExitCode + ")");
-        }
-
-                
-        public bool ConvertBundles()
-        {
-            var assetBuildList = new AssetBundleBuild[AssetBundleNames.Count()];
-
-            for (var i = 0; i < assetBuildList.Count(); i++)
-            {
-                assetBuildList[i].assetBundleName = AssetBundleNames[i];
-                assetBuildList[i].assetNames = AssetNames[i];
-                if (!AssetNames[i].Any(x => string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(x)))) continue;
-                
-                Debug.LogError("Mod Packer was not able to find following assets from folder.");
-                foreach (var s in AssetNames[i].Where(x => string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(x))))
-                    Debug.LogError($">> {s}");
-                return false;
-            }
-
-            convertedBundlesList = assetBuildList;
-            return true;
-        }
-
-        private AssetBundleBuild[] convertedBundlesList;
-        public void BuildAssetBundles()
-        {
-            var assetBuildList = new AssetBundleBuild[AssetBundleNames.Count()];
-
-            for (var i = 0; i < assetBuildList.Count(); i++)
-            {
-                assetBuildList[i].assetBundleName = AssetBundleNames[i];
-                assetBuildList[i].assetNames = AssetNames[i];
-                if (!AssetNames[i].Any(x => string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(x)))) continue;
-          
-                Debug.LogError("Mod Packer was not able to find following assets from folder.");
-                foreach (var s in AssetNames[i].Where(x => string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(x))))
-                    Debug.LogError($">> {s}");
-                throw new Exception("Failed to pack asset bundle.");
-            }
-
-            var result = BuildPipeline.BuildAssetBundles(BundleCacheName, assetBuildList,
-                BuildAssetBundleOptions.ChunkBasedCompression | BuildAssetBundleOptions.StrictMode,
-                BuildTarget.StandaloneWindows64);
-            
-            if (!result)
-                throw new Exception("Failed to pack asset bundle.");
-        }
     }
 }
 #endif

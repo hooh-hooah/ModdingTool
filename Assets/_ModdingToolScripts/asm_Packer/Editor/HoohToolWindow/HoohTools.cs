@@ -1,5 +1,4 @@
 ﻿#if UNITY_EDITOR
-using System;
 using System.Collections.Generic;
 using Common;
 using UnityEditor;
@@ -20,6 +19,8 @@ public partial class HoohTools : EditorWindow
 
     private readonly float maxSliderValue = 5.0f;
     private readonly float minSliderValue = 1.0f;
+
+    private Styles _styles;
     private GUIStyle bigButton;
     private bool foldoutBundler = true;
 
@@ -38,8 +39,6 @@ public partial class HoohTools : EditorWindow
     private GUIStyle smallButton;
     private GUIStyle titleStyle;
 
-    private Styles _styles;
-
     private void Awake()
     {
     }
@@ -55,7 +54,7 @@ public partial class HoohTools : EditorWindow
             {"wrap", Resources.Load("icons/wrap") as Texture2D},
             {"wrapscale", Resources.Load("icons/wrapscale") as Texture2D}
         };
-        
+
         smallButton = new GUIStyle
         {
             fixedWidth = 16,
@@ -71,7 +70,7 @@ public partial class HoohTools : EditorWindow
             margin = new RectOffset(5, 0, 0, 0)
         };
         headerStyle = new GUIStyle {fontSize = 12};
-        titleStyle = new GUIStyle()
+        titleStyle = new GUIStyle
         {
             fontSize = 15,
             margin = new RectOffset(10, 10, 0, 10)
@@ -112,23 +111,24 @@ public partial class HoohTools : EditorWindow
 
         return true;
     }
-    
+
     private void OnGUI()
     {
         _styles.Init();
-        var serializedObject = new SerializedObject((ScriptableObject) this);
-            
+        var serializedObject = new SerializedObject(this);
+
         EditorGUILayout.BeginVertical();
         // Draw Top Help/Tutorial Boxes
         GUILayout.BeginHorizontal("box");
-            if (GUILayout.Button("Check Updates")) Application.OpenURL("https://github.com/hooh-hooah/ModdingTool/tree/release/");
-            if (GUILayout.Button("Tutorials")) Application.OpenURL("https://github.com/hooh-hooah/AI_Tips");
+        if (GUILayout.Button("Check Updates")) Application.OpenURL("https://github.com/hooh-hooah/ModdingTool/tree/release/");
+        if (GUILayout.Button("Tutorials")) Application.OpenURL("https://github.com/hooh-hooah/AI_Tips");
         GUILayout.EndHorizontal();
         // Draw Separator Lines
         DrawUILine(new Color(0, 0, 0));
         // Draw Scroll Positions
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(0), GUILayout.Height(0));
         {
+            DrawThumbnailUtility(serializedObject);
             DrawLightProbeSetting(serializedObject);
             DrawUnityUtility(serializedObject);
             DrawXMLHelper(serializedObject);

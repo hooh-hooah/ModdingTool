@@ -1,23 +1,13 @@
 {
     "name": "ModPacker",
-    "references": [],
-    "optionalUnityReferences": [],
-    "includePlatforms": [],
-    "excludePlatforms": [
-        "Android",
-        "iOS",
-        "LinuxStandalone32",
-        "LinuxStandalone64",
-        "LinuxStandaloneUniversal",
-        "Lumin",
-        "macOSStandalone",
-        "PS4",
-        "Switch",
-        "tvOS",
-        "WSA",
-        "WebGL",
-        "XboxOne"
+    "references": [
+        "RuntimePreviewGenerator.Runtime"
     ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
     "allowUnsafeCode": true,
     "overrideReferences": true,
     "precompiledReferences": [],

@@ -117,7 +117,8 @@ namespace Studio
         [ButtonMethod]
         public void InitializeItem()
         {
-	        gameObject.layer = 10;
+	        gameObject.layer = 11;
+	        GetComponentsInChildren<Transform>().ToList().ForEach(x => x.gameObject.layer = 11);
 
 	        if (gameObject != null)
 	        {
@@ -126,7 +127,6 @@ namespace Studio
 		        for (var i = 0; i < renderers.Length; i++)
 		        {
 			        var renderer = renderers[i];
-			        renderer.gameObject.layer = 10;
 			        rendererInfos[i] = new RendererInfo();
 			        rendererInfos[i].renderer = renderer;
 			        rendererInfos[i].materials = new MaterialInfo[renderer.sharedMaterials.Length];

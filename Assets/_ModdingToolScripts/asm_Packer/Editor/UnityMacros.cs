@@ -1,5 +1,4 @@
 ﻿#if UNITY_EDITOR
-using System.Text.RegularExpressions;
 using UnityEditor;
 
 internal class UnityMacros
@@ -31,7 +30,7 @@ internal class UnityMacros
     public static void SetNameSequence(string name)
     {
         var selections = Selection.gameObjects;
-        int index = 0;
+        var index = 0;
         foreach (var gameObject in selections)
         {
             gameObject.name = name + index;

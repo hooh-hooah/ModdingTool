@@ -1,5 +1,7 @@
 ﻿#if UNITY_EDITOR
 using System;
+using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
@@ -9,6 +11,7 @@ using UnityEngine;
 public class TouchXML
 {
     private static Regex boneRegex;
+    private static TextInfo textFormatObject = new CultureInfo("en-US",false).TextInfo;
 
     public static XDocument GetXMLObject(string xmlPath)
     {
@@ -29,30 +32,37 @@ public class TouchXML
 
     public static string Prettify(string input)
     {
+        
         input = Regex.Replace(input, "([a-z])([A-Z])", "$1 $2");
         input = Regex.Replace(input, "([_-])", " ");
+        input = textFormatObject.ToTitleCase(input);
+        
         return input;
     }
 
     public static void GenerateObjectString(XDocument document, GameObject[] gameObjects)
     {
-        var lists = document.Root.Element("build").Elements("list");
-        foreach (var list in lists)
-            if (list.Attribute("type").Value == "studioitem")
-            {
-                list.RemoveNodes();
+        var firstItemList = document.Root.Element("build")
+            .Elements("list")
+            .FirstOrDefault(x => x.Attribute("type")?.Value == "studioitem");
 
-                foreach (var obj in gameObjects)
-                    if (obj.scene.name == null && obj.scene.rootCount == 0)
-                        list.Add(new XElement("item",
-                            new XAttribute("big-category", HoohTools.Category),
-                            new XAttribute("mid-category", HoohTools.CategorySmall),
-                            new XAttribute("name", Prettify(obj.name)),
-                            new XAttribute("object", obj.name)
-                        ));
+        if (firstItemList != null)
+        {
+            firstItemList.RemoveNodes();
 
-                break;
-            }
+            foreach (var obj in gameObjects)
+                if (obj.scene.name == null && obj.scene.rootCount == 0)
+                    firstItemList.Add(new XElement("item",
+                        new XAttribute("big-category", HoohTools.Category),
+                        new XAttribute("mid-category", HoohTools.CategorySmall),
+                        new XAttribute("name", Prettify(obj.name)),
+                        new XAttribute("object", obj.name)
+                    ));
+        }
+        else
+        {
+            EditorUtility.DisplayDialog("Warning", "Unable to find <list type=\"studioitem\">\nPlease add studioitem node inside of target .xml file.", "OK");
+        }
     }
 
     public static int GetObjectIndex(XDocument document, string name)
@@ -114,7 +124,7 @@ public class TouchXML
         var bundles = document.Root.Element("bundles");
         bundles.RemoveNodes();
 
-        var bundle = new XElement("bundle", new XAttribute("path", HoohTools.SideloaderString));
+        var bundle = new XElement("bundle");
         foreach (var obj in gameObjects)
             if (obj.scene.name == null && obj.scene.rootCount == 0)
                 bundle.Add(new XElement("asset",

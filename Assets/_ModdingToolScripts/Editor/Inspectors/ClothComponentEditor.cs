@@ -60,7 +60,7 @@ public class ClothComponentEditor : Editor
             EditorGUILayout.HelpBox("Nothing is assigned to Rend Normal!", MessageType.Error);
         if (clothComponent.objTopDef == null && clothComponent.objBotDef == null && clothComponent.objTopHalf == null &&
             clothComponent.objBotHalf == null)
-            EditorGUILayout.HelpBox("Nothing is assigned to objTop/objBot.", MessageType.Error);
+            EditorGUILayout.HelpBox("Nothing is assigned to objTop/objBot - This is critical if you're making top/bottom outfit.", MessageType.Warning);
 
         var total = clothComponent.GetComponentsInChildren<Renderer>().Length;
         if (clothComponent.rendCheckVisible == null || total != clothComponent.rendCheckVisible.Length)

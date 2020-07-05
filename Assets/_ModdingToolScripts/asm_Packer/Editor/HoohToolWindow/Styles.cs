@@ -1,36 +1,26 @@
 ﻿#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Common
 {
     public class Styles
     {
-        public static Color red
-        {
-            get { return new Color(0.91f, 0.3f, 0.24f); }
-        }
-
-        public static Color green
-        {
-            get { return new Color(0.18f, 0.8f, 0.44f); }
-        }
+        public GUIStyle Button;
+        public GUIStyle ButtonDark;
+        public GUIStyle ButtonGood;
+        public GUIStyle ButtonWarning;
+        public GUIStyle Foldout;
 
         // fuck me
         public GUIStyle Header;
+        private bool init;
         public GUIStyle Medium;
         public GUIStyle Title;
-        public GUIStyle Foldout;
-        public GUIStyle Button;
-        public GUIStyle ButtonDark;
-        public GUIStyle ButtonWarning;
-        public GUIStyle ButtonGood;
-        private bool init = false;
 
-        public Styles()
-        {
-        }
+        public static Color red => new Color(0.91f, 0.3f, 0.24f);
+
+        public static Color green => new Color(0.18f, 0.8f, 0.44f);
 
         public void Init()
         {
@@ -50,7 +40,7 @@ namespace Common
             Foldout = new GUIStyle(EditorStyles.foldout) {fontSize = 15, margin = new RectOffset(10, 10, 0, 10)};
             Button = new GUIStyle(EditorStyles.toolbarButton)
             {
-                fontSize = 11, margin = new RectOffset(2,2,2,2),padding = new RectOffset(5,5,5,5), fixedHeight = 23
+                fontSize = 11, margin = new RectOffset(2, 2, 2, 2), padding = new RectOffset(5, 5, 5, 5), fixedHeight = 23
             };
             ButtonDark = new GUIStyle(Button);
             ButtonDark.normal.textColor = Color.white;

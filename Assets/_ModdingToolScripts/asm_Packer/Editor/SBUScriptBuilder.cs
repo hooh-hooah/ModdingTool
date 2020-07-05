@@ -134,10 +134,7 @@ internal class SBUScriptBuilder
                 var key = matvalue.Attribute("key");
                 var value = matvalue.Attribute("value");
 
-                if (key != null && value != null)
-                {
-                    builder.AppendLine($"meshAnimEditor{index}.SetMaterialValue(id=copyMatIndex{index}, name=\"{key.Value}\", value={value.Value})");
-                }
+                if (key != null && value != null) builder.AppendLine($"meshAnimEditor{index}.SetMaterialValue(id=copyMatIndex{index}, name=\"{key.Value}\", value={value.Value})");
             }
 
             #endregion
