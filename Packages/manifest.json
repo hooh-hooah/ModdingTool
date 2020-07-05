@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.mybox": "https://github.com/Deadcows/MyBox.git",
+    "com.yasirkula.runtimepreviewgenerator": "https://github.com/yasirkula/UnityRuntimePreviewGenerator.git",
     "com.unity.package-manager-ui": "2.0.12",
     "com.unity.postprocessing": "2.3.0",
     "com.unity.probuilder": "4.2.3",
