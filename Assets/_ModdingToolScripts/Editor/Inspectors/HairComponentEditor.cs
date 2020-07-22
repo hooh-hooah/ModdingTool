@@ -5,15 +5,8 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(CmpHair))]
-public class HairComponentEditor : Editor
+public class HairComponentEditor : CustomComponentBase
 { 
-     private Styles _styles;
-     
-     void InitStyles()
-     {
-         _styles = new Styles();
-     }
-
      public override void OnInspectorGUI()
     {
         InitStyles();
@@ -58,12 +51,12 @@ public class HairComponentEditor : Editor
         
         EditorGUI.indentLevel++;
         GUILayout.BeginVertical("box");
-            GUILayout.Label("Main Hair Information", _styles.header);
+            GUILayout.Label("Main Hair Information", Styles.header);
 		    EditorGUILayout.PropertyField(serializedObject.FindProperty("rendCheckVisible"), new GUIContent("Visible Renderers"), true);
 		    EditorGUILayout.PropertyField(serializedObject.FindProperty("rendHair"), new GUIContent("Hair Renderers"), true);
 		    EditorGUILayout.PropertyField(serializedObject.FindProperty("boneInfo"), new GUIContent("Bone Information"), true);
             GUILayout.Space(5);
-            GUILayout.Label("Main Color Information", _styles.header);
+            GUILayout.Label("Main Color Information", Styles.header);
             GUILayout.BeginHorizontal();
                 EditorGUIUtility.labelWidth = 130;
                 EditorGUIUtility.fieldWidth = 40;
@@ -76,7 +69,7 @@ public class HairComponentEditor : Editor
 		
         GUILayout.Space(5);
         GUILayout.BeginVertical("box");
-            GUILayout.Label("Accessory Information", _styles.header);
+            GUILayout.Label("Accessory Information", Styles.header);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("rendAccessory"), new GUIContent("Accessory Renderers"), true);
             GUILayout.BeginHorizontal();
                 EditorGUIUtility.labelWidth = 130;

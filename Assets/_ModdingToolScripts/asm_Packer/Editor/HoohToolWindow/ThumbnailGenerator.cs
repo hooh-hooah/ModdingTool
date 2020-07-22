@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
+using Common;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -9,17 +9,20 @@ using UnityEngine.Serialization;
 public partial class HoohTools
 {
     public bool foldThumbnailGenerator = true;
+
+    [FormerlySerializedAs("PreviewDirection")]
+    public Vector3 previewDirection;
+
     public Texture2D thumbnailBackgroundTexture;
     public Texture2D thumbnailForegroundTexture;
     public GameObject[] thumbnailTargets;
-    [FormerlySerializedAs("PreviewDirection")] public Vector3 previewDirection;
 
     public void GenerateThumbnail()
     {
-        var assetPath = Path.Combine(Directory.GetCurrentDirectory(), ModPacker.GetProjectPath());
+        var assetPath = Path.Combine(Directory.GetCurrentDirectory(), Utility.GetProjectPath());
         var thumbnailTargetPath = Path.Combine(assetPath, "thumbs");
         if (!Directory.Exists(thumbnailTargetPath)) Directory.CreateDirectory(thumbnailTargetPath);
-        
+
         RuntimePreviewGenerator.MarkTextureNonReadable = false;
         RuntimePreviewGenerator.BackgroundColor = new Color(0, 0, 0, 0);
         RuntimePreviewGenerator.Padding = 0f;
@@ -51,12 +54,13 @@ public partial class HoohTools
             var _bytes = texture.EncodeToPNG();
             File.WriteAllBytes(outputPath, _bytes);
         }
+
         AssetDatabase.Refresh();
     }
 
     private GameObject[] GetAllModelObjects()
     {
-        return AssetDatabase.FindAssets("t:Prefab", new[] {ModPacker.GetProjectPath()})
+        return AssetDatabase.FindAssets("t:Prefab", new[] {Utility.GetProjectPath()})
             .Select(x => AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(x)))
             .ToArray();
     }
@@ -73,20 +77,20 @@ public partial class HoohTools
         if (foldThumbnailGenerator)
         {
             GUILayout.BeginVertical("box");
-                GUILayout.Label("Thumbnail Generator", _styles.Header);
-                        
-                GUILayout.BeginHorizontal();
-                    EditorGUILayout.PropertyField(backgroundField, new GUIContent("Background Image"));
-                    EditorGUILayout.PropertyField(foregroundField, new GUIContent("Foreground Image"));
-                GUILayout.EndHorizontal();
-                
-                EditorGUILayout.PropertyField(directionField, new GUIContent("Preview Direction"));
-                EditorGUILayout.PropertyField(targetsField, new GUIContent("Target Models"), true);
+            GUILayout.Label("Thumbnail Generator", _styles.Header);
 
-                GUILayout.BeginHorizontal();
-                    if (GUILayout.Button("Add Folder", _styles.Button)) thumbnailTargets = GetAllModelObjects();
-                    if (GUILayout.Button("Generate Thumbnails", _styles.Button)) GenerateThumbnail();
-                GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.PropertyField(backgroundField, new GUIContent("Background Image"));
+            EditorGUILayout.PropertyField(foregroundField, new GUIContent("Foreground Image"));
+            GUILayout.EndHorizontal();
+
+            EditorGUILayout.PropertyField(directionField, new GUIContent("Preview Direction"));
+            EditorGUILayout.PropertyField(targetsField, new GUIContent("Target Models"), true);
+
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Add Folder", _styles.Button)) thumbnailTargets = GetAllModelObjects();
+            if (GUILayout.Button("Generate Thumbnails", _styles.Button)) GenerateThumbnail();
+            GUILayout.EndHorizontal();
             GUILayout.EndVertical();
         }
     }

@@ -10,7 +10,7 @@ public class HPoint : MonoBehaviour
     private static Vector3 center = new Vector3(0, size.y / 2, 0);
     private static Vector3 sizeDir = new Vector3(1, 1, 6);
     private static Vector3 centerDir = new Vector3(0, size.y / 2, -3);
-    private static Texture pof = Resources.Load<Texture2D>("gizmo_icon_pof");
+    // private static Texture pof = Resources.Load<Texture2D>("gizmo_icon_pof");
 
     private static List<HScene.AnimationListInfo>[] animationLists;
 
@@ -45,7 +45,11 @@ public class HPoint : MonoBehaviour
         set => nowUsing = value;
     }
 
-    public HpointData Data => data;
+    public HpointData Data
+    {
+        get => data;
+        set => data = value;
+    }
 
     public void OnDrawGizmos()
     {
@@ -53,7 +57,7 @@ public class HPoint : MonoBehaviour
         Gizmos.matrix = transform.localToWorldMatrix;
         Gizmos.DrawWireCube(center, size);
         Gizmos.DrawWireCube(centerDir, sizeDir);
-        Gizmos.DrawIcon(center, "gizmo_icon_pof", true);
+        // Gizmos.DrawIcon(center, "gizmo_icon_pof", true);
     }
 
     public int CheckVisible(GameObject obj)
@@ -68,11 +72,11 @@ public class HPoint : MonoBehaviour
     }
 
     [Serializable]
-    public class HpointData
+        public class HpointData
     {
         public NotMotionInfo[] notMotion = new NotMotionInfo[6];
 
-        public HpointData()
+            public HpointData()
         {
             notMotion = new NotMotionInfo[6];
             for (var i = 0; i < notMotion.Length; i++) notMotion[i].motionID = new List<int>();

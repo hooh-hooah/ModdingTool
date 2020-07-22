@@ -11,7 +11,7 @@ using UnityEngine;
 public class TouchXML
 {
     private static Regex boneRegex;
-    private static TextInfo textFormatObject = new CultureInfo("en-US",false).TextInfo;
+    private static readonly TextInfo textFormatObject = new CultureInfo("en-US", false).TextInfo;
 
     public static XDocument GetXMLObject(string xmlPath)
     {
@@ -32,11 +32,10 @@ public class TouchXML
 
     public static string Prettify(string input)
     {
-        
         input = Regex.Replace(input, "([a-z])([A-Z])", "$1 $2");
         input = Regex.Replace(input, "([_-])", " ");
         input = textFormatObject.ToTitleCase(input);
-        
+
         return input;
     }
 

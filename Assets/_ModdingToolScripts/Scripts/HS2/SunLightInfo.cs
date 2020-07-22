@@ -1,45 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using MyBox;
 using UnityEngine;
 
+[SuppressMessage("ReSharper", "InconsistentNaming")]
+[SuppressMessage("ReSharper", "IdentifierTypo")]
+[SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 public class SunLightInfo : MonoBehaviour
 {
     [SerializeField] private Info _info;
     [SerializeField] private List<GameObject> environmentLightObjects;
     [SerializeField] private List<GameObject> rootObjectMaps;
     public Info info => _info;
-    public List<GameObject> RootObjectMaps => rootObjectMaps;
+    public List<GameObject> RootObjectMaps
+    {
+        get => rootObjectMaps;
+        set => rootObjectMaps = value;
+    }
+
     public List<GameObject> EnvironmentLightObjects => environmentLightObjects;
 
     [Serializable]
     public class Info
     {
-        [Header("Backの色")] public Color charaLightADVBackColor;
-        [Header("Backの強さ")] public float charaLightADVBackintensity = 1f;
-        [Header("ADVキャラライト設定")] public Color charaLightADVFrontColor;
-        [Header("Front(Key)の強さ")] public float charaLightADVFrontintensity = 1f;
-        [Header("Backの色")] public Color charaLightBackColor;
-        [Header("Backの強さ")] public float charaLightBackintensity = 1f;
-        [Header("Hキャラライト設定")] public Color charaLightFrontColor;
-        [Header("Front(Key)の強さ")] public float charaLightFrontintensity = 1f;
-        [Header("絞り")] public float dofAperture;
-        [Header("焦点幅")] public float dofFocalSize;
-        [Header("被写界深度の設定")] public bool dofUse;
-        [Header("色")] public Color fogColor;
-        [Header("フォグ強さ")] public float fogDensity;
-        [Header("背景フォグ")] public bool fogExcludeFarPixels;
-        [Header("フォグ高さ")] public float fogHeight;
-        [Header("フォグ高さ濃度")] public float fogHeightDensity;
-        [Header("フォグの設定")] public bool fogUse;
-        [Header("強さ")] public float reflectProbeintensity;
-        [Header("ReflectProbe設定")] public Texture reflectProbeTexture;
-        [Header("伸び")] public float sunShaftsBlurSize;
-        [Header("色")] public Color sunShaftsColor;
-        [Header("強さ")] public float sunShaftsIntensity;
-        [Header("範囲")] public float sunShaftsMaxRadius;
-        [Header("しきい色")] public Color sunShaftsThresholdColor;
-        [Header("Shafts caster")] public Transform sunShaftsTransform;
-        [Header("カメラのサンシャフト(SunShafts)設定")] public bool sunShaftsUse;
-        [Header("表示オブジェクトの設定")] public List<GameObject> visibleList = new List<GameObject>();
+        [Header("Back Color")] public Color charaLightADVBackColor = Color.white;
+        [Header("Back Strength")] public float charaLightADVBackintensity = 0.1f;
+        [Header("Adv Character Light Setting")] public Color charaLightADVFrontColor = Color.white;
+        [Header("Front (Key) Strength")] public float charaLightADVFrontintensity = 1f;
+        [Header("Back Color")] public Color charaLightBackColor = Color.gray;
+        [Header("Back Strength")] public float charaLightBackintensity = 0.1f;
+        [Header("H Character Light Setting")] public Color charaLightFrontColor = Color.white;
+        [Header("Front (Key) Strength")] public float charaLightFrontintensity = 1f;
+        [Header("Aperture")] public float dofAperture;
+        [Header("Focal Width")] public float dofFocalSize;
+        [Header("Setting The Depth Of Field")] public bool dofUse;
+        [Header("Color")] public Color fogColor;
+        [Header("Fog Strength")] public float fogDensity;
+        [Header("Background Fog")] public bool fogExcludeFarPixels;
+        [Header("Fog Height")] public float fogHeight;
+        [Header("Fog Height Density")] public float fogHeightDensity;
+        [Header("Fog Settings")] public bool fogUse;
+        [Header("Strength")] public float reflectProbeintensity;
+        [Header("Reflect Probe Settings")] public Texture reflectProbeTexture;
+        [Header("Growth")] public float sunShaftsBlurSize;
+        [Header("Color")] public Color sunShaftsColor;
+        [Header("Strength")] public float sunShaftsIntensity;
+        [Header("Range")] public float sunShaftsMaxRadius;
+        [Header("Threshold Color")] public Color sunShaftsThresholdColor;
+        [Header("Shafts Caster")] public Transform sunShaftsTransform;
+        [Header("Camera Sun Shafts Settings")] public bool sunShaftsUse;
+        [Header("Display Object Settings")] public List<GameObject> visibleList = new List<GameObject>();
+    }
+
+    [ButtonMethod]
+    public void Initialize()
+    {
+        var sunObject = GameObject.Find("n_sun");
+        if (sunObject != null)
+        {
+            info.sunShaftsTransform = sunObject.transform;
+        }
     }
 }

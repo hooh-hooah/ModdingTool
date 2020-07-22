@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Common;
 using UnityEditor;
 using UnityEngine;
 
@@ -155,7 +156,7 @@ public partial class HoohTools
 
         foreach (var gameObject in objectArray)
         {
-            var localPath = Path.Combine(ModPacker.GetProjectPath(), gameObject.name + ".prefab").Replace("\\", "/");
+            var localPath = Path.Combine(Utility.GetProjectPath(), gameObject.name + ".prefab").Replace("\\", "/");
             Debug.Log(localPath);
             if (AssetDatabase.LoadAssetAtPath(localPath, typeof(GameObject)))
             {

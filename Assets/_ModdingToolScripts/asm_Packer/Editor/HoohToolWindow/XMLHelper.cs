@@ -7,10 +7,10 @@ using UnityEngine;
 public partial class HoohTools
 {
     public GameObject[] prefabs;
-    public TextAsset xmlHelperTarget;
     public int xmlBigCategory;
+    public TextAsset xmlHelperTarget;
     public int xmlSmallCategory;
-    
+
     public void DrawXMLHelper(SerializedObject serializedObject)
     {
         var xmlHelperTargetField = serializedObject.FindProperty("xmlHelperTarget");
@@ -30,40 +30,37 @@ public partial class HoohTools
             EditorGUILayout.PropertyField(prefabField, new GUIContent("Prefabs to put in xml file"), true);
 
             GUILayout.BeginHorizontal();
-                EditorGUILayout.PropertyField(xmlBigCategoryField, new GUIContent("Big Category"));
-                EditorGUILayout.PropertyField(xmlSmallCategoryField, new GUIContent("Small Category"));
+            EditorGUILayout.PropertyField(xmlBigCategoryField, new GUIContent("Big Category"));
+            EditorGUILayout.PropertyField(xmlSmallCategoryField, new GUIContent("Small Category"));
             GUILayout.EndHorizontal();
-            
+
             GUILayout.Space(5);
 
             GUILayout.BeginHorizontal();
-                if (GUILayout.Button("Add Current Directory", _styles.Button))
-                {
-                    
-                }
+            if (GUILayout.Button("Add Current Directory", _styles.Button))
+            {
+            }
 
-                if (GUILayout.Button("Generate Studio Item List", _styles.Button))
-                {
-                    if (xmlHelperTarget != null) {
-                        try
-                        {
-                            Array.Sort(prefabs, (x, y) => String.Compare(x.name, y.name, StringComparison.Ordinal));
-                            var path = Path.Combine(Directory.GetCurrentDirectory(), AssetDatabase.GetAssetPath(xmlHelperTarget)).Replace("\\", "/");
-                            var document = TouchXML.GetXMLObject(path);
-                            TouchXML.GenerateObjectString(document, prefabs);
-                            TouchXML.GenerateBundleString(document, prefabs);
-                            document.Save(path);
-                        }
-                        catch (InvalidCastException e)
-                        {
-                            Debug.LogError("You've selected wrong kind of object. You should only select prefabs!");
-                        }
-                        catch (Exception e)
-                        {
-                            Debug.LogError(e);
-                        }
+            if (GUILayout.Button("Generate Studio Item List", _styles.Button))
+                if (xmlHelperTarget != null)
+                    try
+                    {
+                        Array.Sort(prefabs, (x, y) => string.Compare(x.name, y.name, StringComparison.Ordinal));
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), AssetDatabase.GetAssetPath(xmlHelperTarget)).Replace("\\", "/");
+                        var document = TouchXML.GetXMLObject(path);
+                        TouchXML.GenerateObjectString(document, prefabs);
+                        TouchXML.GenerateBundleString(document, prefabs);
+                        document.Save(path);
                     }
-                }
+                    catch (InvalidCastException e)
+                    {
+                        Debug.LogError("You've selected wrong kind of object. You should only select prefabs!");
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError(e);
+                    }
+
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
 

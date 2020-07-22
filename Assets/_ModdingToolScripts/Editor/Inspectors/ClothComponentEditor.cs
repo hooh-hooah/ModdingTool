@@ -6,17 +6,10 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(CmpClothes))]
-public class ClothComponentEditor : Editor
+public class ClothComponentEditor : CustomComponentBase
 {
-    private Styles _styles;
-
-    private void InitStyles()
-    {
-        _styles = new Styles();
-    }
-
-    private int dynPreset = 0;
-    private int bodyPreset = 0;
+    private int _dynPreset = 0;
+    private int _bodyPreset = 0;
     public override void OnInspectorGUI()
     {
         InitStyles();
@@ -24,19 +17,19 @@ public class ClothComponentEditor : Editor
         var clothComponent = (CmpClothes) target;
         GUILayout.BeginHorizontal("box");
             var clothPresetOptions = Presets.Clothing.Select(x => x.name).ToArray();
-            dynPreset =
-                EditorGUILayout.Popup("Dynamic Bone Preset", dynPreset, clothPresetOptions);
+            _dynPreset =
+                EditorGUILayout.Popup("Dynamic Bone Preset", _dynPreset, clothPresetOptions);
 
             if (GUILayout.Button("Apply"))
-                clothComponent.ApplyDynamicBones(Presets.Clothing[dynPreset]);
+                clothComponent.ApplyDynamicBones(Presets.Clothing[_dynPreset]);
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal("box");
             var bodyPresetOptions = Presets.Body.Select(x => x.name).ToArray();
-            bodyPreset =
-                EditorGUILayout.Popup("Body Shape Preset", bodyPreset, bodyPresetOptions);
+            _bodyPreset =
+                EditorGUILayout.Popup("Body Shape Preset", _bodyPreset, bodyPresetOptions);
 
-            if (GUILayout.Button("Apply")) AIHSPresetLoader.LoadObject(clothComponent.gameObject, bodyPreset);
+            if (GUILayout.Button("Apply")) AIHSPresetLoader.LoadObject(clothComponent.gameObject, _bodyPreset);
         GUILayout.EndHorizontal();
 
         GUILayout.BeginVertical("box");
@@ -70,7 +63,7 @@ public class ClothComponentEditor : Editor
 
         EditorGUI.indentLevel++;
         GUILayout.BeginVertical("box");
-        GUILayout.Label("Render Objects", _styles.header);
+        GUILayout.Label("Render Objects", Styles.header);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("rendCheckVisible"), new GUIContent("Visible Renderers"), true);
 
         for (var index = 1; index <= 3; index++)
@@ -85,7 +78,7 @@ public class ClothComponentEditor : Editor
         var oldWidth = EditorGUIUtility.labelWidth;
         EditorGUIUtility.labelWidth = 100;
         GUILayout.BeginVertical("box");
-            GUILayout.Label("Cloth Object Assignment", _styles.header);
+            GUILayout.Label("Cloth Object Assignment", Styles.header);
             GUILayout.BeginHorizontal();
             EditorGUILayout.PropertyField(serializedObject.FindProperty("objTopDef"), new GUIContent("Top"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("objTopHalf"), new GUIContent("Top Half"));
@@ -100,7 +93,7 @@ public class ClothComponentEditor : Editor
 
         GUILayout.BeginVertical("box");
         EditorGUIUtility.labelWidth = 100;
-        GUILayout.Label("Option Objects", _styles.header);
+        GUILayout.Label("Option Objects", Styles.header);
         GUILayout.BeginHorizontal();
         GUILayout.EndHorizontal();
         EditorGUILayout.PropertyField(serializedObject.FindProperty("objOpt01"), new GUIContent("Option1 Objects"), true);
@@ -110,7 +103,7 @@ public class ClothComponentEditor : Editor
         GUILayout.Space(5);
 
         GUILayout.BeginVertical("box");
-        GUILayout.Label("Cloth Information", _styles.header);
+        GUILayout.Label("Cloth Information", Styles.header);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("useBreak"), new GUIContent("Enable Break Texture"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("uvScalePattern"), new GUIContent("UV Scale Pattern"), true);
         GUILayout.EndVertical();
@@ -120,7 +113,7 @@ public class ClothComponentEditor : Editor
         {
             var name = "Color" + index;
             GUILayout.BeginVertical("box");
-                GUILayout.Label($"Cloth {name} Option", _styles.header);
+                GUILayout.Label($"Cloth {name} Option", Styles.header);
                 EditorGUILayout.PropertyField(serializedObject.FindProperty($"useColorN{index:D2}"), new GUIContent($"Use {name}"));
                 
                 GUILayout.Space(5);

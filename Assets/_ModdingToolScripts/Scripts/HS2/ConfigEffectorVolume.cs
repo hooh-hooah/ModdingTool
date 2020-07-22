@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using MyBox;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
@@ -20,5 +21,11 @@ namespace CameraEffector
 		public ReflectionProbe rp;
 		public bool isHSceneSettingUse = true;
 		public ParticleSystem particle;
+
+		[ButtonMethod]
+		public static void CheckValid()
+		{
+			
+		}
 	}
 }

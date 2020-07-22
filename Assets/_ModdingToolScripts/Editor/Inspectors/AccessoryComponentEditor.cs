@@ -5,17 +5,10 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(CmpAccessory))]
-public class AccessoryComponentEditor : Editor
+public class AccessoryComponentEditor : CustomComponentBase
 {
-    private Styles _styles;
-
-    private void InitStyles()
-    {
-        _styles = new Styles();
-    }
-
-    private int dynPreset = 0;
-    private int bodyPreset = 0;
+    private int _dynPreset = 0;
+    private int _bodyPreset = 0;
     public override void OnInspectorGUI()
     {
         InitStyles();
@@ -50,7 +43,7 @@ public class AccessoryComponentEditor : Editor
 
         EditorGUI.indentLevel++;
         GUILayout.BeginVertical("box");
-        GUILayout.Label("Render Objects", _styles.header);
+        GUILayout.Label("Render Objects", Styles.header);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("rendCheckVisible"), new GUIContent("Visible Renderers"), true);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("rendNormal"), new GUIContent("Accessory Renderer"), true);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("trfMove01"), new GUIContent("Move Target 1"));
@@ -62,9 +55,9 @@ public class AccessoryComponentEditor : Editor
         var oldWidth = EditorGUIUtility.labelWidth;
         for (var index = 1; index <= 4; index++)
         {
-            var name = "Color" + index;
+            var colorName = "Color" + index;
             GUILayout.BeginVertical("box");
-                GUILayout.Label($"{name} Option", _styles.header);
+                GUILayout.Label($"{colorName} Option", Styles.header);
 
                 SerializedProperty property = null;
                 if (index < 4)
