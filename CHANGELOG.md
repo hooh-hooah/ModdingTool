@@ -1,6 +1,16 @@
 # Changelog
 
-## 0.4.0 - beta
+## 0.4.2
+
+### 2020-07-23
+
+- Added Dependency Loader Support
+- Added HS2 Map Support
+- Added HS2 Map Component Inspector
+- Changed ModPacker into modular structure.
+- Overall performance improvements.
+
+## 0.4.1 - beta
 
 ### 2020-07-05
 
