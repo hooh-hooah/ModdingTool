@@ -29,11 +29,5 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  },
-  "lock": {
-    "com.mybox": {
-      "hash": "a244358ff4139760fecbbd02f0a9b578bbe792b4",
-      "revision": "HEAD"
-    }
   }
 }
