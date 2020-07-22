@@ -9,6 +9,7 @@
 - Added HS2 Map Component Inspector
 - Changed ModPacker into modular structure.
 - Overall performance improvements.
+- Added Hanmen's ILLUSION Clothing Replica Shaders
 
 ## 0.4.1 - beta
 
