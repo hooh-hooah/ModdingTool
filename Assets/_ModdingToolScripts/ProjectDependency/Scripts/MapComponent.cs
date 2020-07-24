@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using LuxWater;
 using MyBox;
 using UnityEngine;
 
@@ -73,29 +72,6 @@ namespace Studio
 
         private class SeaInfo
         {
-            public SeaInfo(Collider _collider, LuxWater_WaterVolume _waterVolume)
-            {
-                Collider = _collider;
-                WaterVolume = _waterVolume;
-            }
-
-
-
-            public Collider Collider { get; }
-
-
-
-            public LuxWater_WaterVolume WaterVolume { get; }
-
-
-            public bool Enable
-            {
-                set
-                {
-                    if (Collider != null) Collider.enabled = value;
-                    if (WaterVolume != null) WaterVolume.enabled = value;
-                }
-            }
         }
     }
 }
