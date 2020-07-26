@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 // TODO: Add Detailed Log file to see what the fuck went wrong
 // TODO: make log file tail-able. latest.log -> [date]_mod.log copy
@@ -13,7 +14,7 @@ namespace ModPackerModule
         {
             public void SetupModFolder()
             {
-                var zipPath = Path.Combine(TempFolder, _fileName).Replace("/", "\\");
+                var zipPath = Path.Combine(TempFolder, _fileName).Replace("\\", "/");
                 if (Directory.Exists(zipPath)) Directory.Delete(zipPath, true);
                 Directory.CreateDirectory(zipPath);
 
@@ -53,23 +54,12 @@ namespace ModPackerModule
 
             public void DeployZipMod(string targetPath)
             {
-                var srcPath = Path.Combine(TempFolder, Path.Combine(_fileName, "*")).Replace("\\", "/");
+                var srcPath = Path.Combine(TempFolder, Path.Combine(_fileName)).Replace("\\", "/");
                 var extPath = Path.Combine(targetPath, _fileName + ".zipmod").Replace("\\", "/");
-                var zipExec = Path.Combine(Directory.GetCurrentDirectory(), "_External\\7za.exe").Replace("\\", "/");
-
+   
                 if (File.Exists(extPath)) File.Delete(extPath);
                 
-                var p = new Process
-                {
-                    StartInfo =
-                    {
-                        UseShellExecute = false, FileName = zipExec, Arguments = $"a -tzip -aoa -w{Environment.GetEnvironmentVariable("TEMP")} \"{extPath}\" \"{srcPath}\""
-                    }
-                };
-                p.Start();
-                p.WaitForExit();
-                if (p.ExitCode != 0)
-                    throw new Exception("Failed to make zip file. (" + p.ExitCode + ")");
+                ZipFile.CreateFromDirectory(srcPath, extPath);
             }
         }
     }
