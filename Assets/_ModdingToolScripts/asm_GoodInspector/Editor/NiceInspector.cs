@@ -7,7 +7,7 @@ public abstract class NiceInspector : Editor
 {
     private GUIEventAction _eventAction;
 
-    private Dictionary<string, SerializedProperty> _propertyCache;
+    private readonly Dictionary<string, SerializedProperty> _propertyCache = new Dictionary<string, SerializedProperty>();
 
     public void OnEnable()
     {
