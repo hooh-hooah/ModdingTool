@@ -2,6 +2,11 @@
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
+
+#pragma warning disable 0168
+#pragma warning disable 0219
+#pragma warning disable 0414
+#pragma warning disable 649
 namespace CameraEffector
 {
     [DisallowMultipleComponent]

@@ -2,16 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using MyBox;
-using UnityEditor.SceneManagement;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
+#endif
 
+
+#pragma warning disable 0168
+#pragma warning disable 0219
+#pragma warning disable 0414
+#pragma warning disable 649
 public class HPointList : MonoBehaviour
 {
     [SerializeField] private PlaceInfo[] HpointGroup;
     private HPoint[] HPoints;
     public Dictionary<int, List<HPoint>> lst;
 
+#if UNITY_EDITOR
     [ButtonMethod]
     public void InitializeAndSetup()
     {
@@ -26,7 +34,7 @@ public class HPointList : MonoBehaviour
 
         EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
     }
-
+#endif
     [Serializable]
     private class PlaceInfo
     {

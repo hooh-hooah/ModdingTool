@@ -1,43 +1,24 @@
 <packer type="fclothe">
-	<!-- This will be copied as manifest.xml -->
-	<guid>com.hooh.catglove</guid>
-	<name>Cat Paws</name>
-	<version>1.0.0</version>
-	<author>hooh</author>
-	<description>Test Mate.</description>
+    <!-- This will be copied as manifest.xml -->
+    <guid>modbuilder.example.gloveandshoes</guid>
+    <name>MODBUILDER GLOVE AND SHOES EXAMPLE</name>
+    <version>1.0.0</version>
+    <author>hooh</author>
+    <description>This is modbuilder example.</description>
 
-	<!-- This section will contain bundle information -->
-	<bundles>
-		<!-- An assetbundle contains mesh objects. -->
-		<bundle path="hoohchar/catglove_mesh.unity3d">
-			<asset path="shoes.prefab"/>
-			<asset path="gloves.prefab"/>
-			<asset path="diffuse.tga"/>
-			<asset path="colormask.psd"/>
-		</bundle>
-		<!-- An assetbudnle contains thumbnail. -->
-		<bundle path="hoohthumbs/catglove_thumb.unity3d">
-			<asset path="thumb_image.png"/>
-		</bundle>
-	</bundles>
+    <!-- This section will contain bundle information -->
+    <bundles>
+        <folder auto-path="prefabs" from="prefabs"/>
+        <folder auto-path="thumbs" from="thumbs"/>
+    </bundles>
 
-	<!-- This section will contain build information -->
-	<build name="hooh_catpaws">
-		<list type="fgloves">
-			<item
-				kind="0" possess="1" name="[hooh] Cat Gloves" en_us="" 
-				mesh-manifest="abdata" mesh-bundle="hoohchar/catglove_mesh.unity3d" mesh-a="gloves"
-				state="1"
-            	tex-main="diffuse" tex-mask="colormask" tex-main2="0" tex-mask2="0" thumb="thumb_image"
-			/>
-		</list>
-		<list type="fshoes">
-			<item
-				kind="0" possess="1" name="[hooh] Cat Shoes" en_us="" 
-				mesh-manifest="abdata" mesh-bundle="hoohchar/catglove_mesh.unity3d" mesh-a="shoes"
-				state="1"
-            	tex-main="diffuse" tex-mask="colormask" tex-main2="0" tex-mask2="0" thumb="thumb_image"
-			/>
-		</list>
-	</build>
+    <!-- This section will contain build information -->
+    <build>
+        <list type="fgloves">
+            <item name="[hooh] Cat Gloves" mesh-a="gloves" tex-main="diffuse" tex-mask="colormask" thumb="thumb_gloves"/>
+        </list>
+        <list type="fshoes">
+            <item name="[hooh] Cat Shoes" en_us="" mesh-a="shoes" tex-main="diffuse" tex-mask="colormask" thumb="thumb_shoes"/>
+        </list>
+    </build>
 </packer>

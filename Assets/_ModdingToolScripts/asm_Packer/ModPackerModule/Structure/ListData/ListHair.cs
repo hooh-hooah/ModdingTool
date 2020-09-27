@@ -9,8 +9,8 @@ namespace ModPackerModule.Structure.ListData
     {
         public ListHair(in SideloaderMod.SideloaderMod sideloaderMod, in XElement element, string category) : base(in sideloaderMod, in element, category)
         {
-            HairAsset = element.Attr<string>("mesh-a");
-            AccessoryAsset = element.Attr<string>("mesh-b");
+            HairAsset = element.Attr("mesh-a", "0");
+            AccessoryAsset = element.Attr("mesh-b", "0");
             BundleName = element.Attr("mesh-bundle", GetBundleFromName(HairAsset) ?? "0");
             Weights = element.Attr("weights", 0);
             RingOff = element.Attr("ringoff", 0);

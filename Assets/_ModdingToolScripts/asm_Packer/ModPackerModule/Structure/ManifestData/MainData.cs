@@ -19,7 +19,7 @@ namespace ModPackerModule.Structure.Classes.ManifestData
 
         // Separator for generic use
         public string Separator => (UniqueId.Length > 0 ? UniqueId : Guid.SanitizeNonCharacters()).ToLower();
-        public string SafeName => Name.SanitizeNonCharacters().ToLower();
+        public string SafeName => Guid.SanitizeNonCharacters().ToLower();
 
         [SuppressMessage("ReSharper", "ConvertIfStatementToReturnStatement")]
         public (bool, string) IsValid()

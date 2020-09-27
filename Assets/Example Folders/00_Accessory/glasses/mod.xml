@@ -1,4 +1,4 @@
-<packer type="acc">
+<packer>
 	<!-- This will be copied as manifest.xml -->
 	<guid>modbuilder.example.accessory</guid>
 	<name>MODBUILDER ACCESSORY EXAMPLE</name>
@@ -8,22 +8,14 @@
 
 	<!-- This section will contain bundle information -->
 	<bundles>
-		<bundle path="example/glasses.unity3d">
-			<asset path="rayben.prefab"/>
-		</bundle>
-		<bundle path="example/glasses_thumb.unity3d">
-			<asset path="thumb_image.psd"/>
-		</bundle>
+		<folder auto-path="prefabs" from="prefab"/>
+		<folder auto-path="thumbs" from="thumbs"/>
 	</bundles>
 
 	<!-- This section will contain build information -->
-	<build name="@example_accessory">
+	<build>
 		<list type="accglasses">
-			<item
-				kind="0" possess="1" name="@@EXAMPLE ACCESSORY" en_us="" 
-				mesh-manifest="abdata" mesh-bundle="example/glasses.unity3d" mesh-a="rayben"
-				parent="N_Megane" thumb-bundle="example/glasses_thumb.unity3d" thumb="thumb_image"
-			/>
+			<item name="@@EXAMPLE ACCESSORY" mesh-a="rayben" parent="N_Megane" thumb="thumb_image" />
 		</list>
 	</build>
 </packer>

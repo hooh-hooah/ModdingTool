@@ -1,20 +1,16 @@
 <packer type="common">
-	<guid>modbuilder.example.bodypaint</guid>
-	<name>MODBUILDER BODYPAINT EXAMPLE</name>
-	<version>1.0.0</version>
-	<author>hooh</author>
-	<description>Mod Packer example.</description>
-	<bundles>
-		<bundle path="example/bodypaint.unity3d">
-			<asset path="001.psd"/>
-			<asset path="002.psd"/>
-			<asset path="003.psd"/>
-		</bundle>
-	</bundles>
-	<build name="example_bodypaint">
-		<list type="spaint">
-			<item kind="" possess="" name="EXAMPLE 001" tex-a="001" tex-g="001" thumb="001"/>
-			<item kind="" possess="" name="EXAMPLE 002" tex-a="002" tex-g="002" thumb="002"/>
-		</list>
-	</build>
+    <guid>modbuilder.example.bodypaint</guid>
+    <name>MODBUILDER BODYPAINT EXAMPLE</name>
+    <version>1.0.0</version>
+    <author>hooh</author>
+    <description>Mod Packer example.</description>
+    <bundles>
+        <folder auto-path="textures" from="images"/>
+    </bundles>
+    <build>
+        <list type="spaint">
+            <item name="EXAMPLE 001" tex-a="001" tex-g="001" thumb="001"/>
+            <item name="EXAMPLE 002" tex-a="002" tex-g="002" thumb="002"/>
+        </list>
+    </build>
 </packer>

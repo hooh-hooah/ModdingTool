@@ -6,6 +6,11 @@ using UnityEngine;
 using ModPackerModule.Utility;
 using UnityEditor;
 
+
+#pragma warning disable 0168
+#pragma warning disable 0219
+#pragma warning disable 0414
+#pragma warning disable 649
 #endif
 
 [CreateAssetMenu(fileName = "MapInfo", menuName = "Honey Select 2: Libido/Create MapInfo", order = 1)]

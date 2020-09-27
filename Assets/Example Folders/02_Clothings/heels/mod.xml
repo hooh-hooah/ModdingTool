@@ -1,44 +1,44 @@
-<packer type="fclothe">
-	<!-- This will be copied as manifest.xml -->
-	<guid>modbuilder.example.heels</guid>
-	<name>MODBUILDER Heels EXAMPLE</name>
-	<version>1.0.0</version>
-	<author>hooh</author>
-	<description>This is modbuilder example.</description>
+<packer>
+    <!-- This will be copied as manifest.xml -->
+    <guid>modbuilder.example.heels</guid>
+    <name>MODBUILDER Heels EXAMPLE</name>
+    <version>1.0.0</version>
+    <author>hooh</author>
+    <description>This is modbuilder example.</description>
 
-	<!-- This section will contain bundle information -->
-	<bundles>
-		<!-- An assetbundle contains mesh objects. -->
-		<bundle path="example/heels.unity3d">
-			<asset path="shoesmesh.prefab"/>
-			<asset path="tempmat.mat"/>
-			<asset path="diffuse.psd"/>
-			<asset path="colormask.png"/>
-		</bundle>
-		<!-- An assetbudnle contains thumbnail. -->
-		<bundle path="example/heels_thumb.unity3d">
-			<asset path="thumb_image.psd"/>
-		</bundle>
-	</bundles>
+    <!-- This section will contain bundle information -->
+    <bundles>
+        <folder auto-path="prefabs" from="prefabs"/>
+        <folder auto-path="thumbs" from="thumbs"/>
+    </bundles>
 
-	<!-- This contains heels data -->
-	<!-- Heel data is sequencial. That means it will go with order of list fshoes below.-->
-	<heels>
-		<heel>
-			<root vec="0,0.4,0"/>
-			<foot01><roll vec="30,0,0" min="0,0,0" max="35,360,360"/><move vec="0,0,0"/> <scale vec="1,1,1"/></foot01>
-			<foot02><roll vec="10.0,0,0" min="0,0,0" max="35,360,360"/><move vec="0,0,0"/><scale vec="1,1,1"/></foot02>
-			<toes01 fixed="true"><roll vec="-40,0,0"/><move vec="0,0,0"/><scale vec="1,1,1"/></toes01>
-		</heel>
-	</heels>
+    <!-- This contains heels data -->
+    <!-- Heel data is sequencial. That means it will go with order of list fshoes below.-->
+    <heels>
+        <heel id="0">
+            <root vec="0,0.4,0"/>
+            <foot01>
+                <roll vec="30,0,0" min="0,0,0" max="35,360,360"/>
+                <move vec="0,0,0"/>
+                <scale vec="1,1,1"/>
+            </foot01>
+            <foot02>
+                <roll vec="10.0,0,0" min="0,0,0" max="35,360,360"/>
+                <move vec="0,0,0"/>
+                <scale vec="1,1,1"/>
+            </foot02>
+            <toes01 fixed="true">
+                <roll vec="-40,0,0"/>
+                <move vec="0,0,0"/>
+                <scale vec="1,1,1"/>
+            </toes01>
+        </heel>
+    </heels>
 
-	<!-- This section will contain build information -->
-	<build name="@example_heels">
-		<list type="fshoes">
-			<item
-				kind="0" possess="1" name="[hooh] Heel Example" mesh-a="shoesmesh" state="1"
-				tex-main="diffuse" tex-mask="colormask" tex-main2="0" tex-mask2="0" thumb="thumb_image"
-			/>
-		</list>
-	</build>
+    <!-- This section will contain build information -->
+    <build>
+        <list type="fshoes">
+            <item name="[hooh] Heel Example" mesh-a="shoesmesh" tex-main="diffuse" tex-mask="colormask" thumb="thumb_shoesmesh"/>
+        </list>
+    </build>
 </packer>

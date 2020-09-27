@@ -43,9 +43,19 @@ namespace ModPackerModule.Structure.SideloaderMod.Data
                             WriteCsv(targetFolder, csvPath, csvHeader, group);
                     }
                 }
-                else if (type.IsSubclassOf(typeof(ListCharacterBase)))
+                else if (type.IsSubclassOf(typeof(ListClothingBase)))
                 {
                     foreach (var group in value.Cast<ListClothing>().GroupBy(list => list.Category))
+                    {
+                        var groupType = group.Key;
+                        if (!GetCsvFileInfo(type, new object[] {groupType}, out var csvPath, out var csvHeader)) continue;
+                        csvHeader = $"{groupType}\n0\n{DateTime.Now.Ticks.ToString().SanitizeNonCharacters()}_{_target}\n" + csvHeader; 
+                        WriteCsv(targetFolder, csvPath, csvHeader, group);
+                    }
+                }
+                else if (type.IsSubclassOf(typeof(ListCharacterBase)))
+                {
+                    foreach (var group in value.Cast<ListCharacterBase>().GroupBy(list => list.Category))
                     {
                         var groupType = group.Key;
                         if (!GetCsvFileInfo(type, new object[] {groupType}, out var csvPath, out var csvHeader)) continue;

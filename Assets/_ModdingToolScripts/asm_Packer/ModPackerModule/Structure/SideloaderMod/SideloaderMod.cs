@@ -239,6 +239,12 @@ namespace ModPackerModule.Structure.SideloaderMod
                     case "midcategory":
                         dictItemList.Insert(typeof(ListIdMidCategory), new ListIdMidCategory(this, item));
                         break;
+                    case "animebigcategory":
+                        dictItemList.Insert(typeof(ListIdBigAnimeCategory), new ListIdBigAnimeCategory(this, item));
+                        break;
+                    case "animemidcategory":
+                        dictItemList.Insert(typeof(ListIdMidAnimeCategory), new ListIdMidAnimeCategory(this, item));
+                        break;
                     case "map":
                     case "scene":
                         dictItemList.Insert(typeof(ListMap), new ListMap(this, item));

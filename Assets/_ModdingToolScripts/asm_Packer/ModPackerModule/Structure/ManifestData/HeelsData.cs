@@ -38,7 +38,7 @@ namespace ModPackerModule.Structure.Classes.ManifestData
             var heelsDataElement = new XElement("AI_HeelsData");
             foreach (var heels in heelsData)
                 heelsDataElement.Add(heels);
-            document.Add(heelsDataElement);
+            document.Root?.Add(heelsDataElement);
         }
 
         public bool TryGetHeelsData(out XElement[] result)

@@ -3,6 +3,11 @@ using System.Linq;
 using MyBox;
 using UnityEngine;
 
+
+#pragma warning disable 0168
+#pragma warning disable 0219
+#pragma warning disable 0414
+#pragma warning disable 649
 [ExecuteInEditMode]
 public class LightmapPrefab : MonoBehaviour
 {

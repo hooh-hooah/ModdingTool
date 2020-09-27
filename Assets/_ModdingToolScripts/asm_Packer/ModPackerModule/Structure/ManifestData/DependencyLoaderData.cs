@@ -58,7 +58,7 @@ namespace ModPackerModule.Structure.Classes.ManifestData
                 ));
             });
 
-            document.Root.Add(hsDependency);
+            document.Root?.Add(hsDependency);
         }
     }
 }

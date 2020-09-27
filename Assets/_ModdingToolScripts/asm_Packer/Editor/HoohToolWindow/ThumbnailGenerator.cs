@@ -100,6 +100,7 @@ public partial class HoohTools
                 GenerateTexture(thumbnailTarget, outputPath, false);
                 EditorUtility.DisplayProgressBar("Generating", "Generating the image...", ++index / (float) total);
             }
+            EditorApplication.Beep();
         }
         catch (Exception e)
         {
@@ -137,6 +138,7 @@ public partial class HoohTools
                 GenerateTexture(thumbnailTarget, outputPath, true);
                 EditorUtility.DisplayProgressBar("Generating", "Generating and Compressing the image...", ++index / (float) total);
             }
+            EditorApplication.Beep();
         }
         catch (Exception e)
         {
