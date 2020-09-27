@@ -1,36 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Json;
-using System.Text;
-using CameraEffector;
 using Map;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
 using Object = UnityEngine.Object;
 
 public static partial class MapInitializer
 {
-    struct HPointType
-    {
-        public string Name;
-        public string KeyName;
-        public string Comment;
-        public int[] NoForeplay;
-        public int[] NoJobs;
-        public int[] NoInsert;
-        public int[] NoSpecial;
-        public int[] NoLesbo;
-        public int[] NoVarious;
-        public bool HasLimit;
-        public int ID;
-    }
+    private static readonly string[] ppStrings = {"default", "user", "color"};
 
-    private static readonly string[] ppStrings = new[] {"default", "user", "color"};
-
-    private static List<HPointType> hPointTypes = new List<HPointType>()
+    private static readonly List<HPointType> hPointTypes = new List<HPointType>
     {
         new HPointType
         {
@@ -59,7 +39,7 @@ public static partial class MapInitializer
         new HPointType
         {
             ID = 4,
-            NoSpecial = new int[]
+            NoSpecial = new[]
             {
                 5
             },
@@ -178,10 +158,10 @@ public static partial class MapInitializer
             ID = 22,
             Name = "Restraint Chair",
             KeyName = "kosokuisu"
-        },
+        }
     };
 
-    private static string mapName = "map";
+    private static readonly string mapName = "map";
 
     public static GameObject MakeNewWrapper(GameObject root, string name)
     {
@@ -189,12 +169,12 @@ public static partial class MapInitializer
         gameObject.transform.parent = root.transform;
         return gameObject;
     }
-    
+
     [MenuItem("hooh Tools/Initialize HS2 Map", false)]
     public static void WrapObject()
     {
         var allMapObjects = Object.FindObjectsOfType<Transform>();
-        
+
         var root = new GameObject();
         root.name = "Map";
         var mapVisibleList = root.AddComponent<MapVisibleList>();
@@ -219,34 +199,22 @@ public static partial class MapInitializer
         var hPointList = hPointGroup.AddComponent<HPointList>();
         foreach (var hpointType in hPointTypes)
         {
-            var hPointLocationGroup = new GameObject{name = $"hpoint_{hpointType.KeyName}_gp"};
+            var hPointLocationGroup = new GameObject {name = $"hpoint_{hpointType.KeyName}_gp"};
             hPointLocationGroup.transform.parent = hPointGroup.transform;
-        
-            var startPoint = new GameObject{name = "hpoint_start"};
+
+            var startPoint = new GameObject {name = "hpoint_start"};
             startPoint.transform.parent = hPointLocationGroup.transform;
             var hPointComponent = startPoint.AddComponent<HPoint>();
             hPointComponent.id = hpointType.ID;
             hPointComponent.Data = new HPoint.HpointData();
-            if (hpointType.NoForeplay != null) {
-                hPointComponent.Data.notMotion[0].motionID = hpointType.NoForeplay.ToList();
-            }
-            if (hpointType.NoJobs != null) {
-                hPointComponent.Data.notMotion[1].motionID = hpointType.NoJobs.ToList();
-            }
-            if (hpointType.NoInsert != null) {
-                hPointComponent.Data.notMotion[2].motionID = hpointType.NoInsert.ToList();
-            }
-            if (hpointType.NoSpecial != null) {
-                hPointComponent.Data.notMotion[3].motionID = hpointType.NoSpecial.ToList();
-            }
-            if (hpointType.NoLesbo != null) {
-                hPointComponent.Data.notMotion[4].motionID = hpointType.NoLesbo.ToList();
-            }
-            if (hpointType.NoVarious != null) {
-                hPointComponent.Data.notMotion[5].motionID = hpointType.NoVarious.ToList();
-            }
+            if (hpointType.NoForeplay != null) hPointComponent.Data.notMotion[0].motionID = hpointType.NoForeplay.ToList();
+            if (hpointType.NoJobs != null) hPointComponent.Data.notMotion[1].motionID = hpointType.NoJobs.ToList();
+            if (hpointType.NoInsert != null) hPointComponent.Data.notMotion[2].motionID = hpointType.NoInsert.ToList();
+            if (hpointType.NoSpecial != null) hPointComponent.Data.notMotion[3].motionID = hpointType.NoSpecial.ToList();
+            if (hpointType.NoLesbo != null) hPointComponent.Data.notMotion[4].motionID = hpointType.NoLesbo.ToList();
+            if (hpointType.NoVarious != null) hPointComponent.Data.notMotion[5].motionID = hpointType.NoVarious.ToList();
         }
-        
+
         // Sound Group Setting
         var mapEnvSetting = soundGroup.AddComponent<MapEnvSetting>();
 
@@ -255,10 +223,7 @@ public static partial class MapInitializer
         var audioList = new List<AudioSource>();
         allMapObjects.ToList().ForEach(x =>
         {
-            if (x.parent == null)
-            {
-                x.parent = mapObjectGroup.transform;
-            }
+            if (x.parent == null) x.parent = mapObjectGroup.transform;
 
             var audio = x.GetComponent<AudioSource>();
             if (audio != null)
@@ -269,24 +234,39 @@ public static partial class MapInitializer
 
             var light = x.GetComponent<Light>();
             if (light != null)
-            {
-                try { x.parent = lightGroup.transform; }
-                catch (Exception e)
+                try
+                {
+                    x.parent = lightGroup.transform;
+                }
+                catch (Exception)
                 {
                     // ignored
                 }
-            }
 
             var refProbe = x.GetComponent<ReflectionProbe>();
-            if (refProbe != null)
-            {
-                x.parent = reflectionProbes.transform;
-            }
+            if (refProbe != null) x.parent = reflectionProbes.transform;
 
             var lightProbe = x.GetComponent<LightProbeGroup>();
             if (lightProbe != null) x.parent = lightProbe.transform;
         });
-        
+
         mapEnvSetting.AudioSources = audioList.ToArray();
+    }
+
+    private struct HPointType
+    {
+#pragma warning disable 649
+        public string Name;
+        public string KeyName;
+        public string Comment;
+        public int[] NoForeplay;
+        public int[] NoJobs;
+        public int[] NoInsert;
+        public int[] NoSpecial;
+        public int[] NoLesbo;
+        public int[] NoVarious;
+        public bool HasLimit;
+        public int ID;
+#pragma warning restore 649
     }
 }

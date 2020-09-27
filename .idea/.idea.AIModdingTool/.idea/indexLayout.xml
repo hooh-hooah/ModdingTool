@@ -3,12 +3,14 @@
   <component name="ContentModelUserStore">
     <attachedFolders />
     <explicitIncludes>
+      <Path>Library/PackageCache/com.mybox@900922be56cf6d547df65650037da21ef3ba54d1</Path>
       <Path>Library/PackageCache/com.mybox@a244358ff4139760fecbbd02f0a9b578bbe792b4</Path>
       <Path>Library/PackageCache/com.unity.package-manager-ui@2.0.12</Path>
       <Path>Library/PackageCache/com.unity.postprocessing@2.3.0</Path>
       <Path>Library/PackageCache/com.unity.probuilder@4.2.3</Path>
       <Path>Library/PackageCache/com.unity.progrids@3.0.3-preview.6</Path>
       <Path>Library/PackageCache/com.unity.settings-manager@1.0.2</Path>
+      <Path>Library/PackageCache/com.yasirkula.runtimepreviewgenerator@21bbb4feac901b53ba2a368e66c83b421567196c</Path>
       <Path>Packages</Path>
       <Path>ProjectSettings</Path>
     </explicitIncludes>
@@ -18,6 +20,7 @@
       <Path>.vs</Path>
       <Path>Library</Path>
       <Path>Logs</Path>
+      <Path>Temp</Path>
       <Path>_AIResources</Path>
       <Path>_BundleCache</Path>
       <Path>_Deploy</Path>

@@ -1,11 +1,11 @@
 {
   "dependencies": {
     "com.mybox": "https://github.com/Deadcows/MyBox.git",
-    "com.yasirkula.runtimepreviewgenerator": "https://github.com/yasirkula/UnityRuntimePreviewGenerator.git",
     "com.unity.package-manager-ui": "2.0.12",
     "com.unity.postprocessing": "2.3.0",
     "com.unity.probuilder": "4.2.3",
     "com.unity.progrids": "3.0.3-preview.6",
+    "com.yasirkula.runtimepreviewgenerator": "https://github.com/yasirkula/UnityRuntimePreviewGenerator.git",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.assetbundle": "1.0.0",
@@ -29,5 +29,15 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
+  },
+  "lock": {
+    "com.mybox": {
+      "hash": "900922be56cf6d547df65650037da21ef3ba54d1",
+      "revision": "HEAD"
+    },
+    "com.yasirkula.runtimepreviewgenerator": {
+      "hash": "21bbb4feac901b53ba2a368e66c83b421567196c",
+      "revision": "HEAD"
+    }
   }
 }

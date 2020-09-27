@@ -1,6 +1,8 @@
 ﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using Common;
+using MyBox;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,8 +19,12 @@ public partial class HoohTools : EditorWindow
     public static int Gap = 10;
     public static int Cols = 10;
 
+    public GameObject targetObject;
+
     private readonly float maxSliderValue = 5.0f;
     private readonly float minSliderValue = 1.0f;
+
+    protected GUIEventAction _guiEventAction;
 
     private Styles _styles;
     private GUIStyle bigButton;
@@ -29,31 +35,28 @@ public partial class HoohTools : EditorWindow
     private bool foldoutMod = true;
     private bool foldoutProbeset = true;
     private bool foldoutScaffolding = true;
-
-    public GameObject fuckyouCunt;
     private GUIStyle headerStyle;
     private float inputNumber;
+    private bool isDirty;
 
     private Vector2 scrollPos;
     private float sliderValue;
     private GUIStyle smallButton;
     private GUIStyle titleStyle;
 
-    private void Awake()
-    {
-    }
-
     public void OnEnable()
     {
-        _styles = new Styles();
-        _icons = new Dictionary<string, Texture2D>
-        {
-            {"plus", Resources.Load("icons/plus") as Texture2D},
-            {"minus", Resources.Load("icons/minus") as Texture2D},
-            {"reset", Resources.Load("icons/arrow_repeat") as Texture2D},
-            {"wrap", Resources.Load("icons/wrap") as Texture2D},
-            {"wrapscale", Resources.Load("icons/wrapscale") as Texture2D}
-        };
+        _guiEventAction = null;
+        if (_styles == null) _styles = new Styles();
+        if (_icons.IsNullOrEmpty())
+            _icons = new Dictionary<string, Texture2D>
+            {
+                {"plus", Resources.Load("icons/plus") as Texture2D},
+                {"minus", Resources.Load("icons/minus") as Texture2D},
+                {"reset", Resources.Load("icons/arrow_repeat") as Texture2D},
+                {"wrap", Resources.Load("icons/wrap") as Texture2D},
+                {"wrapscale", Resources.Load("icons/wrapscale") as Texture2D}
+            };
 
         smallButton = new GUIStyle
         {
@@ -91,37 +94,17 @@ public partial class HoohTools : EditorWindow
         LightScaleSize = 9f;
     }
 
-    public static void DrawUILine(Color color, int thickness = 1, int padding = 15)
-    {
-        var r = EditorGUILayout.GetControlRect(GUILayout.Height(padding + thickness));
-        r.height = thickness;
-        r.y += padding / 2;
-        r.x -= 2;
-        r.width += 6;
-        EditorGUI.DrawRect(r, color);
-    }
-
-    private bool CheckGoodSelection()
-    {
-        if (Selection.objects.Length <= 0)
-        {
-            EditorUtility.DisplayDialog("Error!", "You need to select at least one or more objects.", "Dismiss");
-            return false;
-        }
-
-        return true;
-    }
-
     private void OnGUI()
     {
         _styles.Init();
         var serializedObject = new SerializedObject(this);
 
+        EditorGUI.BeginChangeCheck();
         EditorGUILayout.BeginVertical();
         // Draw Top Help/Tutorial Boxes
         GUILayout.BeginHorizontal("box");
         if (GUILayout.Button("Check Updates")) Application.OpenURL("https://github.com/hooh-hooah/ModdingTool/tree/release/");
-        if (GUILayout.Button("Tutorials")) Application.OpenURL("https://github.com/hooh-hooah/AI_Tips");
+        if (GUILayout.Button("Tutorials")) Application.OpenURL("https://hooh-hooah.github.io/");
         GUILayout.EndHorizontal();
         // Draw Separator Lines
         DrawUILine(new Color(0, 0, 0));
@@ -130,16 +113,62 @@ public partial class HoohTools : EditorWindow
         {
             DrawThumbnailUtility(serializedObject);
             DrawLightProbeSetting(serializedObject);
-            DrawUnityUtility(serializedObject);
+            DrawUnityUtility();
             DrawXMLHelper(serializedObject);
             DrawModBuilder(serializedObject);
         }
         EditorGUILayout.EndScrollView();
         // End Scroll Positions
         EditorGUILayout.EndVertical();
+        var endChangeCheck = EditorGUI.EndChangeCheck();
 
+
+        try
+        {
+            _guiEventAction?.Invoke();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e);
+            // ignored
+        }
+        finally
+        {
+            _guiEventAction = null;
+            EditorUtility.ClearProgressBar();
+        }
+
+        if (!endChangeCheck) return;
         serializedObject.ApplyModifiedProperties();
-        UpdateEditorPreference();
+        isDirty = true;
+    }
+
+    private void OnInspectorUpdate()
+    {
+        if (isDirty) Repaint();
+    }
+
+    protected void SetEvent(GUIEventAction func)
+    {
+        _guiEventAction = null;
+        _guiEventAction = func;
+    }
+
+    public static void DrawUILine(Color color, int thickness = 1, int padding = 15)
+    {
+        var r = EditorGUILayout.GetControlRect(GUILayout.Height(padding + thickness));
+        r.height = thickness;
+        r.y += padding / 2f;
+        r.x -= 2;
+        r.width += 6;
+        EditorGUI.DrawRect(r, color);
+    }
+
+    private bool CheckGoodSelection()
+    {
+        if (Selection.objects.Length > 0) return true;
+        EditorUtility.DisplayDialog("Error!", "You need to select at least one or more objects.", "Dismiss");
+        return false;
     }
 
     private void UpdateEditorPreference()
@@ -158,5 +187,7 @@ public partial class HoohTools : EditorWindow
     {
         GetWindow<HoohTools>(false, "hooh Tools", true);
     }
+
+    protected delegate void GUIEventAction();
 }
 #endif

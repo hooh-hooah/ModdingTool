@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections;
-using UnityEngine;
-using UnityEngine.Audio;
+﻿using UnityEngine;
 
 namespace Map
 {
-	public class MapEnvSetting : MonoBehaviour
-	{
-		[SerializeField]
-		private AudioSource[] audioSources;
+    public class MapEnvSetting : MonoBehaviour
+    {
+        [SerializeField] private AudioSource[] audioSources;
 
-		public AudioSource[] AudioSources
-		{
-			get => audioSources;
-			set => audioSources = value;
-		}
+        public AudioSource[] AudioSources
+        {
+            get => audioSources;
+            set => audioSources = value;
+        }
 
-		// Add initialize button
-	}
+        // Add initialize button
+    }
 }

@@ -5,22 +5,23 @@ namespace Inspectors.Utilities
 {
     public static class EditorUtils
     {
-        private static GUISkin guiSkin = null;
+        private static GUISkin guiSkin;
+
+        private static Texture2D _xIcon;
+
+        private static Texture2D _yIcon;
+
+        private static Texture2D _zIcon;
 
         public static GUISkin uEditorSkin
         {
             get
             {
-                if (guiSkin == null)
-                {
-                    guiSkin = Resources.Load("uEditorGUI") as GUISkin;
-                }
+                if (guiSkin == null) guiSkin = Resources.Load("uEditorGUI") as GUISkin;
 
                 return guiSkin;
             }
         }
-
-        private static Texture2D _xIcon;
 
         private static Texture2D xIcon
         {
@@ -31,8 +32,6 @@ namespace Inspectors.Utilities
             }
         }
 
-        private static Texture2D _yIcon;
-
         private static Texture2D yIcon
         {
             get
@@ -41,8 +40,6 @@ namespace Inspectors.Utilities
                 return _yIcon;
             }
         }
-
-        private static Texture2D _zIcon;
 
         private static Texture2D zIcon
         {
@@ -53,19 +50,19 @@ namespace Inspectors.Utilities
             }
         }
 
-        static public bool DrawHeader(string text)
+        public static bool DrawHeader(string text)
         {
             return DrawHeader(text, text);
         }
 
-        static public bool DrawHeader(string text, string key)
+        public static bool DrawHeader(string text, string key)
         {
-            bool state = EditorPrefs.GetBool(key, true);
+            var state = EditorPrefs.GetBool(key, true);
 
-            GUIStyle style = uEditorSkin.button;
+            var style = uEditorSkin.button;
 
             GUILayout.Label("", GUILayout.Height(20));
-            Rect rect = GUILayoutUtility.GetLastRect();
+            var rect = GUILayoutUtility.GetLastRect();
             rect.x = 20;
             rect.width = rect.width - 20;
 
@@ -88,10 +85,10 @@ namespace Inspectors.Utilities
 
         public static Vector3 Vector3InputField(string label, Vector3 value, bool lockX, bool lockY, bool lockZ)
         {
-            Vector3 originalValue = value;
-            Vector3 newValue = value;
+            var originalValue = value;
+            var newValue = value;
 
-            GUIContent[] Labels = new GUIContent[3];
+            var Labels = new GUIContent[3];
             Labels[0] = new GUIContent("", xIcon, "");
             Labels[1] = new GUIContent("", yIcon, "");
             Labels[2] = new GUIContent("", zIcon, "");
@@ -117,12 +114,9 @@ namespace Inspectors.Utilities
 
             if (EditorGUI.EndChangeCheck())
             {
-                float difference = newValue.x / originalValue.x;
+                var difference = newValue.x / originalValue.x;
                 //Debug.Log("Difference: " + difference);
-                if (lockY)
-                {
-                    newValue.y = originalValue.y * difference;
-                }
+                if (lockY) newValue.y = originalValue.y * difference;
 
                 if (lockZ)
                     newValue.z = originalValue.z * difference;

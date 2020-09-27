@@ -1,47 +1,21 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 [CanEditMultipleObjects]
-public class ProbeIntensity : EditorWindow
+public class ProbeIntensity : Editor
 {
-    private static float sliderValue = 2.0f;
-    public static bool noBaked;
-
-    public static List<float> inputValues = new List<float>();
-    public static List<float> oldValuesList = new List<float>();
-
-    public static Lightmapping.OnCompletedFunction completed;
-    private GUIStyle currentStyle = null;
-    public float inputNumber = 2.0f;
-    private float maxSliderValue = 5.0f;
-    private float minSliderValue = 1.0f;
-    private Color textColor = new Color(0.71f, 0.71f, 0.71f);
-
-    private void Update()
-    {
-        CheckBaking();
-    }
-
-    private bool CheckBaking()
-    {
-        if (Lightmapping.isRunning)
-        {
-            oldValuesList.Clear();
-            return true;
-        }
-
-        StoreProbeData();
-        return false;
-    }
+    private static readonly List<float> InputValues = new List<float>();
+    private static readonly List<float> OldValuesList = new List<float>();
 
     public static unsafe void ScaleLightProbeData(float scale)
     {
         DisplayWarning();
-        inputValues.Add(scale);
+        InputValues.Add(scale);
 
         var probes = LightmapSettings.lightProbes ? LightmapSettings.lightProbes.bakedProbes : null;
         if (probes == null)
@@ -93,14 +67,14 @@ public class ProbeIntensity : EditorWindow
                 {
                     var valueAddress = probePointer + i;
                     var oldValue = *valueAddress;
-                    oldValuesList.Add(oldValue);
+                    OldValuesList.Add(oldValue);
                 }
 
                 probes[j] = probe;
             }
 
             SetProbeData(probes);
-            inputValues.Clear();
+            InputValues.Clear();
         }
     }
 
@@ -124,31 +98,19 @@ public class ProbeIntensity : EditorWindow
             {
                 var valueAddress = probePointer + i;
 
-                *valueAddress = oldValuesList[i];
+                *valueAddress = OldValuesList[i];
             }
 
             probes[j] = probe;
         }
 
         SetProbeData(probes);
-        inputValues.Clear();
-    }
-
-    private Texture2D MakeTex(int width, int height, Color col)
-    {
-        var pix = new Color[width * height];
-        for (var i = 0; i < pix.Length; ++i) pix[i] = col;
-        var result = new Texture2D(width, height);
-        result.SetPixels(pix);
-        result.Apply();
-        return result;
+        InputValues.Clear();
     }
 
     public static float MultItems()
     {
-        var result = 1.0f;
-        for (var i = 0; i < inputValues.Count; i++) result *= inputValues[i];
-        return result;
+        return InputValues.Aggregate(1.0f, (current, t) => current * t);
     }
 
     public static void DisplayWarning()
@@ -157,22 +119,19 @@ public class ProbeIntensity : EditorWindow
 
         try
         {
+            if (lights == null) return;
             foreach (var l in lights)
                 if (l.bakingOutput.isBaked)
                 {
-                    noBaked = false;
                     Debug.LogWarning("Realtime light information is not stored in light probes!");
-                }
-                else
-                {
-                    noBaked = true;
                 }
         }
         finally
         {
-            foreach (var l in lights)
-                if (l.bakingOutput.isBaked == false)
-                    Debug.LogWarning("No lights in the scene");
+            if (lights != null)
+                foreach (var l in lights)
+                    if (l.bakingOutput.isBaked == false)
+                        Debug.LogWarning("No lights in the scene");
         }
     }
 

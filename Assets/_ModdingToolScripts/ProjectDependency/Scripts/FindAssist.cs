@@ -1,87 +1,77 @@
-﻿using System;
+﻿#if UNITY_EDITOR
 using System.Collections.Generic;
+using System.Linq;
+using hooh_ModdingTool.asm_Packer.Utility;
+using MyBox;
 using UnityEngine;
 
 public class FindAssist
 {
-    // Token: 0x1700095B RID: 2395
-    // (get) Token: 0x06003473 RID: 13427 RVA: 0x001343FC File Offset: 0x001327FC
-    // (set) Token: 0x06003474 RID: 13428 RVA: 0x00134404 File Offset: 0x00132804
-    public Dictionary<string, GameObject> dictObjName { get; private set; }
-
-    // Token: 0x1700095C RID: 2396
-    // (get) Token: 0x06003475 RID: 13429 RVA: 0x0013440D File Offset: 0x0013280D
-    // (set) Token: 0x06003476 RID: 13430 RVA: 0x00134415 File Offset: 0x00132815
-    public Dictionary<string, List<GameObject>> dictTagName { get; private set; }
-
-    // Token: 0x06003477 RID: 13431 RVA: 0x0013441E File Offset: 0x0013281E
-    public void Initialize(Transform trf)
+    public FindAssist(Transform transform)
     {
-        this.dictObjName = new Dictionary<string, GameObject>();
-        this.dictTagName = new Dictionary<string, List<GameObject>>();
-        this.FindAll(trf);
+        Recalculate(transform);
+        FindAll(transform);
     }
 
-    // Token: 0x06003478 RID: 13432 RVA: 0x00134440 File Offset: 0x00132840
-    private void FindAll(Transform trf)
+    public Dictionary<string, GameObject> DictObjName { get; private set; }
+    public Dictionary<string, List<GameObject>> DictTagName { get; private set; }
+    public Dictionary<string, SkinnedMeshRenderer> SkinnedMeshRenderers { get; private set; }
+    public Dictionary<string, Renderer> Renderers { get; private set; }
+    public Dictionary<string, MeshRenderer> MeshRenderers { get; private set; }
+
+    public void Recalculate(Transform transform)
     {
-        if (!this.dictObjName.ContainsKey(trf.name))
-        {
-            this.dictObjName[trf.name] = trf.gameObject;
-        }
-        string tag = trf.tag;
-        if (string.Empty != tag)
-        {
-            List<GameObject> list = null;
-            if (!this.dictTagName.TryGetValue(tag, out list))
+        SkinnedMeshRenderers = new Dictionary<string, SkinnedMeshRenderer>();
+        MeshRenderers = new Dictionary<string, MeshRenderer>();
+        Renderers = new Dictionary<string, Renderer>();
+
+        foreach (var renderer in transform.GetComponentsInChildren<Renderer>(true))
+            switch (renderer)
             {
-                list = new List<GameObject>();
-                this.dictTagName[tag] = list;
+                case SkinnedMeshRenderer skinnedMeshRenderer:
+                    SkinnedMeshRenderers.Add(renderer.name, skinnedMeshRenderer);
+                    break;
+                case MeshRenderer meshRenderer:
+                    MeshRenderers.Add(renderer.name, meshRenderer);
+                    break;
+                default:
+                    Renderers.Add(renderer.name, renderer);
+                    break;
             }
-            list.Add(trf.gameObject);
-        }
-        for (int i = 0; i < trf.childCount; i++)
+
+        DictObjName = new Dictionary<string, GameObject>();
+        DictTagName = new Dictionary<string, List<GameObject>>();
+    }
+
+    private void FindAll(Component transform)
+    {
+        foreach (var gameObject in transform.GetComponentsInChildren<Transform>(true).Select(x => x.gameObject))
         {
-            this.FindAll(trf.GetChild(i));
+            DictObjName[gameObject.name] = gameObject;
+            if (gameObject.tag.IsNullOrEmpty()) continue;
+            DictTagName.Insert(gameObject.tag, gameObject);
         }
     }
 
-    // Token: 0x06003479 RID: 13433 RVA: 0x001344EC File Offset: 0x001328EC
     public GameObject GetObjectFromName(string objName)
     {
-        if (this.dictObjName == null)
-        {
-            return null;
-        }
-        GameObject result = null;
-        this.dictObjName.TryGetValue(objName, out result);
+        if (DictObjName == null) return null;
+        DictObjName.TryGetValue(objName, out var result);
         return result;
     }
 
     // Token: 0x0600347A RID: 13434 RVA: 0x00134518 File Offset: 0x00132918
     public Transform GetTransformFromName(string objName)
     {
-        if (this.dictObjName == null)
-        {
-            return null;
-        }
-        GameObject gameObject = null;
-        if (this.dictObjName.TryGetValue(objName, out gameObject))
-        {
-            return gameObject.transform;
-        }
-        return null;
+        if (DictObjName == null) return null;
+        return DictObjName.TryGetValue(objName, out var gameObject) ? gameObject.transform : null;
     }
 
-    // Token: 0x0600347B RID: 13435 RVA: 0x00134550 File Offset: 0x00132950
     public List<GameObject> GetObjectFromTag(string tagName)
     {
-        if (this.dictTagName == null)
-        {
-            return null;
-        }
-        List<GameObject> result = null;
-        this.dictTagName.TryGetValue(tagName, out result);
+        if (DictTagName == null) return null;
+        DictTagName.TryGetValue(tagName, out var result);
         return result;
     }
 }
+#endif

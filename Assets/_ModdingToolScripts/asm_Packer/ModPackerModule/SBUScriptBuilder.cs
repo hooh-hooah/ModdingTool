@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+﻿#if LEGACY_MODE
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;

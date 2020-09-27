@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public struct TransformPreset
@@ -21,7 +20,7 @@ public struct AIHSBodyPreset
     public string name;
     public Dictionary<string, TransformPreset> transformPresets;
 
-    public AIHSBodyPreset(String name, Dictionary<string, TransformPreset> transformPresets)
+    public AIHSBodyPreset(string name, Dictionary<string, TransformPreset> transformPresets)
     {
         this.name = name;
         this.transformPresets = transformPresets;
@@ -32,7 +31,7 @@ public class AIHSPresetLoader
 {
     public static AIHSBodyPreset[] presets =
     {
-        new AIHSBodyPreset("Body Medium Tiddies", new Dictionary<string, TransformPreset>
+        new AIHSBodyPreset("Body 01", new Dictionary<string, TransformPreset>
         {
             {
                 "cf_J_Hips",
@@ -1155,7 +1154,7 @@ public class AIHSPresetLoader
                 new TransformPreset(new Vector3(0.0f, 0.0f, 1.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f))
             }
         }),
-        new AIHSBodyPreset("Big Tiddies", new Dictionary<string, TransformPreset>
+        new AIHSBodyPreset("Body 02", new Dictionary<string, TransformPreset>
         {
             {"cf_J_Hips", new TransformPreset(new Vector3(0.0f, 11.4f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f))},
             {"cf_J_Kosi01", new TransformPreset(new Vector3(0.0f, -0.1f, 0.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f))},

@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using MyBox;
 using UnityEngine;
 
@@ -7,20 +6,17 @@ namespace Studio
 {
     public class MapComponent : MonoBehaviour
     {
-        [Header("オプション")] public OptionInfo[] optionInfos;
-
-        [Header("海面関係")] public GameObject objSeaParent;
-        public Renderer[] renderersSea;
-        
         [Header("ライト")] public OptionInfo[] lightInfos;
 
+        [Header("海面関係")] public GameObject objSeaParent;
+        [Header("オプション")] public OptionInfo[] optionInfos;
+        public Renderer[] renderersSea;
 
 
+        public bool CheckOption => !optionInfos.IsNullOrEmpty();
 
-        public bool CheckOption => !optionInfos.IsNullOrEmpty<OptionInfo>();
 
-
-        public bool IsLight => !lightInfos.IsNullOrEmpty<OptionInfo>();
+        public bool IsLight => !lightInfos.IsNullOrEmpty();
 
         public void SetOptionVisible(bool _value)
         {
@@ -45,8 +41,8 @@ namespace Studio
         [Serializable]
         public class OptionInfo
         {
-            public GameObject[] objectsOn;
             public GameObject[] objectsOff;
+            public GameObject[] objectsOn;
 
 
             public bool Visible
@@ -72,6 +68,27 @@ namespace Studio
 
         private class SeaInfo
         {
+            public SeaInfo(Collider _collider, LuxWater_WaterVolume _waterVolume)
+            {
+                Collider = _collider;
+                WaterVolume = _waterVolume;
+            }
+
+
+            public Collider Collider { get; }
+
+
+            public LuxWater_WaterVolume WaterVolume { get; }
+
+
+            public bool Enable
+            {
+                set
+                {
+                    if (Collider != null) Collider.enabled = value;
+                    if (WaterVolume != null) WaterVolume.enabled = value;
+                }
+            }
         }
     }
 }

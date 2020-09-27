@@ -1,35 +1,37 @@
-﻿using MyBox;
+﻿using ModdingTool;
 using UnityEngine;
 
-namespace AIChara {
-    public abstract class CmpBase : MonoBehaviour {
-        public CmpBase(bool _baseDB) {
-        }
+namespace AIChara
+{
+    public abstract class CmpBase : MonoBehaviour
+    {
+        [HideInInspector] public int reacquire;
 
-        public abstract void SetReferenceObject();
-        private DynamicBone[] dynamicBones;
         public Renderer[] rendCheckVisible;
-        [HideInInspector]
-        public int reacquire;
+        private DynamicBone[] dynamicBones;
+
+        public CmpBase(bool _baseDB)
+        {
+        }
+#if UNITY_EDITOR
+        public abstract void SetReferenceObject();
 
         public virtual void ReassignAllObjects()
         {
             SetReferenceObject();
             GetAllRenderers();
         }
-        
+
         public void GetAllRenderers()
         {
             rendCheckVisible = GetComponentsInChildren<Renderer>(true);
         }
 
-        public void ApplyDynamicBones(ModdingTool.DynamicBonePreset preset)
+        public void ApplyDynamicBones(DynamicBonePreset preset)
         {
-            DynamicBone[] dynamicBones = GetComponentsInChildren<DynamicBone>();
-            foreach (DynamicBone dynamicBone in dynamicBones)
-            {
-                preset.Apply(dynamicBone);
-            }
+            var dynamicBones = GetComponentsInChildren<DynamicBone>();
+            foreach (var dynamicBone in dynamicBones) preset.Apply(dynamicBone);
         }
+#endif
     }
 }

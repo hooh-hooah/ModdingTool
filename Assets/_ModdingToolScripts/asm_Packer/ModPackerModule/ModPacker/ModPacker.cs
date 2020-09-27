@@ -1,73 +1,35 @@
 ﻿#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Media;
-using System.Xml;
-using System.Xml.Linq;
-using Common;
+using ModPackerModule.Structure.SideloaderMod;
+using ModPackerModule.Utility;
+using MyBox;
 using UnityEditor;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace ModPackerModule
 {
-    public static partial class ModPacker
+    public static class ModPacker
     {
         public static void Announce(bool isSuccess = true, string message = "Please check the console the see error.")
         {
-            if (isSuccess)
-            {
-                EditorApplication.Beep();
-                if (EditorUtility.DisplayDialog("Alert", "Build Successful!", "Open Folder", "Okay"))
-                    if (Directory.Exists(HoohTools.GameExportPath))
-                    {
-                        var process = new Process();
-                        var startInfo = new ProcessStartInfo
-                        {
-                            WindowStyle = ProcessWindowStyle.Hidden, FileName = "cmd.exe", Arguments = $"/C start explorer.exe {HoohTools.GameExportPath}"
-                        };
-                        process.StartInfo = startInfo;
-                        process.Start();
-                    }
-            }
-            else
-            {
-                EditorUtility.DisplayDialog("FAILED!", message, "Dismiss");
-            }
-        }
-
-        private static XDocument ParseModXML(TextAsset asset)
-        {
-            if (asset == null) return null;
-            try
-            {
-                var modDocument = new XmlDocument();
-                modDocument.LoadXml(asset.text);
-                return XDocument.Parse(modDocument.OuterXml);
-            }
-            catch (Exception e)
-            {
-                EditorUtility.DisplayDialog("Error: Mod Packing",
-                    "An Error occured while parsing xml data. please check if xml data is formatted correctly. check more detailed information in console", "OK");
-                Debug.LogWarning(e);
-                Debug.Log("Also you can validate your XML from here: https://www.xmlvalidation.com/");
-            }
-
-            return null;
+            if (!isSuccess) return;
+            EditorApplication.Beep();
+            if (EditorUtility.DisplayDialog("Alert", "Build Successful!", "Open Folder", "Okay"))
+                PathUtils.OpenPath(HoohTools.GameExportPath);
+            else EditorUtility.DisplayDialog("FAILED!", message, "Dismiss");
         }
 
         public static TextAsset[] GetProjectDirectoryTextAssets()
         {
-            return Directory.GetFiles(Utility.GetProjectPath())
-                .Where(x => x.EndsWith(".xml"))
-                .Select(x => AssetDatabase.LoadAssetAtPath<TextAsset>(x.Replace("\\", "/")))
-                .ToArray();
+            return PathUtils.LoadAssetsFromDirectory<TextAsset>(PathUtils.GetProjectPath(), ".xml$");
         }
 
-        public static void PackMod(TextAsset[] assets, string exportGamePath, bool doDeploy = true)
+
+        public static void PackMod(TextAsset[] assets, string exportGamePath, bool isDryRun = false)
         {
             if (!Directory.Exists(exportGamePath))
             {
@@ -76,13 +38,12 @@ namespace ModPackerModule
                 return;
             }
 
-            if (assets == null || assets.Length <= 0)
-            {
+            var isFolderTarget = assets.IsNullOrEmpty();
+            assets = isFolderTarget ? GetProjectDirectoryTextAssets() : assets;
+            if (isFolderTarget)
                 Debug.LogWarning("Target is empty! Attempting to get all xml files from current project folder.");
-                assets = GetProjectDirectoryTextAssets();
-            }
 
-            if (assets == null || assets.Length <= 0)
+            if (assets.IsNullOrEmpty())
             {
                 EditorUtility.DisplayDialog("Error: Mod Packing",
                     "There is no xml files to parse. Please add at least one file in mod builder.\nYou can manually drag and drop to targets or open a folder with .xml folders.",
@@ -90,40 +51,59 @@ namespace ModPackerModule
                 return;
             }
 
-            List<ModPackInfo> modPackInfos = null;
-
+            List<SideloaderMod> packingMods;
             try
             {
-                modPackInfos = assets.Select(x => new ModPackInfo(ParseModXML(x), AssetDatabase.GetAssetPath(x))).ToList();
+                packingMods = assets.Select(file => new SideloaderMod(file)).ToList();
             }
             catch (Exception e)
             {
+                Debug.LogError(e);
                 SystemSounds.Exclamation.Play();
                 EditorUtility.DisplayDialog("Error!", "Failed to parse bundle information.\nCheck console for more detailed information.", "YES");
-                throw new Exception("Failed to parse bundles.");
+                throw new Exception("Failed to validate mods");
             }
 
-            modPackInfos.ForEach(modInfo =>
+            var total = packingMods.Count;
+            var done = 0;
+
+            void Progress()
             {
-                    modInfo.BuildAssetBundles();
-                    modInfo.SwapMaterial();
-                    modInfo.SetupModFolder();
-                    if (doDeploy) modInfo.DeployZipMod(exportGamePath);
+                var progress = done / (float) total;
+                EditorUtility.DisplayProgressBar("Packing Mods", "hooh's Modding Tool is validating and packing mods.", progress);
+            }
+
+            void BuildFailed()
+            {
+                if (BuildPipeline.isBuildingPlayer || EditorApplication.isCompiling) return;
+
+                SystemSounds.Exclamation.Play();
+                EditorUtility.DisplayDialog("Error!", "An error occured while the tool is building the mod.\nCheck console for more detailed information.", "Dismiss");
+            }
+
+            Progress();
+            packingMods.ForEach(mod =>
+            {
                 try
                 {
+                    if (!mod.IsValid()) Debug.LogError("The XML file is not valid!");
+                    else if (!mod.Build(exportGamePath, isDryRun)) BuildFailed();
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(e.StackTrace);
                     Debug.LogError(e);
-                    SystemSounds.Exclamation.Play();
-                    EditorUtility.DisplayDialog("Error!", "An error occured while the tool is building the mod.\nCheck console for more detailed information.", "Dismiss");
-                    throw new Exception("Failed to build bundles.");
+                    BuildFailed();
                 }
-            });
+                finally
+                {
+                    EditorUtility.ClearProgressBar();
+                }
 
-            if (doDeploy) Announce();
-            else EditorApplication.Beep();
+                done++;
+                Progress();
+            });
+            EditorUtility.ClearProgressBar();
+            EditorApplication.Beep();
         }
     }
 #endif

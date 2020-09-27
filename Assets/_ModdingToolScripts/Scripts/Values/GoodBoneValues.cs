@@ -4,7 +4,7 @@ using UnityEngine;
 public class GoodValues : MonoBehaviour
 {
     // Totally based and good way, really.
-    public static Dictionary<string, bool> bones = new Dictionary<string, bool>()
+    public static Dictionary<string, bool> bones = new Dictionary<string, bool>
     {
         {"cf_J_Root", true},
         {"cf_N_height", true},
@@ -586,6 +586,6 @@ public class GoodValues : MonoBehaviour
         {"f_pv_knee_L", true},
         {"f_pv_knee_R", true},
         {"f_pv_leg_L", true},
-        {"f_pv_leg_R", true},
+        {"f_pv_leg_R", true}
     };
 }

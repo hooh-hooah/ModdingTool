@@ -1,81 +1,115 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using DebugComponents;
+﻿using System.Linq;
+using AIChara;
 using MyBox;
+using Studio;
 using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
-public class AIObjectHelper {
-     public enum Command
-     {
-         Hair = 0,
-         Clothing = 1,
-         Accessory = 2,
-         StudioItem = 3,
-         HS2Map = 10,
-         AIMap = 20,
-         RemoveAll = 999,
-     }
-     
-    public static void InitializeHair(GameObject selectedObject, int preset = 0) {
-        GameObject hairObject = selectedObject;
-        hairObject.layer = 10;
-
-        if (hairObject != null) {
-            AIChara.CmpHair hairComponent = hairObject.GetOrAddComponent<AIChara.CmpHair>();
-            hairComponent.ReassignAllObjects();
-        }
+public class AIObjectHelper
+{
+    public enum Command
+    {
+        Hair,
+        Clothing,
+        Accessory,
+        AccessoryWithTransform,
+        AccessorySkinned,
+        StudioItem,
+        HS2Map = 10,
+        AIMap = 20,
+        RemoveAll = 999
     }
 
-    public static void InitializeItem(GameObject selectedObject) {
-        GameObject studioItemObject = selectedObject;
+    public static void InitializeHair(GameObject selectedObject, int preset = 0)
+    {
+        var hairObject = selectedObject;
+        hairObject.layer = 10;
+
+        if (hairObject == null) return;
+        var hairComponent = hairObject.GetOrAddComponent<CmpHair>();
+        hairComponent.ReassignAllObjects();
+    }
+
+    public static void InitializeItem(GameObject selectedObject)
+    {
+        var studioItemObject = selectedObject;
         studioItemObject.layer = 10;
 
-        if (studioItemObject != null) {
-            Studio.ItemComponent itemComponent = studioItemObject.GetOrAddComponent<Studio.ItemComponent>();
-            itemComponent.InitializeItem();
-        }
+        if (studioItemObject == null) return;
+        var itemComponent = studioItemObject.GetOrAddComponent<ItemComponent>();
+        itemComponent.InitializeItem();
     }
 
-    public static void InitializeAccessory(GameObject selectedObject) {
-        GameObject hairObject = selectedObject;
-        hairObject.layer = 10;
+    public static void InitializeAccessory(GameObject selectedObject, bool initializeTransform = false)
+    {
+        var gameObject = selectedObject;
+        gameObject.layer = 10;
+        if (gameObject == null) return;
 
-        if (hairObject != null) {
-            AIChara.CmpAccessory accComponent = hairObject.GetOrAddComponent<AIChara.CmpAccessory>();
-            accComponent.ReassignAllObjects();
+        CmpAccessory accComponent;
+
+        if (initializeTransform)
+        {
+            var newWrapper = new GameObject(gameObject.name + "_acc");
+
+            if (gameObject.transform.parent != null)
+            {
+                newWrapper.transform.position = Vector3.zero;
+                newWrapper.transform.eulerAngles = Vector3.zero;
+                newWrapper.transform.localScale = Vector3.one;
+                newWrapper.transform.SetParent(gameObject.transform.parent, false);
+            }
+
+            var newRoot = new GameObject("N_move");
+            newRoot.transform.position = gameObject.transform.position;
+            newRoot.transform.eulerAngles = Vector3.zero;
+            newRoot.transform.localScale = Vector3.one;
+
+            newRoot.transform.parent = newWrapper.transform;
+            gameObject.transform.parent = newRoot.transform;
+            accComponent = newWrapper.GetOrAddComponent<CmpAccessory>();
         }
+        else
+        {
+            accComponent = gameObject.GetOrAddComponent<CmpAccessory>();
+        }
+
+        accComponent.ReassignAllObjects();
     }
 
-    public static void InitializeClothes(GameObject selectedObject) {
-        GameObject clotheObject = selectedObject;
+    public static void InitializeSkinnedAccessory(GameObject selectedObject)
+    {
+        var gameObject = selectedObject;
+        gameObject.layer = 10;
+        if (gameObject == null) return;
+
+        var accComponent = gameObject.GetOrAddComponent<CmpAccessory>();
+        var skinnedComponent = gameObject.GetOrAddComponent<SkinnedAccessory>();
+        foreach (var animator in gameObject.GetComponentsInChildren<Animator>()) Object.DestroyImmediate(animator);
+
+        skinnedComponent.meshRenderers = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
+        skinnedComponent.skeleton = gameObject.GetComponentsInChildren<Transform>().FirstOrDefault(x => x.name.Equals("cf_J_Root"))?.gameObject;
+
+        if (skinnedComponent.skeleton == null)
+            EditorUtility.DisplayDialog("Warning", "This model does not seems a model for skinned accessory.\nPlease check the model has basic character armature rig.", "OK");
+        else if (skinnedComponent.meshRenderers.Count <= 0)
+            EditorUtility.DisplayDialog("Warning", "This model does not seems have any SkinnedMeshRenderer.\nPlease check if the model is rigged/imported properly.", "OK");
+
+        accComponent.ReassignAllObjects();
+    }
+
+    public static void InitializeClothes(GameObject selectedObject)
+    {
+        var clotheObject = selectedObject;
         clotheObject.layer = 10;
 
-        if (clotheObject != null) {
-            AIChara.CmpClothes clotheComponent = clotheObject.GetOrAddComponent<AIChara.CmpClothes>();
-            clotheComponent.ReassignAllObjects();
-        }
-    }
-    
-    public static void InitializeFace(GameObject selectedObject) {
-
+        if (clotheObject == null) return;
+        var clotheComponent = clotheObject.GetOrAddComponent<CmpClothes>();
+        clotheComponent.ReassignAllObjects();
     }
 
-    public static void InitializeMap(GameObject selectedObject)
+    public static void InitializeFace(GameObject selectedObject)
     {
-        if (selectedObject != null) {
-            if (selectedObject.transform.parent == null)
-            {
-                // add some hs2 map shits
-            }
-            else
-            {
-                EditorUtility.DisplayDialog($"Error", $"The map component should be in the top hierarchy of the scene but selected game object has parent.", "OK");
-            }
-        }
     }
-}
 
+}

@@ -1,7 +1,8 @@
 {
     "name": "ModPacker",
     "references": [
-        "RuntimePreviewGenerator.Runtime"
+        "RuntimePreviewGenerator.Runtime",
+        "MyBox"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [
@@ -10,7 +11,11 @@
     "excludePlatforms": [],
     "allowUnsafeCode": true,
     "overrideReferences": true,
-    "precompiledReferences": [],
+    "precompiledReferences": [
+        "ICSharpCode.SharpZipLib.dll",
+        "nQuant.Core.dll",
+        "LoremNET.dll"
+    ],
     "autoReferenced": true,
     "defineConstraints": []
 }

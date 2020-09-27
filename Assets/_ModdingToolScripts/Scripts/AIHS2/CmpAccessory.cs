@@ -39,15 +39,14 @@ namespace AIChara
         public CmpAccessory() : base(true)
         {
         }
-
+#if UNITY_EDITOR
         public override void SetReferenceObject()
         {
             gameObject.layer = 10;
             gameObject.GetComponentsInChildren<Transform>().ToList().ForEach(x => x.gameObject.layer = 10);
-            
+
             rendNormal = GetComponentsInChildren<Renderer>().ToArray();
-            var findAssist = new FindAssist();
-            findAssist.Initialize(transform);
+            var findAssist = new FindAssist(transform);
             trfMove01 = findAssist.GetTransformFromName("N_move");
             trfMove02 = findAssist.GetTransformFromName("N_move2");
             SyncMaterialDefaultValues();
@@ -83,5 +82,6 @@ namespace AIChara
                 }
             }
         }
+#endif
     }
 }

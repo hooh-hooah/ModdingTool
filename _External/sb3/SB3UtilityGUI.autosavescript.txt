@@ -478,3 +478,5 @@ unityEditor8.GetAssetNames(filter=True)
 opensUNITY3D8.OpenTextAsset(componentIndex=61)
 textAsset0 = unityEditor8.LoadWhenNeeded(componentIndex=61)
 unityEditor8.GetAssetNames(filter=True)
+; end session [9/27/2020 9:39 PM] 
+

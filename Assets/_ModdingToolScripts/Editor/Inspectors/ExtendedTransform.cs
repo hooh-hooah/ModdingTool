@@ -25,15 +25,15 @@ public partial class ExtendedTransform : Editor
 
     private static bool SHOW_UTILS; //Should we show the utilities section?
 
+    private static bool unfoldTransformOptions = true;
+    private static bool unfoldModdingOptions = true;
+
     private SerializedProperty positionProperty; //The position of this transform
     private SerializedProperty rotationProperty; //The rotation of this transform
     private SerializedProperty scaleProperty; //The scale of this transform
 
     private static bool ThinInspectorMode => EditorGUIUtility.currentViewWidth <= 300;
 
-    private static bool unfoldTransformOptions = true;
-    private static bool unfoldModdingOptions = true;
-    
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
@@ -55,7 +55,7 @@ public partial class ExtendedTransform : Editor
         //Apply the settings to the object
         serializedObject.ApplyModifiedProperties();
         EditorGUIUtility.labelWidth = 0;
-        
+
         unfoldModdingOptions = EditorGUILayout.Foldout(unfoldModdingOptions, "Initialize Modding Components", true);
         if (unfoldModdingOptions) DrawQuickCommands(targets);
     }

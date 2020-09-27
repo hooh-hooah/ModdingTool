@@ -7,12 +7,17 @@ using UnityEngine;
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "IdentifierTypo")]
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
+#pragma warning disable 0168
+#pragma warning disable 0219
+#pragma warning disable 0414
+#pragma warning disable 649
 public class SunLightInfo : MonoBehaviour
 {
     [SerializeField] private Info _info;
     [SerializeField] private List<GameObject> environmentLightObjects;
     [SerializeField] private List<GameObject> rootObjectMaps;
     public Info info => _info;
+
     public List<GameObject> RootObjectMaps
     {
         get => rootObjectMaps;
@@ -21,12 +26,22 @@ public class SunLightInfo : MonoBehaviour
 
     public List<GameObject> EnvironmentLightObjects => environmentLightObjects;
 
+    [ButtonMethod]
+    public void Initialize()
+    {
+        var sunObject = GameObject.Find("n_sun");
+        if (sunObject != null) info.sunShaftsTransform = sunObject.transform;
+    }
+
     [Serializable]
     public class Info
     {
         [Header("Back Color")] public Color charaLightADVBackColor = Color.white;
         [Header("Back Strength")] public float charaLightADVBackintensity = 0.1f;
-        [Header("Adv Character Light Setting")] public Color charaLightADVFrontColor = Color.white;
+
+        [Header("Adv Character Light Setting")]
+        public Color charaLightADVFrontColor = Color.white;
+
         [Header("Front (Key) Strength")] public float charaLightADVFrontintensity = 1f;
         [Header("Back Color")] public Color charaLightBackColor = Color.gray;
         [Header("Back Strength")] public float charaLightBackintensity = 0.1f;
@@ -51,15 +66,5 @@ public class SunLightInfo : MonoBehaviour
         [Header("Shafts Caster")] public Transform sunShaftsTransform;
         [Header("Camera Sun Shafts Settings")] public bool sunShaftsUse;
         [Header("Display Object Settings")] public List<GameObject> visibleList = new List<GameObject>();
-    }
-
-    [ButtonMethod]
-    public void Initialize()
-    {
-        var sunObject = GameObject.Find("n_sun");
-        if (sunObject != null)
-        {
-            info.sunShaftsTransform = sunObject.transform;
-        }
     }
 }

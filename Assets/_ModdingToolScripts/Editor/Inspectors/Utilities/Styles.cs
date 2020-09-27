@@ -2,24 +2,31 @@
 
 namespace Inspectors.Utilities
 {
-    public class Styles
+    public static class Styles
     {
-        public readonly GUIStyle header;
-        public readonly GUIStyle medium;
+        private static GUIStyle _header;
+        private static GUIStyle _medium;
+        public static GUIStyle Header => GetHeaderStyle();
+        public static GUIStyle Medium => GetMediumStyle();
 
-        public Styles()
+        private static GUIStyle GetHeaderStyle()
         {
-            header = new GUIStyle(GUI.skin.label)
+            return _header ?? (_header = new GUIStyle(GUI.skin.label)
             {
                 alignment = TextAnchor.MiddleLeft,
                 fontSize = 13,
                 fontStyle = FontStyle.Bold
-            };
-            medium = new GUIStyle(GUI.skin.label)
+            });
+        }
+
+        private static GUIStyle GetMediumStyle()
+        {
+            return _medium ?? (_medium = new GUIStyle(GUI.skin.label)
             {
                 alignment = TextAnchor.MiddleLeft,
-                fontSize = 11
-            };
+                fontSize = 13,
+                fontStyle = FontStyle.Bold
+            });
         }
     }
 }

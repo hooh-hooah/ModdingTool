@@ -4,10 +4,23 @@ using RootMotion;
 using UnityEngine;
 using UnityEngine.UI;
 
+// ReSharper disable InconsistentNaming
+// ReSharper disable IdentifierTypo
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedMember.Local
+// ReSharper disable ClassNeverInstantiated.Global
+#pragma warning disable 0168
+#pragma warning disable 0219
+#pragma warning disable 0414
+#pragma warning disable 649
+#pragma warning disable 0168
+#pragma warning disable 0219
+#pragma warning disable 0414
+
 public class CameraControl_Ver2
 {
-    
 }
+
 public class HSceneFlagCtrl : Singleton<HSceneFlagCtrl>
 {
     public enum AnimType
@@ -70,10 +83,8 @@ public class HSceneFlagCtrl : Singleton<HSceneFlagCtrl>
         Constraint = 32
     }
 
-    public readonly int gotoFaintnessCount = 3;
     public string atariTamaName;
     public bool bFutanari;
-    public CameraControl_Ver2 cameraCtrl;
     public int categoryMotionList = -1;
     public float changeAutoMotionTimeMax;
     public float changeAutoMotionTimeMin;
@@ -87,13 +98,11 @@ public class HSceneFlagCtrl : Singleton<HSceneFlagCtrl>
     public ClickKind click;
     [Tooltip("どの汁を制御するか")] public string ctrlSiru;
     public int ctrlSiruType;
-    private Dictionary<int, Dictionary<int, int>> EndAddTaiiParam = new Dictionary<int, Dictionary<int, int>>();
     public int FaintnessType = -1;
     [Range(0f, 1f)] public float feel_f;
     [Range(0f, 1f)] public float feel_m;
     public float feelPain;
     [Range(0f, 1f)] public float feelSpnking;
-    private Dictionary<int, Dictionary<int, int[]>> FinishResistTaii = new Dictionary<int, Dictionary<int, int[]>>();
     [Range(0f, 1f)] public float guageDecreaseRate;
     public float HBeforeHouchiTime;
     [Tooltip("Hポイントのマーカーを識別するID")] public int HPointID;
@@ -126,8 +135,6 @@ public class HSceneFlagCtrl : Singleton<HSceneFlagCtrl>
     [Tooltip("0:弱ループ 1:強ループ 2:絶頂前ループ 3:中ループ -1:その他")]
     public int loopType;
 
-    public List<int>[,] lstSyncAnimLayers = new List<int>[2, 2];
-
     public MasterbationLoopSpeeds masterbationSpeeds = new MasterbationLoopSpeeds
     {
         minLoopSpeedW = 1f,
@@ -140,11 +147,9 @@ public class HSceneFlagCtrl : Singleton<HSceneFlagCtrl>
         maxLoopSpeedM = 1.6f
     };
 
-    private bool[] mindJudge = new bool[4];
     [Range(0f, 1f)] public float[] motions;
     [SerializeField] public HScene.AnimationListInfo nowAnimationInfo = new HScene.AnimationListInfo();
     public HPoint nowHPoint;
-    private InputField nowInputForcus;
     public bool nowOrgasm;
     public bool nowSpeedStateFast;
     [Tooltip("現在の場所を示すID")] public int nPlace;
@@ -202,6 +207,16 @@ public class HSceneFlagCtrl : Singleton<HSceneFlagCtrl>
     public VoiceFlag voice = new VoiceFlag();
     [Tooltip("ホイール一回でどれだけ回したことにするか")] public float wheelActionCount = 0.05f;
     [Tooltip("0～100％で(小数不可)")] public int YobaiBareRate = 50;
+
+    public readonly int gotoFaintnessCount = 3;
+    public CameraControl_Ver2 cameraCtrl;
+    private Dictionary<int, Dictionary<int, int>> EndAddTaiiParam = new Dictionary<int, Dictionary<int, int>>();
+    private Dictionary<int, Dictionary<int, int[]>> FinishResistTaii = new Dictionary<int, Dictionary<int, int[]>>();
+
+    public List<int>[,] lstSyncAnimLayers = new List<int>[2, 2];
+
+    private bool[] mindJudge = new bool[4];
+    private InputField nowInputForcus;
     public List<int> UrineIDs => urineIDs;
     public bool inputForcus => nowInputForcus != null && nowInputForcus.isFocused;
     public HScene.AnimationListInfo selectAnimationListInfo { get; set; }

@@ -1,7 +1,9 @@
 {
     "name": "DebugComponents",
     "references": [
-        "MyBox"
+        "MyBox",
+        "BundleManager",
+        "GoodInsepctor"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],

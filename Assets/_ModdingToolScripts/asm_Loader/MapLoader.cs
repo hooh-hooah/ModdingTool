@@ -1,74 +1,133 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
+using ModdingTool;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[SuppressMessage("ReSharper", "IdentifierTypo")]
+[SuppressMessage("ReSharper", "StringLiteralTypo")]
 public class MapLoader : EditorWindow
 {
-    public DefaultAsset bundleA;
-    public DefaultAsset bundleB;
-    public DefaultAsset bundleC;
-    public string name;
+    private const string BASE_PATH = "D:/AI-Syoujyo/abdata";
 
-    // Show control window - WiP
-    [MenuItem("powerfucker/fuckshit")]
-    public static void Fuckshit()
-    {
-        var mapRoot = GameObject.Find("Map");
-        var LightMap = GameObject.Find("!ftraceLightmaps");
+    private static readonly Dictionary<string, AssetBundle> LoadedBundles = new Dictionary<string, AssetBundle>();
 
-        LightMap.transform.parent = mapRoot.transform;
-    }
-    [MenuItem("powerfucker/toggalight")]
-    public static void toggalight()
-    {
-        var LightMap = GameObject.Find("!ftraceLightmaps");
-        LightMap.SetActive(!LightMap.activeSelf);
-    }
-    
-    // Show control window - WiP
-    [MenuItem("powerfucker/loadhist")]
-    public static void ShowWindow()
-    {
-        GetWindow<MapLoader>(false, "hooh Tools", true);
-    }
+    private static readonly List<AssetBundleManifest> Dependencies = new List<AssetBundleManifest>();
+
+    public List<string> sceneList = new List<string>();
 
     private void OnGUI()
     {
         var serializedObject = new SerializedObject(this);
-        var bundleAField = serializedObject.FindProperty("bundleA");
-        var bundleBField = serializedObject.FindProperty("bundleB");
-        var bundleCField = serializedObject.FindProperty("bundleC");
-        var nameField = serializedObject.FindProperty("name");
+        var nameField = serializedObject.FindProperty("sceneList");
+        EditorGUILayout.PropertyField(nameField, new GUIContent("nameList"), true);
+        serializedObject.ApplyModifiedProperties();
 
+        if (!GUILayout.Button("load map please")) return;
 
-        EditorGUILayout.PropertyField(bundleAField, new GUIContent("bundleAField"));
-        EditorGUILayout.PropertyField(bundleBField, new GUIContent("bundleBField"));
-        EditorGUILayout.PropertyField(bundleCField, new GUIContent("bundleCField"));
-        EditorGUILayout.PropertyField(nameField, new GUIContent("name"));
-
-
-        if (GUILayout.Button("fuckyou"))
+        var isFirst = true;
+        foreach (var scenePath in sceneList.Select(x => $"{x}.unity3d").Select(internalBundleName =>
         {
-            var targetPath = $"D:\\suqa\\abdata\\studio\\map\\{name}.unity3d".Replace("\\", "/");
-            var bundle = Resources.FindObjectsOfTypeAll<AssetBundle>()
-                .Concat(AssetBundle.GetAllLoadedAssetBundles())
-                .FirstOrDefault(x => x.name.Contains(Path.GetFileName(targetPath)));
-            ;
-            if (bundle == null) bundle = AssetBundle.LoadFromFile(targetPath);
-            if (bundle.isStreamedSceneAssetBundle)
-            {
-                // well it usually has one map so
-                var path = bundle.GetAllScenePaths().First();
-                SceneManager.LoadScene(path, LoadSceneMode.Single);
-            }
-            else
-            {
-                
-            }
+            foreach (var file in Directory.GetFiles(BASE_PATH))
+                if (GetAssetBundleDepencency(GetPath(file), out var manifestBundle))
+                    Dependencies.Add(manifestBundle);
+
+            var depBundles = GetDependencies(internalBundleName);
+            foreach (var depBundle in depBundles)
+                GetBundle(GetPath(depBundle));
+
+            var bundle = GetBundle(GetPath(internalBundleName));
+            var scene = bundle.GetAllScenePaths().FirstOrDefault();
+            return scene;
+        }).Where(x => !string.IsNullOrEmpty(x)))
+        {
+            SceneManager.LoadScene(scenePath, isFirst ? LoadSceneMode.Single : LoadSceneMode.Additive);
+            isFirst = false;
         }
 
-        serializedObject.ApplyModifiedProperties();
+        foreach (var component in FindObjectsOfType<Component>().Where(x => !(x is Transform))) Debug.LogWarning(component);
+    }
+
+    // Show control window - WiP
+    [MenuItem("Developers/Remove Bakery Transform")]
+    public static void RemoveBakeryPlease()
+    {
+        var lightMap = Selection
+            .objects
+            .Cast<GameObject>()
+            .FirstOrDefault()?
+            .transform
+            .GetComponentsInChildren<Transform>()
+            .Where(x => x.name == "!ftraceLightmaps")
+            .ToList();
+
+        var go = GameObject.Find("!ftraceLightmaps");
+        if (go) lightMap?.Add(go.transform);
+
+        Debug.Log($"Found {lightMap?.Count ?? 0} Lightmap Containers");
+        if (lightMap == null) return;
+        foreach (var transform in lightMap)
+        {
+            Debug.LogWarning("Destroyed Bakery Lightmap Containers");
+            DestroyImmediate(transform.gameObject);
+        }
+    }
+
+    // Show control window - WiP
+    [MenuItem("Developers/Move Bakerylightmap")]
+    public static void RemoveBakery()
+    {
+        var mapRoot = GameObject.Find("Map");
+        var lightMap = GameObject.Find("!ftraceLightmaps");
+
+        lightMap.transform.parent = mapRoot.transform;
+    }
+
+    [MenuItem("Developers/Toggle Bakery Light")]
+    public static void Toggalight()
+    {
+        var lightMap = GameObject.Find("Map/!ftraceLightmaps");
+        lightMap.SetActive(!lightMap.activeSelf);
+    }
+
+    // Show control window - WiP
+    [MenuItem("Developers/Load Map Loader")]
+    public static void ShowWindow()
+    {
+        GetWindow<MapLoader>(false, "WIP Map Loader", true);
+    }
+
+    private static AssetBundle GetBundle(string path)
+    {
+        if (LoadedBundles.TryGetValue(path, out var cache)) return cache;
+
+        var bundle = AssetBundleManager.GetBundle(path);
+        LoadedBundles.Add(path, bundle);
+        return bundle;
+    }
+
+    private static bool GetAssetBundleDepencency(string path, out AssetBundleManifest result)
+    {
+        var bundle = GetBundle(path);
+        var manifest = bundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
+        result = manifest;
+        return !ReferenceEquals(null, manifest);
+    }
+
+    private static IEnumerable<string> GetDependencies(string path)
+    {
+        return Dependencies
+            .Select(dependency => dependency.GetAllDependencies(path))
+            .Where(dependency => dependency.Length > 0)
+            .SelectMany(x => x)
+            .ToArray();
+    }
+
+    private static string GetPath(string path)
+    {
+        return Path.Combine(BASE_PATH, path).Replace("\\", "/");
     }
 }

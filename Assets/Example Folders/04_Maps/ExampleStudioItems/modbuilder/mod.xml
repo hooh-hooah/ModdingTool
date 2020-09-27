@@ -10,7 +10,6 @@
 	<bundles>
 		<!-- An assetbundle contains mesh objects. -->
 		<bundle path="hooh/furniture.unity3d">
-			<!-- generate fucking list. -->
 			<asset path="Painting_Large_A.prefab"/>
 			<asset path="Painting_Large_B.prefab"/>
 			<asset path="Painting_Large_C.prefab"/>

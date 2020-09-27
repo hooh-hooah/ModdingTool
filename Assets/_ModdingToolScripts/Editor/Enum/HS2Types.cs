@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HS2.Types {
-    enum Studio {
+﻿namespace HS2.Types
+{
+    internal enum Studio
+    {
         Map = -1,
         BigCategory = -2,
         MidCategory = -3,
@@ -13,7 +9,8 @@ namespace HS2.Types {
         Animation = -5
     }
 
-    enum Male {
+    internal enum Male
+    {
         MaleHead = 110,
         MaleSkinMain = 111,
         MaleDetailMain = 112,
@@ -27,7 +24,8 @@ namespace HS2.Types {
         MaleShoes = 147
     }
 
-    enum Female {
+    internal enum Female
+    {
         Head = 210,
         SkinMain = 211,
         DetailMain = 212,
@@ -41,10 +39,11 @@ namespace HS2.Types {
         Gloves = 244,
         Panst = 245,
         Socks = 246,
-        Shoes = 247,
+        Shoes = 247
     }
 
-    enum Common {
+    internal enum Common
+    {
         Paint = 313,
         Eyebrow = 314,
         Eyelash = 315,
@@ -60,7 +59,8 @@ namespace HS2.Types {
         Pattern = 348
     }
 
-    enum Accessory {
+    internal enum Accessory
+    {
         None = 350,
         Head = 351,
         Ear = 352,
@@ -77,7 +77,8 @@ namespace HS2.Types {
         Kokan = 363
     }
 
-    enum Hair {
+    internal enum Hair
+    {
         Back = 300,
         Front = 301,
         Side = 302,

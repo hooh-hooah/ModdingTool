@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿#if UNITY_EDITOR
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 // I really need to keep all collection filter process in one place.
-public class FindAssistFilter
+public static class FindAssistFilter
 {
     public enum Cloth
     {
@@ -16,14 +17,15 @@ public class FindAssistFilter
         FirstAccessory = 4,
         SecondAccessory = 5
     }
-    
-    private static readonly Regex _skirtRegex = new Regex(@"(.*_s)");
-    private static readonly Dictionary<Cloth, Regex> regexCollection = new Dictionary<Cloth, Regex>
+
+    private static readonly Regex SkirtRegex = new Regex(@"(cf_J_Legsk_[0-9]+_00)"); // select only root
+
+    private static readonly Dictionary<Cloth, Regex> RegexCollection = new Dictionary<Cloth, Regex>
     {
-        {Cloth.Top, new Regex(@"([A-z]_top_a|top_[0-9]+_a)|[A-z]_top_[A-z0-9]+_a")},
-        {Cloth.TopHalf, new Regex(@"([A-z]_top_b|top_[0-9]+_b)|[A-z]_top_[A-z0-9]+_b")},
-        {Cloth.Bot, new Regex(@"([A-z]_bot_a|bot_[0-9]+_a)|[A-z]_bot_[A-z0-9]+_a]")},
-        {Cloth.BotHalf, new Regex(@"([A-z]_bot_b|bot_[0-9]+_b)|[A-z]_bot_[A-z0-9]+_b")}
+        {Cloth.Top, new Regex(@"([A-z]_top_a|top_[0-9]+_a)|[A-z]_top_[A-z0-9]+_a|^top_a$")},
+        {Cloth.TopHalf, new Regex(@"([A-z]_top_b|top_[0-9]+_b)|[A-z]_top_[A-z0-9]+_b|^top_b$")},
+        {Cloth.Bot, new Regex(@"([A-z]_bot_a|bot_[0-9]+_a)|[A-z]_bot_[A-z0-9]+_a]|^bot_a$")},
+        {Cloth.BotHalf, new Regex(@"([A-z]_bot_b|bot_[0-9]+_b)|[A-z]_bot_[A-z0-9]+_b|^bot_b$")}
     };
 
     public static bool IsAccessoryBone()
@@ -36,10 +38,15 @@ public class FindAssistFilter
         return true;
     }
 
-    public static GameObject[] GetSkirtBones(FindAssist assist)
+    public static bool IsSkirtBone(string name)
     {
-        return (from kv in assist.dictObjName
-            where _skirtRegex.IsMatch(kv.Key)
+        return SkirtRegex.IsMatch(name);
+    }
+
+    public static GameObject[] GetSkirtBones(this FindAssist assist)
+    {
+        return (from kv in assist.DictObjName
+            where IsSkirtBone(kv.Key)
             select kv.Value).ToArray();
     }
 
@@ -48,37 +55,65 @@ public class FindAssistFilter
         return true;
     }
 
-    public static GameObject GetClothPart(Cloth part, FindAssist assist)
+    public static GameObject GetClothPart(this FindAssist assist, Cloth part)
     {
-        // TODO: Yes, it runs regex 4 times. I know that.
-        // I will fix this shit later so don't bully me.
+        if (!RegexCollection.TryGetValue(part, out var regex)) return null;
+        var gameObjects = from kv in assist.DictObjName
+            where regex.IsMatch(kv.Key)
+            select kv.Value;
 
-        if (regexCollection.TryGetValue(part, out var regex))
-        {
-            var g = from kv in assist.dictObjName
-                where regex.IsMatch(kv.Key)
-                select kv.Value;
-            return g.Any() ? g.Single() : null;
-        }
-
-        return null;
+        var enumerable = gameObjects as GameObject[] ?? gameObjects.ToArray();
+        return enumerable.Any() ? enumerable.Single() : null;
     }
 
-    public static GameObject[] GetClothParts(Cloth part, FindAssist assist)
+    public static GameObject[] GetClothParts(this FindAssist assist, Cloth part)
     {
-        var names = assist.dictObjName;
+        var names = assist.DictObjName;
         GameObject[] output = { };
         // TODO: Initialize regex operators.
         switch (part)
         {
             case Cloth.FirstAccessory:
-                output = (from x in assist.dictObjName where x.Key.StartsWith("op1") select x.Value).ToArray();
+                output = (from x in assist.DictObjName where x.Key.StartsWith("op1") select x.Value).ToArray();
                 break;
             case Cloth.SecondAccessory:
-                output = (from x in assist.dictObjName where x.Key.StartsWith("op2") select x.Value).ToArray();
+                output = (from x in assist.DictObjName where x.Key.StartsWith("op2") select x.Value).ToArray();
                 break;
+            case Cloth.Top:
+                break;
+            case Cloth.Bot:
+                break;
+            case Cloth.TopHalf:
+                break;
+            case Cloth.BotHalf:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(part), part, null);
         }
 
         return output;
     }
+
+    public static Renderer[][] GetRendererParts(this FindAssist assist, int partIndexes = 3)
+    {
+        var result = new List<Renderer>[partIndexes];
+        for (var i = partIndexes - 1; i >= 0; i--) result[i] = new List<Renderer>();
+
+        var regex = new Regex(".*(group|color|col|grp|part)_(0*[0-9]).*");
+        foreach (var skinnedMeshRenderer in assist.SkinnedMeshRenderers.Values)
+        {
+            var groups = regex.Match(skinnedMeshRenderer.name).Groups;
+            if (int.TryParse(groups[groups.Count - 1].Value, out var rendererSlot))
+                if (rendererSlot > 1 && rendererSlot <= partIndexes)
+                {
+                    result[rendererSlot - 1].Add(skinnedMeshRenderer);
+                    continue;
+                }
+
+            result[0].Add(skinnedMeshRenderer);
+        }
+
+        return result.Select(x => x.ToArray()).ToArray();
+    }
 }
+#endif

@@ -1,3 +1,5 @@
 ﻿using UnityEngine;
-public class ObiCollider : MonoBehaviour {
+
+public class ObiCollider : MonoBehaviour
+{
 }

@@ -3,13 +3,17 @@
 [AddComponentMenu("Dynamic Bone/Dynamic Bone Plane Collider")]
 public class DynamicBonePlaneCollider : DynamicBoneColliderBase
 {
-    void OnValidate()
+    private void OnDrawGizmosSelected()
     {
-    }
+        if (!enabled)
+            return;
 
-    public override void Collide(ref Vector3 particlePosition, float particleRadius)
-    {
-        Vector3 normal = Vector3.up;
+        if (m_Bound == Bound.Outside)
+            Gizmos.color = Color.yellow;
+        else
+            Gizmos.color = Color.magenta;
+
+        var normal = Vector3.up;
         switch (m_Direction)
         {
             case Direction.X:
@@ -23,9 +27,33 @@ public class DynamicBonePlaneCollider : DynamicBoneColliderBase
                 break;
         }
 
-        Vector3 p = transform.TransformPoint(m_Center);
-        Plane plane = new Plane(normal, p);
-        float d = plane.GetDistanceToPoint(particlePosition);
+        var p = transform.TransformPoint(m_Center);
+        Gizmos.DrawLine(p, p + normal);
+    }
+
+    private void OnValidate()
+    {
+    }
+
+    public override void Collide(ref Vector3 particlePosition, float particleRadius)
+    {
+        var normal = Vector3.up;
+        switch (m_Direction)
+        {
+            case Direction.X:
+                normal = transform.right;
+                break;
+            case Direction.Y:
+                normal = transform.up;
+                break;
+            case Direction.Z:
+                normal = transform.forward;
+                break;
+        }
+
+        var p = transform.TransformPoint(m_Center);
+        var plane = new Plane(normal, p);
+        var d = plane.GetDistanceToPoint(particlePosition);
 
         if (m_Bound == Bound.Outside)
         {
@@ -37,33 +65,5 @@ public class DynamicBonePlaneCollider : DynamicBoneColliderBase
             if (d > 0)
                 particlePosition -= normal * d;
         }
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        if (!enabled)
-            return;
-
-        if (m_Bound == Bound.Outside)
-            Gizmos.color = Color.yellow;
-        else
-            Gizmos.color = Color.magenta;
-
-        Vector3 normal = Vector3.up;
-        switch (m_Direction)
-        {
-            case Direction.X:
-                normal = transform.right;
-                break;
-            case Direction.Y:
-                normal = transform.up;
-                break;
-            case Direction.Z:
-                normal = transform.forward;
-                break;
-        }
-
-        Vector3 p = transform.TransformPoint(m_Center);
-        Gizmos.DrawLine(p, p + normal);
     }
 }

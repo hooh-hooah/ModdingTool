@@ -12,7 +12,7 @@ internal class UnityMacros
     public static void AddPostfixOnName(string postfix)
     {
         var selections = Selection.gameObjects;
-        foreach (var gameObject in selections) gameObject.name = postfix + gameObject.name;
+        foreach (var gameObject in selections) gameObject.name = gameObject.name + postfix;
     }
 
     public static void ReplaceTextOfName(string search, string to)

@@ -1,76 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class FindAssist
 {
-	public Dictionary<string, GameObject> dictObjName { get; private set; }
+    private Dictionary<string, GameObject> DictObjName { get; set; }
 
-	public Dictionary<string, List<GameObject>> dictTagName { get; private set; }
+    private Dictionary<string, List<GameObject>> DictTagName { get; set; }
 
-	public void Initialize(Transform trf)
-	{
-		this.dictObjName = new Dictionary<string, GameObject>();
-		this.dictTagName = new Dictionary<string, List<GameObject>>();
-		this.FindAll(trf);
-	}
+    public void Initialize(Transform trf)
+    {
+        DictObjName = new Dictionary<string, GameObject>();
+        DictTagName = new Dictionary<string, List<GameObject>>();
+        FindAll(trf);
+    }
 
-	private void FindAll(Transform trf)
-	{
-		if (!this.dictObjName.ContainsKey(trf.name))
-		{
-			this.dictObjName[trf.name] = trf.gameObject;
-		}
-		string tag = trf.tag;
-		if (string.Empty != tag)
-		{
-			List<GameObject> list = null;
-			if (!this.dictTagName.TryGetValue(tag, out list))
-			{
-				list = new List<GameObject>();
-				this.dictTagName[tag] = list;
-			}
-			list.Add(trf.gameObject);
-		}
-		for (int i = 0; i < trf.childCount; i++)
-		{
-			this.FindAll(trf.GetChild(i));
-		}
-	}
+    private void FindAll(Transform trf)
+    {
+        if (!DictObjName.ContainsKey(trf.name)) DictObjName[trf.name] = trf.gameObject;
+        var tag = trf.tag;
+        if (string.Empty != tag)
+        {
+            if (!DictTagName.TryGetValue(tag, out var list))
+            {
+                list = new List<GameObject>();
+                DictTagName[tag] = list;
+            }
 
-	public GameObject GetObjectFromName(string objName)
-	{
-		if (this.dictObjName == null)
-		{
-			return null;
-		}
-		GameObject result = null;
-		this.dictObjName.TryGetValue(objName, out result);
-		return result;
-	}
+            list.Add(trf.gameObject);
+        }
 
-	public Transform GetTransformFromName(string objName)
-	{
-		if (this.dictObjName == null)
-		{
-			return null;
-		}
-		GameObject gameObject = null;
-		if (this.dictObjName.TryGetValue(objName, out gameObject))
-		{
-			return gameObject.transform;
-		}
-		return null;
-	}
+        for (var i = 0; i < trf.childCount; i++) FindAll(trf.GetChild(i));
+    }
 
-	public List<GameObject> GetObjectFromTag(string tagName)
-	{
-		if (this.dictTagName == null)
-		{
-			return null;
-		}
-		List<GameObject> result = null;
-		this.dictTagName.TryGetValue(tagName, out result);
-		return result;
-	}
+    public GameObject GetObjectFromName(string objName)
+    {
+        if (DictObjName == null) return null;
+        DictObjName.TryGetValue(objName, out var result);
+        return result;
+    }
+
+    public Transform GetTransformFromName(string objName)
+    {
+        if (DictObjName == null) return null;
+        return DictObjName.TryGetValue(objName, out var gameObject) ? gameObject.transform : null;
+    }
+
+    public List<GameObject> GetObjectFromTag(string tagName)
+    {
+        if (DictTagName == null) return null;
+        DictTagName.TryGetValue(tagName, out var result);
+        return result;
+    }
 }

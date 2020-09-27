@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using MyBox;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 #if UNITY_EDITOR
 public partial class HoohTools
@@ -8,41 +11,43 @@ public partial class HoohTools
     public void DrawLightProbeSetting(SerializedObject serializedObject)
     {
         foldoutProbeset = EditorGUILayout.Foldout(foldoutProbeset, "LightProbe Adjustment", true, _styles.Foldout);
-        if (foldoutProbeset)
+        if (!foldoutProbeset) return;
+
+        GUILayout.BeginHorizontal("box");
+        if (inputNumber > 5.0f)
+            sliderValue = 5.0f;
+        else if (inputNumber < 1) sliderValue = 1;
+
+        const string inputText = " ";
+        sliderValue = EditorGUILayout.Slider(sliderValue, minSliderValue, maxSliderValue);
+
+        if (Math.Abs(inputNumber - sliderValue) > 0.01f)
         {
-            GUILayout.BeginHorizontal("box");
-            if (inputNumber > 5.0f)
-                sliderValue = 5.0f;
-            else if (inputNumber < 1) sliderValue = 1;
+            if (float.TryParse(inputText, out inputNumber))
+                sliderValue = Mathf.Clamp(inputNumber, minSliderValue, maxSliderValue);
+            else if (inputText.IsNullOrEmpty()) inputNumber = sliderValue;
+        }
 
-            var inputText = " ";
-            sliderValue = EditorGUILayout.Slider(sliderValue, minSliderValue, maxSliderValue);
+        EditorPrefs.SetFloat("hoohTool_probeStrength", sliderValue);
 
-            if (inputNumber != sliderValue)
-            {
-                if (float.TryParse(inputText, out inputNumber))
-                    sliderValue = Mathf.Clamp(inputNumber, minSliderValue, maxSliderValue);
-                else if (inputText == " ") inputNumber = sliderValue;
-            }
-
-            EditorPrefs.SetFloat("hoohTool_probeStrength", sliderValue);
-
-            if (GUILayout.Button(_icons["plus"], smallButton))
+        if (GUILayout.Button(_icons["plus"], smallButton))
+            _guiEventAction = () =>
             {
                 ProbeIntensity.ScaleLightProbeData(sliderValue);
                 ProbeIntensity.DisplayWarning();
-            }
+            };
 
-            if (GUILayout.Button(_icons["minus"], smallButton)) ProbeIntensity.ScaleLightProbeData(1 / Mathf.Abs(sliderValue));
+        if (GUILayout.Button(_icons["minus"], smallButton))
+            _guiEventAction = () => { ProbeIntensity.ScaleLightProbeData(1 / Mathf.Abs(sliderValue)); };
 
-            if (GUILayout.Button(_icons["reset"], smallButton))
+        if (GUILayout.Button(_icons["reset"], smallButton))
+            _guiEventAction = () =>
             {
                 ProbeIntensity.ResetProbeData();
                 ProbeIntensity.DisplayWarning();
-            }
+            };
 
-            GUILayout.EndHorizontal();
-        }
+        GUILayout.EndHorizontal();
     }
 
     public static void ScaleLightsAndProbes()
