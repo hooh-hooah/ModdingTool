@@ -7,8 +7,6 @@ namespace DebugComponents.Inspectors
     [CustomEditor(typeof(DevPreviewHair))]
     public class HairPreviewEditor : Editor
     {
-        private int columns = 4;
-
         public override void OnInspectorGUI()
         {
             var hairPreviewComponent = (DevPreviewHair) target;
