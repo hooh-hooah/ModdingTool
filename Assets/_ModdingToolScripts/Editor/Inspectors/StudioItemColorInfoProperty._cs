@@ -1,0 +1,73 @@
+﻿using System.Collections.Generic;
+using RootMotion.FinalIK;
+using Studio;
+using UnityEditor;
+using UnityEngine;
+
+[CustomPropertyDrawer(typeof(ItemComponent.Info))]
+public class StudioColorInfoProperty : PropertyDrawer
+{
+    //  /*
+    //   * 
+    // [Header("Material Properties")]
+    // public Color defColor = Color.white;
+    // public bool useMetallic;
+    // [ConditionalField(nameof(useMetallic)), Range(0f, 1f)]
+    // public float defMetallic;
+    // [Range(0f, 1f)]
+    // public float defGlossiness;
+    // [Header("Pattern Properties"), Space]
+    // public Color defColorPattern = Color.white;
+    // public bool defClamp = true;
+    // public Vector4 defUV = Vector4.zero;
+    // public float defRot;
+    //
+    //   */
+    //  // COLOR, METALIC, METALIC DEF, GLOSS DEF
+    //  // PATTERN COLOR, CLAMP
+    //  // UV, ROTATION
+    //
+    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+    {
+        return base.GetPropertyHeight(property, label) * 5;
+    }
+
+    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    {
+        base.OnGUI(position, property, label);
+    }
+
+
+    // public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    // {
+    //     EditorGUI.BeginProperty(position, label, property);
+    //     position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
+    //     var indent = EditorGUI.indentLevel;
+    //     EditorGUI.indentLevel = 0;
+    //
+    //     
+    //     GUILayout.BeginHorizontal();
+    //         EditorGUI.PropertyField(new Rect(position.x, position.y, 100, 32), property.FindPropertyRelative("defColor"),
+    //             new GUIContent("Color"));
+    //     GUILayout.EndHorizontal();
+    //     // EditorGUI.PropertyField(new Rect(0, 0, 300, 16), property.FindPropertyRelative("useMetallic"),
+    //     //     new GUIContent("useMetallic"));
+    //     // EditorGUI.PropertyField(new Rect(0, 0, 300, 16), property.FindPropertyRelative("defMetallic"),
+    //     //     new GUIContent("defMetallic"));
+    //     // EditorGUI.PropertyField(new Rect(0, 0, 300, 16), property.FindPropertyRelative("defGlossiness"),
+    //     //     new GUIContent("defGlossiness"));
+    //     // EditorGUI.PropertyField(new Rect(0, 0, 300, 16), property.FindPropertyRelative("defColorPattern"),
+    //     //     new GUIContent("defColorPattern"));
+    //     // EditorGUI.PropertyField(new Rect(0, 0, 300, 16), property.FindPropertyRelative("defClamp"),
+    //     //     new GUIContent("defClamp"));
+    //     // EditorGUI.PropertyField(new Rect(0, 0, 300, 16), property.FindPropertyRelative("defUV"),
+    //     //     new GUIContent("defUV"));
+    //     // EditorGUI.PropertyField(new Rect(0, 0, 300, 16), property.FindPropertyRelative("defRot"),
+    //     //     new GUIContent("defRot"));
+    //     // EditorGUI.LabelField(new Rect(0, 0, 300, 16), "fuck you");
+    //
+    //
+    //     EditorGUI.indentLevel = indent;
+    //     EditorGUI.EndProperty();
+    // }
+}

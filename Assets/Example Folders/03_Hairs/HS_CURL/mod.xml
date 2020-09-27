@@ -1,0 +1,36 @@
+<packer type="hair">
+    <!-- This will be copied as manifest.xml -->
+    <guid>modbuilder.example.hair</guid>
+    <name>HS Set Hair Curly</name>
+    <version>1.0.0</version>
+    <author>hooh</author>
+    <description>Example</description>
+
+    <!-- This section will contain bundle information -->
+    <bundles>
+        <folder auto-path="prefabs" from="prefabs"/>
+        <folder auto-path="textures" from="textures"/>
+        <folder auto-path="thumbs" from="thumbs"/>
+    </bundles>
+
+    <!-- hair modding is temporaily disabled in 0.5.0-->
+    <matswap>
+        <!-- mat-bundle WILL ONLY reference from PROJECT/_AIResources. -->
+        <!-- Each target only can swap one materials. don't look at me, it's SB3 Script mode's structural limit. -->
+        <target mesh-object="hairobject" mat-name="hairmat" >
+            <texture mat-slot="0" tex-name="normal"/>
+            <texture mat-slot="1" tex-name="colormask"/>
+            <texture mat-slot="2" tex-name="noise"/>
+            <texture mat-slot="3" tex-name="diffuse"/>
+            <texture mat-slot="4" tex-name="ao"/>
+            <matvalue slot="mat-detail" value="0.4"/>
+        </target>
+    </matswap>
+
+    <!-- This section will contain build information -->
+    <build>
+        <list type="hairback">
+            <item name="Example Hair" mesh-a="hairobject" ringoff="0" tex-a="diffuse" tex-b="colormask" thumb="thumb_image"/>
+        </list>
+    </build>
+</packer>

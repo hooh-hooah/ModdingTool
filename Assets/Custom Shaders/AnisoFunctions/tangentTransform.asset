@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78b2425a2284af743826c689403a4924, type: 3}
+  m_Name: tangentTransform
+  m_EditorClassIdentifier: 
+  m_functionInfo: "// Made with Amplify Shader Editor\n// Available at the Unity Asset
+    Store - http://u3d.as/y3X \n/*ASEBEGIN\nVersion=17400\n0;112.6667;1453;1013;1208.438;435.2882;1;True;False\nNode;AmplifyShaderEditor.CommentaryNode;1;-652.6869,-223.7239;Inherit;False;620.1995;530;Comment;2;5;6;Tangent
+    To World;1,1,1,1;0;0\nNode;AmplifyShaderEditor.CustomExpressionNode;5;-269.1548,0.261034;Inherit;False;transpose(float3x3(Tangent,
+    Bitangent, Normal));5;False;3;True;Tangent;FLOAT3;0,0,0;In;;Float;False;True;Bitangent;FLOAT3;0,0,0;In;;Float;False;True;Normal;FLOAT3;0,0,0;In;;Float;False;Transpose;True;False;0;3;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;2;FLOAT3;0,0,0;False;1;FLOAT3x3;0\nNode;AmplifyShaderEditor.VertexBinormalNode;7;-579.13,-19.91919;Inherit;False;0;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3\nNode;AmplifyShaderEditor.WorldNormalVector;8;-548.13,124.0808;Inherit;False;False;1;0;FLOAT3;0,0,1;False;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3\nNode;AmplifyShaderEditor.VertexTangentNode;6;-576.13,-178.9192;Inherit;False;0;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3\nNode;AmplifyShaderEditor.FunctionOutput;0;0,0;Inherit;False;True;-1;Output;0;False;1;0;FLOAT3x3;0,0,0,1,0,0,1,0,1;False;1;FLOAT3x3;0\nWireConnection;5;0;6;0\nWireConnection;5;1;7;0\nWireConnection;5;2;8;0\nWireConnection;0;0;5;0\nASEEND*/\n//CHKSM=9CF3CACF7E4684E9700E0CFD9A9727345EA27C42"
+  m_functionName: 
+  m_description: 
+  m_additionalIncludes:
+    m_additionalIncludes: []
+    m_outsideIncludes: []
+  m_additionalPragmas:
+    m_additionalPragmas: []
+    m_outsidePragmas: []
+  m_additionalDirectives:
+    m_validData: 0
+    m_isDirty: 0
+    m_moduleName: ' Additional Directives'
+    m_independentModule: 1
+    m_additionalDirectives: []
+    m_shaderFunctionDirectives: []
+    m_nativeDirectives: []
+    m_nativeDirectivesIndex: -1
+    m_nativeDirectivesFoldout: 0
+    m_directivesSaveItems: []
+  m_nodeCategory: 3
+  m_customNodeCategory: 
+  m_previewPosition: 0
+  m_hidden: 0

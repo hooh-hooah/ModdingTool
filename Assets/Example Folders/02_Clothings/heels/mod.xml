@@ -1,0 +1,44 @@
+<packer>
+    <!-- This will be copied as manifest.xml -->
+    <guid>modbuilder.example.heels</guid>
+    <name>MODBUILDER Heels EXAMPLE</name>
+    <version>1.0.0</version>
+    <author>hooh</author>
+    <description>This is modbuilder example.</description>
+
+    <!-- This section will contain bundle information -->
+    <bundles>
+        <folder auto-path="prefabs" from="prefabs"/>
+        <folder auto-path="thumbs" from="thumbs"/>
+    </bundles>
+
+    <!-- This contains heels data -->
+    <!-- Heel data is sequencial. That means it will go with order of list fshoes below.-->
+    <heels>
+        <heel id="0">
+            <root vec="0,0.4,0"/>
+            <foot01>
+                <roll vec="30,0,0" min="0,0,0" max="35,360,360"/>
+                <move vec="0,0,0"/>
+                <scale vec="1,1,1"/>
+            </foot01>
+            <foot02>
+                <roll vec="10.0,0,0" min="0,0,0" max="35,360,360"/>
+                <move vec="0,0,0"/>
+                <scale vec="1,1,1"/>
+            </foot02>
+            <toes01 fixed="true">
+                <roll vec="-40,0,0"/>
+                <move vec="0,0,0"/>
+                <scale vec="1,1,1"/>
+            </toes01>
+        </heel>
+    </heels>
+
+    <!-- This section will contain build information -->
+    <build>
+        <list type="fshoes">
+            <item name="[hooh] Heel Example" mesh-a="shoesmesh" tex-main="diffuse" tex-mask="colormask" thumb="thumb_shoesmesh"/>
+        </list>
+    </build>
+</packer>
