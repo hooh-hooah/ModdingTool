@@ -63,7 +63,7 @@ public class SkinnedAccessory : MonoBehaviour
         smr.enabled = true;
         smr.localBounds = bound;
 
-        // well if i could track coroutines like god damn async
+        // well shit if i could track coroutines like god damn async
         _done++;
         if (_done == meshRenderers.Count) DestroyImmediate(skeleton);
         yield break;
