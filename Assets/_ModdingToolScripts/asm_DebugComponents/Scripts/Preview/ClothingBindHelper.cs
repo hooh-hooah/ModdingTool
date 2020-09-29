@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿#if UNITY_EDITOR
+using System.Linq;
 using MyBox;
 using UnityEditor;
 using UnityEngine;
@@ -49,3 +50,4 @@ namespace DebugComponents
         }
     }
 }
+#endif
