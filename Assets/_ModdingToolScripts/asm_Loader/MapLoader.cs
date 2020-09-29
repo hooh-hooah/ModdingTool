@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿#if UNITY_EDITOR
+
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -131,3 +133,4 @@ public class MapLoader : EditorWindow
         return Path.Combine(BASE_PATH, path).Replace("\\", "/");
     }
 }
+#endif
