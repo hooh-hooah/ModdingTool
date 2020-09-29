@@ -255,8 +255,10 @@ namespace ModPackerModule.Structure.SideloaderMod
                     case "hairext":
                         dictItemList.Insert(typeof(ListHair), new ListHair(this, item, type));
                         break;
-                    case "accnone":
                     case "acchead":
+                        dictItemList.Insert(typeof(ListAccessoryHead), new ListAccessoryHead(this, item, type));
+                        break;
+                    case "accnone":
                     case "accear":
                     case "accglasses":
                     case "accface":
