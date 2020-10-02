@@ -153,41 +153,47 @@ namespace Studio
         [ButtonMethod]
         public void InitializeAnimations()
         {
-            var animator = gameObject.GetComponent<Animator>();
-            var controller = animator.runtimeAnimatorController;
-            var clips = controller.animationClips;
-
-            if (clips.Length <= 0)
+            foreach (var targetComponent in Selection.objects.OfType<GameObject>().Select(x => x.GetComponent<ItemComponent>()).Where(x => x != null))
             {
-                isAnime = false;
-                return;
+                var targetGameobject = targetComponent.gameObject;
+                var animator = targetGameobject.GetComponent<Animator>();
+                var controller = animator.runtimeAnimatorController;
+                var clips = controller.animationClips;
+
+                if (clips.Length <= 0)
+                {
+                    targetComponent.isAnime = false;
+                    return;
+                }
+
+                var anims = new AnimeInfo[clips.Length];
+                var index = 0;
+                foreach (var clip in clips)
+                {
+                    var animInfo = new AnimeInfo();
+
+                    // Make name not-developer friendly.
+                    var niceName = clip.name;
+                    if (niceName.IndexOf("|", StringComparison.Ordinal) > 0)
+                        niceName = niceName.Substring(niceName.IndexOf("|", StringComparison.Ordinal) + 1);
+                    niceName = Regex.Replace(niceName, @"([a-z])([A-Z])", "$1 $2");
+                    niceName = Regex.Replace(niceName, @"([_-])", " ");
+                    niceName = Regex.Replace(niceName, @"(^| )[a-z]", m => m.ToString().ToUpper());
+
+                    // But put those in developer friendly form.
+                    animInfo.name = niceName;
+                    animInfo.state = clip.name;
+                    anims[index] = animInfo;
+                    index++;
+
+                    // Debug if you need em'
+                    //Debug.Log(niceName);
+                }
+
+                targetComponent.animeInfos = anims;
+
+                EditorUtility.SetDirty(targetComponent);
             }
-
-            var anims = new AnimeInfo[clips.Length];
-            var index = 0;
-            foreach (var clip in clips)
-            {
-                var animInfo = new AnimeInfo();
-
-                // Make name not-developer friendly.
-                var niceName = clip.name;
-                if (niceName.IndexOf("|") > 0)
-                    niceName = niceName.Substring(niceName.IndexOf("|") + 1);
-                niceName = Regex.Replace(niceName, @"([a-z])([A-Z])", "$1 $2");
-                niceName = Regex.Replace(niceName, @"([_-])", " ");
-                niceName = Regex.Replace(niceName, @"(^| )[a-z]", m => m.ToString().ToUpper());
-
-                // But put those in developer friendly form.
-                animInfo.name = niceName;
-                animInfo.state = clip.name;
-                anims[index] = animInfo;
-                index++;
-
-                // Debug if you need em'
-                //Debug.Log(niceName);
-            }
-
-            animeInfos = anims;
         }
 #endif
     }
