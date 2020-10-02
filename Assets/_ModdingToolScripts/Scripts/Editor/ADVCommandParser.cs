@@ -44,7 +44,7 @@ public static class ADVCommandParser
             {
                 foreach (var param in scenarioData.list)
                 {
-                    stream.WriteLine($"{Enum.GetName(typeof(Command), param._command)},{string.Join(",", param._args)}");
+                    stream.WriteLine($"{Enum.GetName(typeof(Command), param._command)}\t{param._multi}\t{param._version}\t{string.Join("\t", param._args)}");
                 }
 
                 stream.Close();
