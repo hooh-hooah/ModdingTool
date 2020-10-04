@@ -163,6 +163,7 @@ namespace ModPackerModule.Structure.SideloaderMod
             foreach (var target in _bundleTargets.Where(x => x.AutoPath)) target.ResolveAutoPath();
             ParseListData(rootNode?.Element(BuildTargetName)); // parse list data
             ParseManifest(rootNode);
+            ValidateBundleData();
             ValidateListData();
             if (_outputFileName.IsNullOrEmpty())
                 _outputFileName = !MainData.UniqueId.IsNullOrEmpty() ? MainData.UniqueId : MainData.Guid.SanitizeNonCharacters();

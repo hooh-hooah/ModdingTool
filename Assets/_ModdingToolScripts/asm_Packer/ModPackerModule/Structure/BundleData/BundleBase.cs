@@ -58,25 +58,40 @@ namespace ModPackerModule.Structure.BundleData
 
         public string AssetPath { get; set; }
 
-        public (bool, string) IsValid()
+        public virtual bool IsValid(out string reason)
         {
-            if (ReferenceEquals(null, _bundleElement)) return (false, "Invalid Element");
-            if (AssetPath.IsNullOrEmpty()) return (false, "Invalid Path");
-            if (_badAssets.Count <= 0) return (true, null);
+            reason = default;
+            if (ReferenceEquals(null, _bundleElement))
+            {
+                reason = "Invalid Bundle XMLElement";
+                return false;
+            }
+
+            if (GetType() != typeof(CopyFiles) && AssetPath.IsNullOrEmpty())
+            {
+                reason = "Invalid Bundle Target Path";
+                return false;
+            }
+
+            if (_badAssets.Count <= 0)
+            {
+                return true;
+            }
 
             _badAssets.ForEach(path => Debug.LogError($"Failed to resolve asset: {path}"));
-            return (false, "Failed to validate assetbundle.");
+            reason = "Failed to validate assetbundle";
+            return false;
         }
 
         public BundleBase InitializeBundles(in XElement element)
         {
-            if (element.Attribute("auto-path")?.Value == null)
+            AutoPathType = element.Attr<string>("auto-path");
+            if (AutoPathType.IsNullOrEmpty())
             {
                 GenerateAssetBundles();
             }
             else
             {
-                AutoPathType = element.Attr<string>("auto-path");
                 AutoPathParameter = element.Attr("parameter", "");
                 AutoPath = true;
             }

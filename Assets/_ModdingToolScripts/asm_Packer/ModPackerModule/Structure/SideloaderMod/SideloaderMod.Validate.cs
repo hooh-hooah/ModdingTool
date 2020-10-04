@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using ModPackerModule.Structure.BundleData;
 using ModPackerModule.Structure.ListData;
 using MyBox;
 using UnityEditor;
@@ -59,6 +60,31 @@ namespace ModPackerModule.Structure.SideloaderMod
             return true;
         }
 
+        private void ValidateBundleData()
+        {
+            var confirmed = true;
+            var badBundleList = new List<(BundleBase, string)>();
+
+            foreach (var bundleTarget in _bundleTargets)
+            {
+                if (bundleTarget.IsValid(out var reason)) continue;
+                confirmed = false;
+                badBundleList.Add((bundleTarget, reason));
+            }
+
+            if (confirmed) return;
+
+            Debug.LogError("<bundles> Validation has been failed.");
+            Debug.LogError("Please check items below:");
+            foreach (var valueTuple in badBundleList)
+            {
+                var (list, reason) = valueTuple;
+                Debug.LogError($"{reason} => {list}");
+            }
+
+            throw new InvalidBundleTargetException($"Found bad bundle targets from the {FileName}.xml file.");
+        }
+
         private void ValidateListData()
         {
             var confirmed = true;
@@ -86,7 +112,7 @@ namespace ModPackerModule.Structure.SideloaderMod
                 Debug.LogError($"{reason} => {list}");
             }
 
-            throw new Exception("Found bad item list");
+            throw new InvalidListTargetException("Found bad list targets from the {FileName}.xml file.");
         }
 
         public static bool IsValidModXml(string path)
