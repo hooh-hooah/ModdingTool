@@ -93,7 +93,8 @@ namespace ModPackerModule.Structure.SideloaderMod
                 MainData,
                 DependencyData,
                 new HeelsData(),
-                new MaterialEditorData()
+                new MaterialEditorData(),
+                new AIMapData()
             };
 
             _bundleTargets = new List<BundleBase>();
