@@ -1,6 +1,8 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using AIProject;
 using hooh_ModdingTool.asm_Packer.Utility;
 using MyBox;
 using UnityEngine;
@@ -10,7 +12,6 @@ public class FindAssist
     public FindAssist(Transform transform)
     {
         Recalculate(transform);
-        FindAll(transform);
     }
 
     public Dictionary<string, GameObject> DictObjName { get; private set; }
@@ -18,38 +19,52 @@ public class FindAssist
     public Dictionary<string, SkinnedMeshRenderer> SkinnedMeshRenderers { get; private set; }
     public Dictionary<string, Renderer> Renderers { get; private set; }
     public Dictionary<string, MeshRenderer> MeshRenderers { get; private set; }
+    public Dictionary<string, Collider> Colliders { get; private set; }
+    
+    public Dictionary<string, Point> Points { get; private set; }
 
     public void Recalculate(Transform transform)
     {
         SkinnedMeshRenderers = new Dictionary<string, SkinnedMeshRenderer>();
         MeshRenderers = new Dictionary<string, MeshRenderer>();
         Renderers = new Dictionary<string, Renderer>();
+        Colliders = new Dictionary<string, Collider>();
+        Points = new Dictionary<string, Point>();
+        DictObjName = new Dictionary<string, GameObject>();
+        DictTagName = new Dictionary<string, List<GameObject>>();
 
-        foreach (var renderer in transform.GetComponentsInChildren<Renderer>(true))
-            switch (renderer)
+        foreach (var component in transform.GetComponentsInChildren<Component>(true))
+        {
+            var componentName = component.name;
+
+            switch (component)
             {
                 case SkinnedMeshRenderer skinnedMeshRenderer:
-                    SkinnedMeshRenderers.Add(renderer.name, skinnedMeshRenderer);
+                    SkinnedMeshRenderers.Add(componentName, skinnedMeshRenderer);
                     break;
                 case MeshRenderer meshRenderer:
-                    MeshRenderers.Add(renderer.name, meshRenderer);
+                    MeshRenderers.Add(componentName, meshRenderer);
                     break;
-                default:
-                    Renderers.Add(renderer.name, renderer);
+                case Collider collider:
+                    Colliders.Add(componentName, collider);
+                    break;
+                case Point point:
+                    Points.Add(componentName, point);
+                    break;
+                case Transform transformComponent:
+                    var gameObject = transformComponent.gameObject;
+                    DictObjName[gameObject.name] = gameObject;
+                    if (gameObject.tag.IsNullOrEmpty()) continue;
+                    DictTagName.Insert(gameObject.tag, gameObject);
                     break;
             }
 
-        DictObjName = new Dictionary<string, GameObject>();
-        DictTagName = new Dictionary<string, List<GameObject>>();
-    }
-
-    private void FindAll(Component transform)
-    {
-        foreach (var gameObject in transform.GetComponentsInChildren<Transform>(true).Select(x => x.gameObject))
-        {
-            DictObjName[gameObject.name] = gameObject;
-            if (gameObject.tag.IsNullOrEmpty()) continue;
-            DictTagName.Insert(gameObject.tag, gameObject);
+            switch (component)
+            {
+                case Renderer renderer:
+                    Renderers.Add(componentName, renderer);
+                    break;
+            }
         }
     }
 

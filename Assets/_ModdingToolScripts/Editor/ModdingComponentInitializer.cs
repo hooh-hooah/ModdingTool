@@ -36,6 +36,7 @@ public partial class ExtendedTransform
         if (EditorGUILayout.DropdownButton(new GUIContent("AI"), FocusType.Passive, EditorStyles.toolbarDropDown))
         {
             var menu = new GenericMenu();
+            menu.AddItem(new GUIContent("Furniture Data"), false, InitializeObject, AIObjectHelper.Command.AIFurniture);
             menu.ShowAsContext();
         }
 
@@ -75,6 +76,9 @@ public partial class ExtendedTransform
                     AIObjectHelper.InitializeItem(transform.gameObject);
                     break;
                 case AIObjectHelper.Command.HS2Map:
+                    break;
+                case AIObjectHelper.Command.AIFurniture:
+                    AIObjectHelper.InitializeFurniture(transform.gameObject);
                     break;
                 case AIObjectHelper.Command.RemoveAll:
                     transform.gameObject.GetComponents<Component>().Where(x => x is CmpBase).ToList().ForEach(DestroyImmediate);

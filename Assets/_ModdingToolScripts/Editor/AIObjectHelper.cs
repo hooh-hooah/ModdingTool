@@ -17,6 +17,7 @@ public class AIObjectHelper
         StudioItem,
         HS2Map = 10,
         AIMap = 20,
+        AIFurniture,
         RemoveAll = 999
     }
 
@@ -112,4 +113,9 @@ public class AIObjectHelper
     {
     }
 
+    public static void InitializeFurniture(GameObject transformGameObject)
+    {
+        var housingFurniture = transformGameObject.GetOrAddComponent<Housing.ItemComponent>();
+        housingFurniture.InitializeItem();
+    }
 }
