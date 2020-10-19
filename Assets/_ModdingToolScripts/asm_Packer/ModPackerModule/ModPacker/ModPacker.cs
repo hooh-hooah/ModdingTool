@@ -75,7 +75,7 @@ namespace ModPackerModule
 
             void BuildFailed()
             {
-                if (BuildPipeline.isBuildingPlayer || EditorApplication.isCompiling) return;
+                if (BuildPipeline.isBuildingPlayer || EditorApplication.isCompiling || EditorApplication.isPlayingOrWillChangePlaymode) return;
 
                 SystemSounds.Exclamation.Play();
                 EditorUtility.DisplayDialog("Error!", "An error occured while the tool is building the mod.\nCheck console for more detailed information.", "Dismiss");

@@ -38,6 +38,8 @@ public partial class HoohTools
     {
         var texture = RuntimePreviewGenerator.GenerateModelPreview(thumbnailTarget.transform, 128, 128, true);
 
+        if (texture == null) return;
+
         if (thumbnailBackgroundTexture)
         {
             var texturePixels = texture.GetPixels();
