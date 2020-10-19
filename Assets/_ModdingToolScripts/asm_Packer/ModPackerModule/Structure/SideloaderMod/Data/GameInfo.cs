@@ -72,6 +72,15 @@ namespace ModPackerModule.Structure.SideloaderMod.Data
                     if (GetCsvFileInfo(type, new object[] {folderName, midCategory, bigCategory}, out var csvPath, out var csvHeader))
                         WriteCsv(targetFolder, csvPath, csvHeader, listStudioItems);
                 }
+                else if (type == typeof(ListAnimation))
+                {
+                    var studioItems = value.Cast<ListAnimation>();
+                    var listStudioItems = studioItems as ListAnimation[] ?? studioItems.ToArray();
+                    var midCategory = listStudioItems.Min(item => item.MidCategory);
+                    var bigCategory = listStudioItems.Min(item => item.BigCategory);
+                    if (GetCsvFileInfo(type, new object[] {folderName, midCategory, bigCategory}, out var csvPath, out var csvHeader))
+                        WriteCsv(targetFolder, csvPath, csvHeader, listStudioItems);
+                }
                 else if (type == typeof(ListMapCollider))
                 {
                     // TODO: this does nothing yet.

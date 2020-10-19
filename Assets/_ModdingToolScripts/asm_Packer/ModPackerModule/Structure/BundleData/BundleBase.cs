@@ -122,32 +122,33 @@ namespace ModPackerModule.Structure.BundleData
 
         protected string GetAutoPath(in SideloaderMod.SideloaderMod sideloaderMod, string mode, string uniqueId, string parameter)
         {
+            var autoDestPath = $"{sideloaderMod.MainData.SafeName}_bundles/{uniqueId}";
             switch (mode)
             {
                 case "textures":
                 case "texture":
-                    return $"{sideloaderMod.MainData.SafeName}/{uniqueId}/data_texture_{GetAutoPathIdentifier("textures")}.unity3d";
+                    return $"{autoDestPath}/data_texture_{GetAutoPathIdentifier("textures")}.unity3d";
                 case "materials":
                 case "material":
-                    return $"{sideloaderMod.MainData.SafeName}/{uniqueId}/data_material_{GetAutoPathIdentifier("materials")}.unity3d";
+                    return $"{autoDestPath}/data_material_{GetAutoPathIdentifier("materials")}.unity3d";
                 case "map":
                 case "maps":
-                    return $"{sideloaderMod.MainData.SafeName}/{uniqueId}/data_scene_{GetAutoPathIdentifier("maps")}.unity3d";
+                    return $"{autoDestPath}/data_scene_{GetAutoPathIdentifier("maps")}.unity3d";
                 case "thumbnail":
                 case "thumbnails":
                 case "thumb":
                 case "thumbs":
-                    return $"{sideloaderMod.MainData.SafeName}/{uniqueId}/data_thumbnail_{GetAutoPathIdentifier("thumbs")}.unity3d";
+                    return $"{autoDestPath}/data_thumbnail_{GetAutoPathIdentifier("thumbs")}.unity3d";
                 case "object":
                 case "objects":
                 case "prefab":
                 case "prefabs":
-                    return $"{sideloaderMod.MainData.SafeName}/{uniqueId}/data_prefab_{GetAutoPathIdentifier("prefabs")}.unity3d";
+                    return $"{autoDestPath}/data_prefab_{GetAutoPathIdentifier("prefabs")}.unity3d";
                 case "object-split":
                 case "objects-split":
                 case "prefab-split":
                 case "prefabs-split":
-                    return $"{sideloaderMod.MainData.SafeName}/{uniqueId}/data_prefab_*.unity3d";
+                    return $"{autoDestPath}/data_prefab_*.unity3d";
                 case "studiothumbs":
                 case "studiothumb":
                 case "studio-thumbs":

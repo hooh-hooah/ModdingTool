@@ -15,7 +15,7 @@ namespace ModPackerModule.Structure.ListData
             BigCategory = element.Attr("big-category", 0);
             MidCategory = element.Attr("mid-category", 0);
             Name = element.Attr("name", "Unknown Name");
-            AnimationController = element.Attr("anime-contoller", "0");
+            AnimationController = element.Attr("anime-controller", "0");
             AnimationClip = element.Attr("anime", "0");
             AnimationControllerBundle = element.Attr("anime-bundle", GetBundleFromName(AnimationController) ?? "0");
 
@@ -80,12 +80,13 @@ namespace ModPackerModule.Structure.ListData
 
         public override string ToString()
         {
-            return ToCsvLine(Index, BigCategory, MidCategory, Name, Manifest);
+            return ToCsvLine(Index, SortIndex, BigCategory, MidCategory, Name, AnimationControllerBundle, AnimationController, AnimationClip, "","","","","","","","","");
         }
 
         public new static string GetOutputName(IEnumerable<object> parameters)
         {
-            return $"abdata/studio/info/{parameters.First()}/custom/Anime_00_00_00.csv";
+            var array = parameters.ToArray();
+            return $"abdata/studio/info/{array[0]}/custom/Anime_00_{array[2]:D2}_{array[1]:D2}.csv";
         }
 
         public new static string GetOutputHeader()
