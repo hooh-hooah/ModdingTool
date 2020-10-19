@@ -74,8 +74,8 @@ namespace ModPackerModule.Structure.SideloaderMod
         private bool BuildAssetBundles(bool isDryRun = false)
         {
             if (BuildPipeline.isBuildingPlayer) return false;
-
             if (EditorApplication.isCompiling) return false;
+            if (EditorApplication.isPlayingOrWillChangePlaymode) return false;
 
             var buildList = GetAssetBundleBuilds();
             if (buildList.Count <= 0) return false;
@@ -83,6 +83,9 @@ namespace ModPackerModule.Structure.SideloaderMod
                 buildList.AddRange(SplitBundleIntoModules(buildList));
 
             Directory.CreateDirectory(ManifestAssetFolder);
+
+            if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.StandaloneWindows64)
+                EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.StandaloneWindows64);
 
             var result = BuildPipeline.BuildAssetBundles(
                 ManifestAssetFolder,
@@ -185,7 +188,7 @@ namespace ModPackerModule.Structure.SideloaderMod
 
                 void Progress()
                 {
-                    EditorUtility.DisplayProgressBar("Compressing...", "Compressing and deploying zipmod", progressDone / (float) progressMAX);
+                    EditorUtility.DisplayProgressBar("Compressing...", "Compressing and deploying zipmod", progressDone / (float)progressMAX);
                 }
 
                 Progress();
@@ -233,7 +236,7 @@ namespace ModPackerModule.Structure.SideloaderMod
                                 .Where(x => x > 0)
                                 .Select(id => MapEvents.GenerateMapEvent(AssetFolder, names.Last(), id))
                                 .Where(x => !x.IsNullOrEmpty())
-                            , false)
+                            )
                 );
             }
         }
