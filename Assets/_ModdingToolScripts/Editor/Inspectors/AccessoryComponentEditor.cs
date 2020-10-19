@@ -14,6 +14,7 @@ public class AccessoryComponentEditor : CustomComponentBase
         RegisterProperty("rendNormal");
         RegisterProperty("trfMove01");
         RegisterProperty("trfMove02");
+        RegisterProperty("typeHair");
         for (var index = 1; index <= 3; index++)
         {
             RegisterProperty($"useColor{index:D2}");
@@ -62,6 +63,7 @@ public class AccessoryComponentEditor : CustomComponentBase
         SafeProperty("rendNormal", new GUIContent("Accessory Renderer"), true);
         SafeProperty("trfMove01", new GUIContent("Move Target 1"));
         SafeProperty("trfMove02", new GUIContent("Move Target 2"));
+        SafeProperty("typeHair", new GUIContent("Is Hair Type Accessory?"));
         GUILayout.EndVertical();
 
         GUILayout.Space(5);

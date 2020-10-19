@@ -47,8 +47,16 @@ namespace AIChara
 
             rendNormal = GetComponentsInChildren<Renderer>().ToArray();
             var findAssist = new FindAssist(transform);
-            trfMove01 = findAssist.GetTransformFromName("N_move");
-            trfMove02 = findAssist.GetTransformFromName("N_move2");
+            trfMove01 = findAssist.GetTransformFromCandidates(new string[]
+            {
+                "N_move",
+                "root",
+            });
+            trfMove02 = findAssist.GetTransformFromCandidates(new string[]
+            {
+                "N_move2",
+                "tip",
+            });
             SyncMaterialDefaultValues();
         }
 

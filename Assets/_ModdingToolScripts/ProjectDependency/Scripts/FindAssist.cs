@@ -20,7 +20,7 @@ public class FindAssist
     public Dictionary<string, Renderer> Renderers { get; private set; }
     public Dictionary<string, MeshRenderer> MeshRenderers { get; private set; }
     public Dictionary<string, Collider> Colliders { get; private set; }
-    
+
     public Dictionary<string, Point> Points { get; private set; }
 
     public void Recalculate(Transform transform)
@@ -80,6 +80,13 @@ public class FindAssist
     {
         if (DictObjName == null) return null;
         return DictObjName.TryGetValue(objName, out var gameObject) ? gameObject.transform : null;
+    }
+
+    public Transform GetTransformFromCandidates(string[] names)
+    {
+        if (DictObjName == null) return null;
+        var list = names.Where(name => DictObjName.ContainsKey(name)).Select(name => DictObjName[name].transform).ToArray();
+        return list.Length <= 0 ? null : list.First();
     }
 
     public List<GameObject> GetObjectFromTag(string tagName)
