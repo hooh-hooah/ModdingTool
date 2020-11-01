@@ -13,7 +13,7 @@ namespace ModPackerModule.Structure.ListData
         public new static string GetOutputName(IEnumerable<object> parameters)
         {
             var manifest = parameters.First();
-            return $"abdata/studio/info/{manifest}/custom/AnimeGroup_{manifest}.csv";
+            return $"abdata/studio/info/{manifest}/custom/AnimeGroup_custom.csv";
         }
     }
 }

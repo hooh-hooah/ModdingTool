@@ -13,7 +13,7 @@ namespace ModPackerModule.Structure.ListData
         public new static string GetOutputName(IEnumerable<object> parameters)
         {
             var array = parameters.ToArray();
-            return $"abdata/studio/info/{array[0]}/custom/AnimeCategory_{array[1]:D2}_{array[2]:D2}.csv";
+            return $"abdata/studio/info/{array[0]}/custom/AnimeCategory_00_{array[2]:D2}.csv";
         }
     }
 }
