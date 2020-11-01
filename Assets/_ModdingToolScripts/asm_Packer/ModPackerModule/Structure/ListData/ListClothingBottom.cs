@@ -49,7 +49,7 @@ namespace ModPackerModule.Structure.ListData
         public override string ToString()
         {
             return ToCsvLine(Index, Kind, Possess, Name, EN_US, Manifest, MeshAssetBundle, MeshAsset, StateType, BreakMaskTexture, InnerTBMaskBundle, InnerTBMaskTexture,
-                InnerBodyMaskBundle, InnerBodyMask, OverPanstMaskBundle, OverPanstMaskTexture, OverBodyBottomMaskBundle, OverBodyBottomMaskTexture, Texture, TextureBundle,
+                InnerBodyMaskBundle, InnerBodyMask, OverPanstMaskBundle, OverPanstMaskTexture, OverBodyBottomMaskBundle, OverBodyBottomMaskTexture, Texture, TextureMask,
                 TextureSub, TextureSubMask, TextureThird, TextureThirdMask,
                 KokanHide, ThumbBundle, ThumbAsset);
         }
