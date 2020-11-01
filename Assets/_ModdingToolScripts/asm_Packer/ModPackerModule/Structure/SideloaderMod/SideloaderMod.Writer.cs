@@ -43,7 +43,7 @@ namespace ModPackerModule.Structure.SideloaderMod
                 new XElement("author", TemplateAuthor),
                 new XElement("description", GetTemplateDescription("Generic")),
                 new XElement("bundles",
-                    new XElement("folder", new XAttribute("auto-path", "prefabs"), new XAttribute("from", "output"), new XAttribute("filter", @"*.?\.prefab"))
+                    new XElement("folder", new XAttribute("auto-path", "prefabs"), new XAttribute("from", "output"), new XAttribute("filter", @".+?\.prefab"))
                 ),
                 new XElement("build")
             ));
@@ -63,8 +63,8 @@ namespace ModPackerModule.Structure.SideloaderMod
                 new XElement("author", TemplateAuthor),
                 new XElement("description", GetTemplateDescription("Studio Maps and Item")),
                 new XElement("bundles",
-                    new XElement("folder", new XAttribute("auto-path", "prefabs"), new XAttribute("from", "prefabs"), new XAttribute("filter", @".*?\.prefab")),
-                    new XElement("move", new XAttribute("auto-path", "studiothumb"), new XAttribute("from", "thumbs"), new XAttribute("filter", @".*?\.png"))
+                    new XElement("folder", new XAttribute("auto-path", "prefabs"), new XAttribute("from", "prefabs"), new XAttribute("filter", @".+?\.prefab")),
+                    new XElement("move", new XAttribute("auto-path", "studiothumb"), new XAttribute("from", "thumbs"), new XAttribute("filter", @".+?\.png"))
                 ),
                 new XElement("build",
                     new XElement("list", new XAttribute("type", "bigcategory"),
@@ -80,15 +80,15 @@ namespace ModPackerModule.Structure.SideloaderMod
             AssetDatabase.Refresh();
         }
 
-        [MenuItem("Assets/Mod XML Templates/Clothing")]
-        public static void MakeCharacterModTemplate()
-        {
-        }
-
-        [MenuItem("Assets/Mod XML Templates/Accessory")]
-        public static void MakeAccessoryTemplate()
-        {
-        }
+        // [MenuItem("Assets/Mod XML Templates/Clothing")]
+        // public static void MakeCharacterModTemplate()
+        // {
+        // }
+        //
+        // [MenuItem("Assets/Mod XML Templates/Accessory")]
+        // public static void MakeAccessoryTemplate()
+        // {
+        // }
 
         private XElement GetListElement(string type)
         {
