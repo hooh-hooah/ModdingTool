@@ -174,7 +174,7 @@ namespace ModPackerModule.Structure.SideloaderMod
                         target.Copy(AssetDirectory, targetFolder);
                 }
 
-                if (_gameItems.TryGetValue(targetName, out var gameInfo))
+                if (GameItems.TryGetValue(targetName, out var gameInfo))
                     gameInfo.WriteCsvFiles(targetFolder, MainData.Separator);
             }
         }

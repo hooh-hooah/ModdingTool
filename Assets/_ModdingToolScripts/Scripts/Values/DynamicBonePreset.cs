@@ -83,8 +83,6 @@ namespace ModdingTool
                 Force = new Vector3(0, -0.15f, 0)
             }
         };
-
-        public static AIHSBodyPreset[] Body = AIHSPresetLoader.presets;
     }
 
     public class DynamicBonePreset

@@ -20,7 +20,7 @@ public partial class HoohTools
         var xmlBigCategoryField = serializedObject.FindProperty("xmlBigCategory");
         var xmlSmallCategoryField = serializedObject.FindProperty("xmlSmallCategory");
 
-        foldoutElement = EditorGUILayout.Foldout(foldoutElement, "Mod Scaffolding", true, _styles.Foldout);
+        foldoutElement = EditorGUILayout.Foldout(foldoutElement, "Mod Scaffolding", true, Style.Foldout);
         if (!foldoutElement) return;
         // place warnings and errors
         if (xmlHelperTargetField == null) EditorGUILayout.HelpBox("You didn't specified the mod xml script.", MessageType.Error, true);
@@ -38,14 +38,14 @@ public partial class HoohTools
         GUILayout.Space(5);
 
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Add Current Directory", _styles.Button))
+        if (GUILayout.Button("Add Current Directory", Style.Button))
             _guiEventAction = () =>
             {
                 var gameObjects = PathUtils.LoadAssetsFromDirectory<GameObject>(PathUtils.GetProjectPath(), ".prefab$");
                 prefabs = prefabs.Concat(gameObjects).Distinct().ToArray();
             };
 
-        if (GUILayout.Button("Generate Studio Item List", _styles.Button))
+        if (GUILayout.Button("Generate Studio Item List", Style.Button))
             _guiEventAction = () =>
             {
                 if (xmlHelperTarget == null) return;

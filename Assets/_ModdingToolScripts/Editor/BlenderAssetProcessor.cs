@@ -1,13 +1,16 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
 public class BlenderAssetProcessor : AssetPostprocessor
 {
     // TODO: Make some sort of generic rule to process 
-    private void OnPreprocessAnimation()
+    private void OnPreprocessModel()
     {
         /*
          * Rules
@@ -34,7 +37,6 @@ public class BlenderAssetProcessor : AssetPostprocessor
             importer.importTangents = ModelImporterTangents.Import;
             importer.importBlendShapeNormals = ModelImporterNormals.Import;
             importer.importNormals = ModelImporterNormals.Import;
-
 
             // make it some database or something later, i'm so lazy atm
             switch (meshType)
@@ -79,40 +81,49 @@ public class BlenderAssetProcessor : AssetPostprocessor
             modelImporter.isReadable = true;
             modelImporter.optimizeMesh = false;
         }
+    }
 
-        // all hs/sbpr/ph animation conversion should have avatar filters.
+    static private Regex animRegex = new Regex(@"Armature\|", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    public void OnPreprocessAnimation()
+    {
         if (assetPath.Contains("hs_anim"))
         {
             var modelImporter = assetImporter as ModelImporter;
 
             modelImporter.animationType = ModelImporterAnimationType.Generic;
             modelImporter.sourceAvatar = Resources.Load<Avatar>("AI_Generic");
+            var animationMask = Resources.Load<AvatarMask>("HS_MaskAvatar");
 
             var defaultAnimations = modelImporter.defaultClipAnimations;
             foreach (var animation in defaultAnimations)
             {
                 animation.loopTime = true;
                 animation.maskType = ClipAnimationMaskType.CopyFromOther;
-                animation.maskSource = Resources.Load<AvatarMask>("HS_MaskAvatar");
+                animation.maskSource = animationMask;
+                animation.ConfigureClipFromMask(animationMask);
             }
 
             modelImporter.clipAnimations = defaultAnimations;
         }
 
-        var textInfo = new CultureInfo("en-US", false).TextInfo;
         // prepare all humanoid animations ready to bake with Animation Converter.
         if (assetPath.Contains("src_"))
         {
             var name = Path.GetFileNameWithoutExtension(assetPath);
             var modelImporter = assetImporter as ModelImporter;
             if (modelImporter == null || modelImporter.animationType != ModelImporterAnimationType.Human) return;
-            modelImporter.clipAnimations = modelImporter.clipAnimations.Select(animation =>
+            modelImporter.humanoidOversampling = ModelImporterHumanoidOversampling.X2;
+            modelImporter.clipAnimations = modelImporter.defaultClipAnimations.Select(clip =>
             {
-                animation.loopTime = true;
-                animation.lockRootRotation = true;
-                animation.lockRootHeightY = true;
-                animation.lockRootPositionXZ = true;
-                return animation;
+                clip.name = animRegex.Replace(clip.name, "");
+                clip.loopTime = true;
+                clip.lockRootRotation = true;
+                clip.lockRootHeightY = true;
+                clip.lockRootPositionXZ = true;
+                clip.keepOriginalOrientation = true;
+                clip.keepOriginalPositionY = true;
+                clip.keepOriginalPositionXZ = true;
+                return clip;
             }).ToArray();
         }
     }

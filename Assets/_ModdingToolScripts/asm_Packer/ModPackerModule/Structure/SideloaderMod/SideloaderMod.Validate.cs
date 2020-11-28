@@ -90,7 +90,7 @@ namespace ModPackerModule.Structure.SideloaderMod
             var confirmed = true;
             var badList = new List<(ListBase, string)>();
 
-            foreach (var list in _gameItems.Values
+            foreach (var list in GameItems.Values
                 .SelectMany(info => info.ItemList.Values
                     .SelectMany(x => x)
                 ))

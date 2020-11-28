@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using ModPackerModule.Structure.ListData;
 using MyBox;
 
 namespace ModPackerModule.Structure.Classes.ManifestData
@@ -29,7 +30,24 @@ namespace ModPackerModule.Structure.Classes.ManifestData
                 heelsRootElement = modDocument.Element(candidate);
                 if (!ReferenceEquals(null, heelsRootElement)) break;
             }
+
+            try
+            {
+                ListShoes = modObject.GameItems.Values
+                    .Where(items => items.ItemList.ContainsKey(typeof(ListClothing)))
+                    .Select(x => x.ItemList[typeof(ListClothing)])
+                    .SelectMany(x => x)
+                    .Cast<ListClothing>()
+                    .Where(x => x.CategoryString.Equals("fshoes") || x.CategoryString.Equals("mshoes"))
+                    .ToArray();
+            }
+            catch
+            {
+                ListShoes = new ListClothing[] {};
+            }
         }
+
+        private ListClothing[] ListShoes { get; set; }
 
         public void SaveData(ref XDocument document)
         {
@@ -47,6 +65,14 @@ namespace ModPackerModule.Structure.Classes.ManifestData
             if (ReferenceEquals(null, heelsRootElement)) return false;
             var heelsData = heelsRootElement.Elements("heel");
             var heelsArray = heelsData as XElement[] ?? heelsData.ToArray();
+
+            for (var i = heelsArray.Length - 1; i >= 0; i--)
+            {
+                if (ListShoes.Length <= i) break;
+                var shoeItems = ListShoes[i];
+                heelsArray[i].SetAttributeValue("id", shoeItems.Index);
+            }
+
             if (heelsArray.IsNullOrEmpty()) return false;
             result = heelsArray;
             return true;

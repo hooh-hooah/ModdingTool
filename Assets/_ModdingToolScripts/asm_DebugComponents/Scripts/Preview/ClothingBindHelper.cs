@@ -10,7 +10,7 @@ namespace DebugComponents
     public class ClothingBindHelper : MonoBehaviour, IPreview
     {
         public GameObject[] meshesToTest;
-        [HideInInspector] public GameObject boneRoot;
+        public GameObject boneRoot;
         private GameObject meshTarget;
 
         private void Start()
@@ -47,6 +47,12 @@ namespace DebugComponents
                 renderer.bones = boneNames.Values.ToArray();
                 renderer.sharedMesh.RecalculateBounds();
             }
+        }
+
+        [ButtonMethod()]
+        private void ChangeBodyType()
+        {
+            AIHSPresetLoader.LoadObject(boneRoot, 0);
         }
     }
 }

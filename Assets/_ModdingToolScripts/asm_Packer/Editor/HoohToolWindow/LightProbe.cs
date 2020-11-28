@@ -10,7 +10,7 @@ public partial class HoohTools
 {
     public void DrawLightProbeSetting(SerializedObject serializedObject)
     {
-        foldoutProbeset = EditorGUILayout.Foldout(foldoutProbeset, "LightProbe Adjustment", true, _styles.Foldout);
+        foldoutProbeset = EditorGUILayout.Foldout(foldoutProbeset, "LightProbe Adjustment", true, Style.Foldout);
         if (!foldoutProbeset) return;
 
         GUILayout.BeginHorizontal("box");

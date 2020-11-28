@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using Ludiq.OdinSerializer.Utilities;
 using ModdingTool;
 using UnityEditor;
 using UnityEngine;
@@ -28,49 +29,68 @@ public class MapLoader : EditorWindow
         EditorGUILayout.PropertyField(nameField, new GUIContent("nameList"), true);
         serializedObject.ApplyModifiedProperties();
 
-        if (!GUILayout.Button("load map please")) return;
-
-        var isFirst = true;
-        foreach (var scenePath in sceneList.Select(x => $"{x}.unity3d").Select(internalBundleName =>
+        if (GUILayout.Button("load map please"))
         {
-            foreach (var file in Directory.GetFiles(BASE_PATH))
-                if (GetAssetBundleDepencency(GetPath(file), out var manifestBundle))
-                    Dependencies.Add(manifestBundle);
+            var isFirst = true;
+            foreach (var scenePath in sceneList.Select(x => $"{x}.unity3d").Select(internalBundleName =>
+            {
+                foreach (var file in Directory.GetFiles(BASE_PATH))
+                    if (GetAssetBundleDepencency(GetPath(file), out var manifestBundle))
+                        Dependencies.Add(manifestBundle);
 
-            var depBundles = GetDependencies(internalBundleName);
-            foreach (var depBundle in depBundles)
-                GetBundle(GetPath(depBundle));
+                var depBundles = GetDependencies(internalBundleName);
+                foreach (var depBundle in depBundles)
+                    GetBundle(GetPath(depBundle));
 
-            var bundle = GetBundle(GetPath(internalBundleName));
-            var scene = bundle.GetAllScenePaths().FirstOrDefault();
-            return scene;
-        }).Where(x => !string.IsNullOrEmpty(x)))
-        {
-            SceneManager.LoadScene(scenePath, isFirst ? LoadSceneMode.Single : LoadSceneMode.Additive);
-            isFirst = false;
+                var bundle = GetBundle(GetPath(internalBundleName));
+                var scene = bundle.GetAllScenePaths().FirstOrDefault();
+                return scene;
+            }).Where(x => !string.IsNullOrEmpty(x)))
+            {
+                SceneManager.LoadScene(scenePath, isFirst ? LoadSceneMode.Single : LoadSceneMode.Additive);
+                isFirst = false;
+            }
+
+            foreach (var component in FindObjectsOfType<Component>().Where(x => !(x is Transform))) Debug.LogWarning(component);
         }
 
-        foreach (var component in FindObjectsOfType<Component>().Where(x => !(x is Transform))) Debug.LogWarning(component);
+        if (GUILayout.Button("load thing please"))
+        {
+            AssetBundle.UnloadAllAssetBundles(true);
+            foreach (var gameObject in sceneList.Select(x => $"{x}.unity3d").SelectMany(internalBundleName =>
+            {
+                foreach (var file in Directory.GetFiles(BASE_PATH))
+                    if (GetAssetBundleDepencency(GetPath(file), out var manifestBundle))
+                        Dependencies.Add(manifestBundle);
+
+                var depBundles = GetDependencies(internalBundleName);
+                foreach (var depBundle in depBundles)
+                    GetBundle(GetPath(depBundle));
+
+                var bundle = GetBundle(GetPath(internalBundleName));
+                var gameObjects = bundle.LoadAllAssets<GameObject>();
+                return gameObjects;
+            }))
+            {
+                Instantiate(gameObject);
+            }
+        }
     }
 
     // Show control window - WiP
     [MenuItem("Developers/Remove Bakery Transform")]
     public static void RemoveBakeryPlease()
     {
-        var lightMap = Selection
-            .objects
-            .Cast<GameObject>()
-            .FirstOrDefault()?
-            .transform
-            .GetComponentsInChildren<Transform>()
-            .Where(x => x.name == "!ftraceLightmaps")
+        LightmapSettings.lightmaps = null;
+        var lightMap = new []
+            {
+                FindObjectsOfType<ftLightmapsStorage>(),
+            }
+            .SelectMany(x => x)
+            .Select(x => x.gameObject)
             .ToList();
 
-        var go = GameObject.Find("!ftraceLightmaps");
-        if (go) lightMap?.Add(go.transform);
-
         Debug.Log($"Found {lightMap?.Count ?? 0} Lightmap Containers");
-        if (lightMap == null) return;
         foreach (var transform in lightMap)
         {
             Debug.LogWarning("Destroyed Bakery Lightmap Containers");

@@ -14,7 +14,7 @@ public partial class HoohTools
     {
         var packingObjectsField = serializedObject.FindProperty("packingObjects");
 
-        foldoutMod = EditorGUILayout.Foldout(foldoutMod, "Build Mod", true, _styles.Foldout);
+        foldoutMod = EditorGUILayout.Foldout(foldoutMod, "Build Mod", true, Style.Foldout);
         if (!foldoutMod) return;
 
         GUILayout.BeginVertical("box");
@@ -23,7 +23,7 @@ public partial class HoohTools
                 "You didn't specified the mod xml scripts. It will automatically try to get *.xml files from the folder you're looking at in Project Window.", MessageType.Info,
                 true);
         if (!Directory.Exists(GameExportPath)) EditorGUILayout.HelpBox("You need to provide Output Directory to build mods.", MessageType.Error, true);
-        GUILayout.Label("Build Mod Targets", _styles.Header);
+        GUILayout.Label("Build Mod Targets", Style.Header);
 
         EditorGUILayout.PropertyField(packingObjectsField, new GUIContent("Target Mod XML Files"), true);
 
@@ -33,18 +33,18 @@ public partial class HoohTools
         GameExportPath = EditorPrefs.GetString("hoohTool_exportPath");
 
         GUILayout.BeginHorizontal();
-        GUI.backgroundColor = Styles.green;
-        if (GUILayout.Button("Build Mod", _styles.ButtonDark))
+        GUI.backgroundColor = HoohWindowStyles.green;
+        if (GUILayout.Button("Build Mod", Style.ButtonDark))
             SetEvent(() => { ModPacker.PackMod(packingObjects, GameExportPath); });
-        GUI.backgroundColor = Styles.red;
-        if (GUILayout.Button("Remove All", _styles.ButtonDark))
+        GUI.backgroundColor = HoohWindowStyles.red;
+        if (GUILayout.Button("Remove All", Style.ButtonDark))
             SetEvent(() =>
             {
                 var check = EditorUtility.DisplayDialog("Are you sure?", "Just checking, did you really tried to remove all target xml files?", "Yes", "No");
                 if (check) packingObjects = null;
             });
         GUI.backgroundColor = Color.white;
-        if (GUILayout.Button("Add Folder", _styles.Button))
+        if (GUILayout.Button("Add Folder", Style.Button))
             SetEvent(() =>
             {
                 var folderAssets = ModPacker.GetProjectDirectoryTextAssets();
@@ -55,7 +55,7 @@ public partial class HoohTools
             });
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Dry Run", _styles.Button))
+        if (GUILayout.Button("Dry Run", Style.Button))
             SetEvent(
                 () => { ModPacker.PackMod(packingObjects, GameExportPath, true); }
             );

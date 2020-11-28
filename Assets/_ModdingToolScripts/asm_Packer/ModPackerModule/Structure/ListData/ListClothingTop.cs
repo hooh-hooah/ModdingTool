@@ -51,7 +51,6 @@ namespace ModPackerModule.Structure.ListData
             {
                 (OverBodyMaskBundle, OverBodyMaskTexture),
                 (OverBraMaskBundle, OverBraMaskTexture),
-                (OverBodyMaskBundle, OverBodyMaskTexture),
                 (OverBraMaskBundle, BreakMaskTexture),
                 (InnerTbMaskBundle, InnerTbMaskTexture),
                 (InnerBodyMaskBundle, InnerBodyMask),

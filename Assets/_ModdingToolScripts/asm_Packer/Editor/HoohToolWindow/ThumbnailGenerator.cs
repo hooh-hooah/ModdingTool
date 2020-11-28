@@ -170,11 +170,11 @@ public partial class HoohTools
         var directionField = serializedObject.FindProperty("previewDirection");
         var thumbnailGeneratorField = serializedObject.FindProperty("foldThumbnailGenerator");
 
-        thumbnailGeneratorField.boolValue = EditorGUILayout.Foldout(foldThumbnailGenerator, "Thumbnail Generator", true, _styles.Foldout);
+        thumbnailGeneratorField.boolValue = EditorGUILayout.Foldout(foldThumbnailGenerator, "Thumbnail Generator", true, Style.Foldout);
         if (!foldThumbnailGenerator) return;
 
         GUILayout.BeginVertical("box");
-        GUILayout.Label("Thumbnail Generator", _styles.Header);
+        GUILayout.Label("Thumbnail Generator", Style.Header);
 
         GUILayout.BeginHorizontal();
         EditorGUILayout.PropertyField(backgroundField, new GUIContent("Background Image"));
@@ -185,11 +185,11 @@ public partial class HoohTools
         EditorGUILayout.PropertyField(targetsField, new GUIContent("Target Models"), true);
 
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Add Folder", _styles.Button))
+        if (GUILayout.Button("Add Folder", Style.Button))
             SetEvent(() => { thumbnailTargets = GetAllModelObjects(); });
-        if (GUILayout.Button("Generate Thumbnails", _styles.Button))
+        if (GUILayout.Button("Generate Thumbnails", Style.Button))
             SetEvent(GenerateThumbnail);
-        if (GUILayout.Button("Generate Studio Thumbnails", _styles.Button))
+        if (GUILayout.Button("Generate Studio Thumbnails", Style.Button))
             SetEvent(GenerateStudioThumbnail);
         GUILayout.EndHorizontal();
         GUILayout.EndVertical();

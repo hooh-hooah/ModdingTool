@@ -56,8 +56,8 @@ public partial class ExtendedTransform : Editor
         serializedObject.ApplyModifiedProperties();
         EditorGUIUtility.labelWidth = 0;
 
-        unfoldModdingOptions = EditorGUILayout.Foldout(unfoldModdingOptions, "Initialize Modding Components", true);
-        if (unfoldModdingOptions) DrawQuickCommands(targets);
+        // unfoldModdingOptions = EditorGUILayout.Foldout(unfoldModdingOptions, "Initialize Modding Components", true);
+        // if (unfoldModdingOptions) DrawQuickCommands(targets);
     }
 
     private void DrawPositionElement()

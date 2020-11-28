@@ -83,8 +83,10 @@ namespace ModPackerModule.Structure.ListData
             ThumbAsset = element.Attr("thumb", "0");
             ThumbBundle = element.Attr("thumb-bundle", GetBundleFromName(ThumbAsset) ?? "0");
             if (DictCategory.TryGetValue(category, out var num)) Category = num.Item1;
+            CategoryString = category;
         }
 
+        public string CategoryString { get; }
         public int Category { get; }
         public int Kind { get; }
         public int Possess { get; }
