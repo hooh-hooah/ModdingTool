@@ -1,29 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public struct TransformPreset
 {
-    public Vector3 localPosition;
-    public Vector3 localEulerAngle;
-    public Vector3 localScale;
+    public Vector3 position;
+    public Vector3 rotation;
+    public Vector3 scale;
 
-    public TransformPreset(Vector3 localPosition, Vector3 localEulerAngle, Vector3 localScale)
+    public TransformPreset(Vector3 position, Vector3 rotation, Vector3 scale)
     {
-        this.localPosition = localPosition;
-        this.localEulerAngle = localEulerAngle;
-        this.localScale = localScale;
+        this.position = position;
+        this.rotation = rotation;
+        this.scale = scale;
     }
 }
 
+[Serializable]
 public struct AIHSBodyPreset
 {
     public string name;
-    public Dictionary<string, TransformPreset> transformPresets;
+    [SerializeField]
+    public Dictionary<string, TransformPreset> data;
 
-    public AIHSBodyPreset(string name, Dictionary<string, TransformPreset> transformPresets)
+    public AIHSBodyPreset(string name, Dictionary<string, TransformPreset> data)
     {
         this.name = name;
-        this.transformPresets = transformPresets;
+        this.data = data;
     }
 }
 
@@ -1439,18 +1443,20 @@ public static class AIHSPresetLoader
         })
     };
 
-    public static void LoadObject(GameObject gameObject, int index = 0)
-    {
-        var preset = presets[index];
+
+    public static void LoadObject(GameObject gameObject, AIHSBodyPreset preset) {
         foreach (var child in gameObject.GetComponentsInChildren<Transform>())
         {
             TransformPreset pp;
-            if (preset.transformPresets.TryGetValue(child.name, out pp))
-            {
-                child.transform.localPosition = pp.localPosition;
-                child.transform.localEulerAngles = pp.localEulerAngle;
-                child.transform.localScale = pp.localScale;
-            }
+            if (!preset.data.TryGetValue(child.name, out pp)) continue;
+            var transform = child.transform;
+            transform.localPosition = pp.position;
+            transform.localEulerAngles = pp.rotation;
+            transform.localScale = pp.scale;
         }
+    }
+    public static void LoadObject(GameObject gameObject, int index = 0)
+    {
+        LoadObject(gameObject, presets[index]);
     }
 }
