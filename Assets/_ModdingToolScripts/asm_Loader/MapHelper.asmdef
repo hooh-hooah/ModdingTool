@@ -1,8 +1,7 @@
 {
     "name": "NewAssembly",
     "references": [
-        "BundleManager",
-        "BakeryRuntimeAssembly"
+        "BundleManager"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],
