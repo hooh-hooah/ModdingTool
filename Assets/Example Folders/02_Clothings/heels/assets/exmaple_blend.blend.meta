@@ -154,6 +154,61 @@ ModelImporter:
     100296: cf_J_LegLow03_s_R_end
     100298: cf_J_Toes01_L_end
     100300: cf_J_Toes01_R_end
+    100302: body_reference
+    100304: cf_J_Ana_end
+    100306: cf_J_Foot01_L 1
+    100308: cf_J_Foot01_R 1
+    100310: cf_J_Foot02_L 1
+    100312: cf_J_Foot02_R 1
+    100314: cf_J_Hips 1
+    100316: cf_J_Kokan_end
+    100318: cf_J_Kosi01 1
+    100320: cf_J_Kosi01_s_end
+    100322: cf_J_Kosi02 1
+    100324: cf_J_LegKnee_back_s_L_end
+    100326: cf_J_LegKnee_back_s_R_end
+    100328: cf_J_LegKnee_low_s_L_end
+    100330: cf_J_LegKnee_low_s_R_end
+    100332: cf_J_LegLow01_L 1
+    100334: cf_J_LegLow01_R 1
+    100336: cf_J_LegLow01_s_L_end
+    100338: cf_J_LegLow01_s_R_end
+    100340: cf_J_LegLow02_s_L 1
+    100342: cf_J_LegLow02_s_L_end 1
+    100344: cf_J_LegLow02_s_R 1
+    100346: cf_J_LegLow02_s_R_end 1
+    100348: cf_J_LegLow03_L 1
+    100350: cf_J_LegLow03_R 1
+    100352: cf_J_LegLow03_s_L 1
+    100354: cf_J_LegLow03_s_L_end 1
+    100356: cf_J_LegLow03_s_R 1
+    100358: cf_J_LegLow03_s_R_end 1
+    100360: cf_J_LegLowRoll_L 1
+    100362: cf_J_LegLowRoll_R 1
+    100364: cf_J_LegUp00_L 1
+    100366: cf_J_LegUp00_R 1
+    100368: cf_J_LegUp01_s_L_end
+    100370: cf_J_LegUp01_s_R_end
+    100372: cf_J_LegUp02_s_L_end
+    100374: cf_J_LegUp02_s_R_end
+    100376: cf_J_LegUpDam_s_L_end
+    100378: cf_J_LegUpDam_s_R_end
+    100380: cf_J_Mune00_s_L_end
+    100382: cf_J_Mune00_s_R_end
+    100384: cf_J_Root 1
+    100386: cf_J_Siri_s_L_end
+    100388: cf_J_Siri_s_R_end
+    100390: cf_J_Spine01_s_end
+    100392: cf_J_Spine02_s_end
+    100394: cf_J_Spine03_s_end
+    100396: cf_J_Toes01_L 1
+    100398: cf_J_Toes01_L_end 1
+    100400: cf_J_Toes01_R 1
+    100402: cf_J_Toes01_R_end 1
+    100404: cf_N_height 1
+    100406: heels_mesh
+    100408: o_panst_a_end
+    100410: Original_Bones
     400000: Armature
     400002: Armature_001
     400004: Armature_002
@@ -305,19 +360,80 @@ ModelImporter:
     400296: cf_J_LegLow03_s_R_end
     400298: cf_J_Toes01_L_end
     400300: cf_J_Toes01_R_end
+    400302: body_reference
+    400304: cf_J_Ana_end
+    400306: cf_J_Foot01_L 1
+    400308: cf_J_Foot01_R 1
+    400310: cf_J_Foot02_L 1
+    400312: cf_J_Foot02_R 1
+    400314: cf_J_Hips 1
+    400316: cf_J_Kokan_end
+    400318: cf_J_Kosi01 1
+    400320: cf_J_Kosi01_s_end
+    400322: cf_J_Kosi02 1
+    400324: cf_J_LegKnee_back_s_L_end
+    400326: cf_J_LegKnee_back_s_R_end
+    400328: cf_J_LegKnee_low_s_L_end
+    400330: cf_J_LegKnee_low_s_R_end
+    400332: cf_J_LegLow01_L 1
+    400334: cf_J_LegLow01_R 1
+    400336: cf_J_LegLow01_s_L_end
+    400338: cf_J_LegLow01_s_R_end
+    400340: cf_J_LegLow02_s_L 1
+    400342: cf_J_LegLow02_s_L_end 1
+    400344: cf_J_LegLow02_s_R 1
+    400346: cf_J_LegLow02_s_R_end 1
+    400348: cf_J_LegLow03_L 1
+    400350: cf_J_LegLow03_R 1
+    400352: cf_J_LegLow03_s_L 1
+    400354: cf_J_LegLow03_s_L_end 1
+    400356: cf_J_LegLow03_s_R 1
+    400358: cf_J_LegLow03_s_R_end 1
+    400360: cf_J_LegLowRoll_L 1
+    400362: cf_J_LegLowRoll_R 1
+    400364: cf_J_LegUp00_L 1
+    400366: cf_J_LegUp00_R 1
+    400368: cf_J_LegUp01_s_L_end
+    400370: cf_J_LegUp01_s_R_end
+    400372: cf_J_LegUp02_s_L_end
+    400374: cf_J_LegUp02_s_R_end
+    400376: cf_J_LegUpDam_s_L_end
+    400378: cf_J_LegUpDam_s_R_end
+    400380: cf_J_Mune00_s_L_end
+    400382: cf_J_Mune00_s_R_end
+    400384: cf_J_Root 1
+    400386: cf_J_Siri_s_L_end
+    400388: cf_J_Siri_s_R_end
+    400390: cf_J_Spine01_s_end
+    400392: cf_J_Spine02_s_end
+    400394: cf_J_Spine03_s_end
+    400396: cf_J_Toes01_L 1
+    400398: cf_J_Toes01_L_end 1
+    400400: cf_J_Toes01_R 1
+    400402: cf_J_Toes01_R_end 1
+    400404: cf_N_height 1
+    400406: heels_mesh
+    400408: o_panst_a_end
+    400410: Original_Bones
     2100000: ggmod1_002__t-DXT1_dds_002
     2100002: cf_m_shoes_beasan1
     2100004: ggmod1.002
+    2100006: ggmod1.003
+    2100008: cf_m_skin_body_00
     2300000: o_shoes_beasan1_0
     3300000: o_shoes_beasan1_0
     4300000: cf_O_shoes_ggmod_mayar1_0
     4300002: o_shoes_beasan1_0
     4300004: mesh_o
+    4300006: heels_mesh
+    4300008: body_reference
     7400000: Default Take
     9500000: //RootNode
     13700000: cf_O_shoes_ggmod_mayar1_0
     13700002: o_shoes_beasan1_0
     13700004: mesh_o
+    13700006: body_reference
+    13700008: heels_mesh
   externalObjects: {}
   materials:
     importMaterials: 1
