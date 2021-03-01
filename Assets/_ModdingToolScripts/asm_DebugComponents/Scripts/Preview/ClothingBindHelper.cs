@@ -93,7 +93,6 @@ namespace DebugComponents
                     data = presets,
                 };
 
-                Debug.Log(1);
                 AIHSPresetLoader.LoadObject(boneRoot, preset);
             }
             else

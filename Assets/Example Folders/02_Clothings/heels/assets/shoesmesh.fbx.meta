@@ -69,6 +69,7 @@ ModelImporter:
     400062: heels_mesh
     2100000: ggmod1.002
     2100002: ggmod1.003
+    2100004: HeelsMaterial
     2300000: //RootNode
     3300000: //RootNode
     4300000: mesh_o
