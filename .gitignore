@@ -75,3 +75,6 @@ crashlytics-build.properties
 # End of https://www.gitignore.io/api/unity
 _External/sb3/SB3UtilityGUI.exe.Config
 _External/sb3/SB3UtilityGUI.autosavescript.txt
+
+
+.idea
