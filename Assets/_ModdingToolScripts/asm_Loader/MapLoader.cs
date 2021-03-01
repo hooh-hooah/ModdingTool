@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using Ludiq.OdinSerializer.Utilities;
+// using Ludiq.OdinSerializer.Utilities;
 using ModdingTool;
 using UnityEditor;
 using UnityEngine;
@@ -77,6 +77,7 @@ public class MapLoader : EditorWindow
         }
     }
 
+    /*
     // Show control window - WiP
     [MenuItem("Developers/Remove Bakery Transform")]
     public static void RemoveBakeryPlease()
@@ -97,6 +98,7 @@ public class MapLoader : EditorWindow
             DestroyImmediate(transform.gameObject);
         }
     }
+    */
 
     // Show control window - WiP
     [MenuItem("Developers/Move Bakerylightmap")]

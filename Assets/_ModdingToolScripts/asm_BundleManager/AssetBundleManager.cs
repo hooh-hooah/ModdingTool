@@ -8,7 +8,17 @@ namespace ModdingTool
     {
         public static AssetBundle GetBundle(string path)
         {
-            var bundle = AssetBundle.LoadFromFile(path);
+            AssetBundle bundle;
+            try
+            {
+                bundle = AssetBundle.LoadFromFile(path);
+            }
+            finally
+            {
+                AssetBundle.UnloadAllAssetBundles(false);
+                bundle = AssetBundle.LoadFromFile(path);
+            }
+
             return bundle;
         }
     }
