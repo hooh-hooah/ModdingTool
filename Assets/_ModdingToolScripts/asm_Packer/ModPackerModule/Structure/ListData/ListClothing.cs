@@ -13,7 +13,7 @@ namespace ModPackerModule.Structure.ListData
         }
         public override string ToString()
         {
-            return ToCsvLine(Index, Kind, Possess, Name, EN_US, Manifest, MeshAssetBundle, MeshAsset, StateType, Texture, TextureBundle, TextureSub, TextureSubMask, ThumbBundle, ThumbAsset);
+            return ToCsvLine(Index, Kind, Possess, Name, EN_US, Manifest, MeshAssetBundle, MeshAsset, StateType, Texture, TextureMask, TextureSub, TextureSubMask, ThumbBundle, ThumbAsset);
         }
     }
 }

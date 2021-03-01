@@ -4,6 +4,7 @@ using System.Linq;
 using MyBox;
 using UnityEngine;
 #if UNITY_EDITOR
+using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 #endif
@@ -33,6 +34,7 @@ public class HPointList : MonoBehaviour
             }).ToArray();
 
         EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+        EditorUtility.SetDirty(this);
     }
 #endif
     [Serializable]

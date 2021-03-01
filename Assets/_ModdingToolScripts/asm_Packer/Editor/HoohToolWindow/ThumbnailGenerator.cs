@@ -8,6 +8,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Color = UnityEngine.Color;
+using Object = UnityEngine.Object;
 
 #if UNITY_EDITOR
 public partial class HoohTools
@@ -19,7 +20,7 @@ public partial class HoohTools
 
     public Texture2D thumbnailBackgroundTexture;
     public Texture2D thumbnailForegroundTexture;
-    public GameObject[] thumbnailTargets;
+    public Object[] thumbnailTargets;
 
 
     // TODO: Make automatic studio item thumbnail generator with compression methods
@@ -34,10 +35,16 @@ public partial class HoohTools
         RuntimePreviewGenerator.PreviewDirection = previewDirection;
     }
 
+
     private void GenerateTexture(GameObject thumbnailTarget, string outputPath, bool compress)
     {
         var texture = RuntimePreviewGenerator.GenerateModelPreview(thumbnailTarget.transform, 128, 128, true);
+        if (texture == null) return;
+        ProcessTexture(texture, outputPath, compress);
+    }
 
+    private void ProcessTexture(Texture2D texture, string outputPath, bool compress)
+    {
         if (thumbnailBackgroundTexture)
         {
             var texturePixels = texture.GetPixels();
@@ -81,6 +88,39 @@ public partial class HoohTools
         }
     }
 
+    private void FormatThumbnail()
+    {
+        var assetPath = Path.Combine(Directory.GetCurrentDirectory(), PathUtils.GetProjectPath());
+        var thumbnailTargetPath = Path.Combine(assetPath, "thumbs");
+        if (!Directory.Exists(thumbnailTargetPath)) Directory.CreateDirectory(thumbnailTargetPath);
+
+        var index = 0;
+        var total = thumbnailTargets.Length;
+
+        try
+        {
+            EditorUtility.DisplayProgressBar("Generating", "Generating the image...", 0);
+            foreach (var image in thumbnailTargets.OfType<Texture2D>())
+            {
+                var outputPath = Path.Combine(thumbnailTargetPath, $"thumb_{image.name.ToLower().Replace(" ", "_")}.png");
+                ProcessTexture(image, outputPath, false);
+                EditorUtility.DisplayProgressBar("Generating", "Generating the image...", ++index / (float) total);
+            }
+            EditorApplication.Beep();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        finally
+        {
+            EditorUtility.ClearProgressBar();
+        }
+
+        AssetDatabase.Refresh();
+    }
+
     private void GenerateThumbnail()
     {
         var assetPath = Path.Combine(Directory.GetCurrentDirectory(), PathUtils.GetProjectPath());
@@ -94,7 +134,7 @@ public partial class HoohTools
         try
         {
             EditorUtility.DisplayProgressBar("Generating", "Generating the image...", 0);
-            foreach (var thumbnailTarget in thumbnailTargets)
+            foreach (var thumbnailTarget in thumbnailTargets.OfType<GameObject>())
             {
                 var outputPath = Path.Combine(thumbnailTargetPath, $"thumb_{thumbnailTarget.name.ToLower().Replace(" ", "_")}.png");
                 GenerateTexture(thumbnailTarget, outputPath, false);
@@ -128,7 +168,7 @@ public partial class HoohTools
         try
         {
             EditorUtility.DisplayProgressBar("Generating", "Generating and Compressing the image...", 0);
-            foreach (var pairs in PathUtils.GetAllNearestModData(thumbnailTargets))
+            foreach (var pairs in PathUtils.GetAllNearestModData(thumbnailTargets.OfType<GameObject>()))
             {
                 var thumbnailTarget = pairs.Key;
                 var thumbnailModObject = pairs.Value;
@@ -168,11 +208,11 @@ public partial class HoohTools
         var directionField = serializedObject.FindProperty("previewDirection");
         var thumbnailGeneratorField = serializedObject.FindProperty("foldThumbnailGenerator");
 
-        thumbnailGeneratorField.boolValue = EditorGUILayout.Foldout(foldThumbnailGenerator, "Thumbnail Generator", true, _styles.Foldout);
+        thumbnailGeneratorField.boolValue = EditorGUILayout.Foldout(foldThumbnailGenerator, "Thumbnail Generator", true, Style.Foldout);
         if (!foldThumbnailGenerator) return;
 
         GUILayout.BeginVertical("box");
-        GUILayout.Label("Thumbnail Generator", _styles.Header);
+        GUILayout.Label("Thumbnail Generator", Style.Header);
 
         GUILayout.BeginHorizontal();
         EditorGUILayout.PropertyField(backgroundField, new GUIContent("Background Image"));
@@ -183,12 +223,14 @@ public partial class HoohTools
         EditorGUILayout.PropertyField(targetsField, new GUIContent("Target Models"), true);
 
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Add Folder", _styles.Button))
+        if (GUILayout.Button("Add Folder", Style.Button))
             SetEvent(() => { thumbnailTargets = GetAllModelObjects(); });
-        if (GUILayout.Button("Generate Thumbnails", _styles.Button))
+        if (GUILayout.Button("Generate Thumbnails", Style.Button))
             SetEvent(GenerateThumbnail);
-        if (GUILayout.Button("Generate Studio Thumbnails", _styles.Button))
+        if (GUILayout.Button("Generate Studio Thumbnails", Style.Button))
             SetEvent(GenerateStudioThumbnail);
+        if (GUILayout.Button("Apply Overlay on Image", Style.Button))
+            SetEvent(FormatThumbnail);
         GUILayout.EndHorizontal();
         GUILayout.EndVertical();
     }

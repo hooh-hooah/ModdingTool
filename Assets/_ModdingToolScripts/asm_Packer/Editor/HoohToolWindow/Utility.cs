@@ -14,9 +14,9 @@ public partial class HoohTools
     private static readonly int BumpMap = Shader.PropertyToID("_BumpMap");
     private static readonly int MainTex = Shader.PropertyToID("_MainTex");
 
-    private void DrawUnityUtility()
+    private void DrawUnityUtility(SerializedObject serializedObject)
     {
-        foldoutMacros = EditorGUILayout.Foldout(foldoutMacros, "Quick Unity Macros", true, _styles.Foldout);
+        foldoutMacros = EditorGUILayout.Foldout(foldoutMacros, "Quick Unity Macros", true, Style.Foldout);
         if (!foldoutMacros) return;
 
         // Starts a horizontal group
@@ -25,21 +25,21 @@ public partial class HoohTools
         Gap = EditorGUILayout.IntField("Showcase Gap: ", Gap);
         Cols = EditorGUILayout.IntField("Showcase Columns: ", Cols);
         GUILayout.EndVertical();
-        if (GUILayout.Button("Showcase Mode", _styles.Button))
+        if (GUILayout.Button("Showcase Mode", Style.Button))
             if (CheckGoodSelection())
                 _guiEventAction = ShowcaseMode;
         GUILayout.EndHorizontal();
 
         GUILayout.Space(5);
         GUILayout.BeginVertical("box");
-        GUILayout.Label("Easy Macros", _styles.Header);
-        if (GUILayout.Button("Wrap Object with new GameObject and Scale", _styles.Button))
+        GUILayout.Label("Easy Macros", Style.Header);
+        if (GUILayout.Button("Wrap Object with new GameObject and Scale", Style.Button))
             if (CheckGoodSelection())
                 _guiEventAction = WrapObjectScale;
-        if (GUILayout.Button("Wrap Object with new GameObject", _styles.Button))
+        if (GUILayout.Button("Wrap Object with new GameObject", Style.Button))
             if (CheckGoodSelection())
                 _guiEventAction = WrapObject;
-        if (GUILayout.Button("Create Prefab from Selected Objects", _styles.Button))
+        if (GUILayout.Button("Create Prefab from Selected Objects", Style.Button))
             if (CheckGoodSelection())
                 _guiEventAction = CreatePrefab;
         GUILayout.EndVertical();
@@ -50,10 +50,10 @@ public partial class HoohTools
         LightScaleSize = EditorGUILayout.FloatField("Light Scale Size: ", LightScaleSize);
 
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Scale Lights and Probes", _styles.Button))
+        if (GUILayout.Button("Scale Lights and Probes", Style.Button))
             if (CheckGoodSelection())
                 _guiEventAction = ScaleLightsAndProbes;
-        if (GUILayout.Button("Reset Lightmap Scale", _styles.Button))
+        if (GUILayout.Button("Reset Lightmap Scale", Style.Button))
             _guiEventAction = () =>
             {
                 var meshes = Resources.FindObjectsOfTypeAll<MeshRenderer>();
@@ -71,7 +71,7 @@ public partial class HoohTools
         GUILayout.Space(5);
         GUILayout.BeginHorizontal("box");
         targetObject = (GameObject) EditorGUILayout.ObjectField("Target Object", targetObject, typeof(GameObject), true);
-        if (GUILayout.Button("Move Selected to Clutter", _styles.Button))
+        if (GUILayout.Button("Move Selected to Clutter", Style.Button))
             _guiEventAction = () =>
             {
                 if (!CheckGoodSelection()) return;
@@ -88,18 +88,18 @@ public partial class HoohTools
 
         GUILayout.Space(5);
         GUILayout.BeginVertical("box");
-        GUILayout.Label("Multi-Rename", _styles.Header);
+        GUILayout.Label("Multi-Rename", Style.Header);
         PrepostString = EditorGUILayout.TextField("Pre/Postfix Text", PrepostString);
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Add to Front", _styles.Button) && CheckGoodSelection())
+        if (GUILayout.Button("Add to Front", Style.Button) && CheckGoodSelection())
             _guiEventAction = () => { UnityMacros.AddPrefixOnName(PrepostString); };
-        if (GUILayout.Button("Add to End", _styles.Button) && CheckGoodSelection())
+        if (GUILayout.Button("Add to End", Style.Button) && CheckGoodSelection())
             _guiEventAction = () => { UnityMacros.AddPostfixOnName(PrepostString); };
-        if (GUILayout.Button("Remove", _styles.Button) && CheckGoodSelection())
+        if (GUILayout.Button("Remove", Style.Button) && CheckGoodSelection())
             _guiEventAction = () => { UnityMacros.ReplaceTextOfName(PrepostString, ""); };
-        if (GUILayout.Button("SetTo", _styles.Button) && CheckGoodSelection())
+        if (GUILayout.Button("SetTo", Style.Button) && CheckGoodSelection())
             _guiEventAction = () => { UnityMacros.SetName(PrepostString); };
-        if (GUILayout.Button("Sequence", _styles.Button) && CheckGoodSelection())
+        if (GUILayout.Button("Sequence", Style.Button) && CheckGoodSelection())
             _guiEventAction = () => { UnityMacros.SetNameSequence(PrepostString); };
         GUILayout.EndHorizontal();
         GUILayout.EndVertical();
@@ -108,7 +108,7 @@ public partial class HoohTools
         GUILayout.Space(5);
         GUILayout.BeginVertical("box");
 
-        if (GUILayout.Button("Auto-Generate Materials", _styles.Button))
+        if (GUILayout.Button("Auto-Generate Materials", Style.Button))
             _guiEventAction = () =>
             {
                 var targetPath = PathUtils.GetProjectPath();

@@ -23,7 +23,7 @@ namespace ModPackerModule.Structure.ListData
 
         public static bool IsMidCategory(Type type)
         {
-            return type == typeof(ListIdMidCategory) || type.IsSubclassOf(typeof(ListIdMidCategory));
+            return type == typeof(ListIdMidCategory) || type == typeof(ListIdMidAnimeCategory);
         }
     }
 }

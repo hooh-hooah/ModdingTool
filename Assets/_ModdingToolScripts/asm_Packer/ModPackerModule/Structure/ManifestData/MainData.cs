@@ -32,12 +32,12 @@ namespace ModPackerModule.Structure.Classes.ManifestData
 
         public void ParseData(in SideloaderMod.SideloaderMod modObject, in XElement modDocument)
         {
-            Guid = modDocument.Element("guid")?.Value;
-            Name = modDocument.Element("name")?.Value;
-            Version = modDocument.Elem("version", "1.0.0");
-            Author = modDocument.Elem("author", "Anonymous");
-            Description = modDocument.Elem("description", "No Description Provided - Packed with Modding tool.");
-            UniqueId = modDocument.Elem("mod-id", "");
+            Guid = modDocument.Element("guid")?.Value.Trim();
+            Name = modDocument.Element("name")?.Value.Trim();
+            Version = modDocument.Elem("version", "1.0.0").Trim();
+            Author = modDocument.Elem("author", "Anonymous").Trim();
+            Description = modDocument.Elem("description", "No Description Provided - Packed with Modding tool.").Trim();
+            UniqueId = modDocument.Elem("mod-id", "").Trim();
         }
 
         public void SaveData(ref XDocument document)

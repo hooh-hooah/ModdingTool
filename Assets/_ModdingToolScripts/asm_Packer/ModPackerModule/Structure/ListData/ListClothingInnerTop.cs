@@ -11,8 +11,18 @@ namespace ModPackerModule.Structure.ListData
         {
             Coordinate = element.Attr("coordinate", 0);
             OverBraType = element.Attr("overbra-type", 0);
-            OverBodyMaskTexture = element.Attr("overbra-tex", "0");
-            OverBodyMaskBundle = element.Attr("overbra-bundle", GetBundleFromName(OverBodyMaskBundle) ?? "0");
+            OverBodyMaskTexture = element.FindAttr(new[]
+            {
+                "bodymask-tex",
+                "overbodymask-tex",
+                "overbra-tex",
+            }, "0");
+            OverBodyMaskBundle = element.FindAttr(new[]
+            {
+                "bodymask-bundle",
+                "overbodymask-bundle",
+                "overbra-bundle",
+            }, GetBundleFromName(OverBodyMaskBundle) ?? "0");
         }
 
         public int Coordinate { get; }

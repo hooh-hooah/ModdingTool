@@ -1,5 +1,9 @@
 ﻿#if UNITY_EDITOR
+using System;
+using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
+using fastJSON;
 using MyBox;
 using UnityEditor;
 using UnityEngine;
@@ -10,7 +14,7 @@ namespace DebugComponents
     public class ClothingBindHelper : MonoBehaviour, IPreview
     {
         public GameObject[] meshesToTest;
-        [HideInInspector] public GameObject boneRoot;
+        public GameObject boneRoot;
         private GameObject meshTarget;
 
         private void Start()
@@ -46,6 +50,54 @@ namespace DebugComponents
 
                 renderer.bones = boneNames.Values.ToArray();
                 renderer.sharedMesh.RecalculateBounds();
+            }
+        }
+
+        public TextAsset bodyPreset;
+
+        [ButtonMethod]
+        private void ChangeBodyType()
+        {
+            if (bodyPreset != null)
+            {
+                // bruh
+                var dynamic = JSON.ToDynamic(bodyPreset.text);
+                var presets = new Dictionary<string, TransformPreset>();
+
+                foreach (var key in dynamic.data.GetDynamicMemberNames())
+                {
+                    var transformData = dynamic.data[key];
+                    presets.Add(key, new TransformPreset
+                    {
+                        position = new Vector3(
+                            Convert.ToSingle(transformData.position[0]),
+                            Convert.ToSingle(transformData.position[1]),
+                            Convert.ToSingle(transformData.position[2])
+                        ),
+                        rotation = new Vector3(
+                            Convert.ToSingle(transformData.rotation[0]),
+                            Convert.ToSingle(transformData.rotation[1]),
+                            Convert.ToSingle(transformData.rotation[2])
+                        ),
+                        scale = new Vector3(
+                            Convert.ToSingle(transformData.scale[0]),
+                            Convert.ToSingle(transformData.scale[1]),
+                            Convert.ToSingle(transformData.scale[2])
+                        )
+                    });
+                }
+
+                var preset = new AIHSBodyPreset
+                {
+                    name = Convert.ToString(dynamic.name),
+                    data = presets,
+                };
+
+                AIHSPresetLoader.LoadObject(boneRoot, preset);
+            }
+            else
+            {
+                AIHSPresetLoader.LoadObject(boneRoot, 0);
             }
         }
     }

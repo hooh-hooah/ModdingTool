@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text.RegularExpressions;
 using AIChara;
 using MyBox;
 using Studio;
@@ -7,19 +8,6 @@ using UnityEngine;
 
 public class AIObjectHelper
 {
-    public enum Command
-    {
-        Hair,
-        Clothing,
-        Accessory,
-        AccessoryWithTransform,
-        AccessorySkinned,
-        StudioItem,
-        HS2Map = 10,
-        AIMap = 20,
-        RemoveAll = 999
-    }
-
     public static void InitializeHair(GameObject selectedObject, int preset = 0)
     {
         var hairObject = selectedObject;
@@ -38,6 +26,11 @@ public class AIObjectHelper
         if (studioItemObject == null) return;
         var itemComponent = studioItemObject.GetOrAddComponent<ItemComponent>();
         itemComponent.InitializeItem();
+    }
+
+    public static void RemoveAllModRelatedObjects(Transform transform)
+    {
+        transform.gameObject.GetComponents<Component>().Where(x => x is CmpBase).ToList().ForEach(Object.DestroyImmediate);
     }
 
     public static void InitializeAccessory(GameObject selectedObject, bool initializeTransform = false)
@@ -77,39 +70,84 @@ public class AIObjectHelper
         accComponent.ReassignAllObjects();
     }
 
-    public static void InitializeSkinnedAccessory(GameObject selectedObject)
+    private static bool IsRootBone(Transform transform)
+    {
+        for (var i = transform.childCount - 1; i >= 0; i--)
+            if (transform.GetChild(i).name == "cf_N_height")
+                return true;
+
+        return false;
+    }
+
+    public static bool InitializeSkinnedAccessory(GameObject selectedObject)
     {
         var gameObject = selectedObject;
         gameObject.layer = 10;
-        if (gameObject == null) return;
+        if (gameObject == null) return false;
 
         var accComponent = gameObject.GetOrAddComponent<CmpAccessory>();
         var skinnedComponent = gameObject.GetOrAddComponent<SkinnedAccessory>();
         foreach (var animator in gameObject.GetComponentsInChildren<Animator>()) Object.DestroyImmediate(animator);
 
         skinnedComponent.meshRenderers = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
-        skinnedComponent.skeleton = gameObject.GetComponentsInChildren<Transform>().FirstOrDefault(x => x.name.Equals("cf_J_Root"))?.gameObject;
+        skinnedComponent.skeleton = gameObject.GetComponentsInChildren<Transform>().FirstOrDefault(IsRootBone)?.gameObject;
 
         if (skinnedComponent.skeleton == null)
-            EditorUtility.DisplayDialog("Warning", "This model does not seems a model for skinned accessory.\nPlease check the model has basic character armature rig.", "OK");
-        else if (skinnedComponent.meshRenderers.Count <= 0)
-            EditorUtility.DisplayDialog("Warning", "This model does not seems have any SkinnedMeshRenderer.\nPlease check if the model is rigged/imported properly.", "OK");
+            return EditorUtility.DisplayDialog("Warning", "This model does not seems a model for skinned accessory.\nPlease check the model has basic character armature rig.",
+                "OK");
 
+        if (skinnedComponent.meshRenderers.Count <= 0)
+            return EditorUtility.DisplayDialog("Warning", "This model does not seems have any SkinnedMeshRenderer.\nPlease check if the model is rigged/imported properly.", "OK");
+
+        skinnedComponent.skeleton.name = "cf_J_Root";
         accComponent.ReassignAllObjects();
+
+        return true;
     }
 
-    public static void InitializeClothes(GameObject selectedObject)
+    public static bool InitializeClothes(GameObject selectedObject)
     {
-        var clotheObject = selectedObject;
-        clotheObject.layer = 10;
+        var target = selectedObject;
+        target.layer = 10;
 
-        if (clotheObject == null) return;
-        var clotheComponent = clotheObject.GetOrAddComponent<CmpClothes>();
+        if (target == null) return false;
+
+        if (!target.GetComponentsInChildren<SkinnedMeshRenderer>().Any())
+            return EditorUtility.DisplayDialog("Warning",
+                "It seems like this model does not have any skinned mesh renderer.\nPlease check if you imported the model with correct option.", "Hnng");
+
+        if (target.GetComponentsInChildren<MeshRenderer>().Any())
+            return EditorUtility.DisplayDialog("Warning",
+                "You can't use MeshRenderer Component for the clothing.\nMake sure the model is properly rigged in 3D Modeling Software.", "Okay...?");
+
+
+        Transform rootBoneCandidate = null;
+        for (var i = target.transform.childCount - 1; i >= 0; i--)
+        {
+            var child = target.transform.GetChild(i);
+            if (!IsRootBone(child)) continue;
+            rootBoneCandidate = child;
+            break;
+        }
+
+        if (rootBoneCandidate == null)
+            return EditorUtility.DisplayDialog("Warning",
+                $"It seems like the model does not have any kind of root bone candidates.", "Yas");
+
+        rootBoneCandidate.name = "cf_J_Root";
+        var clotheComponent = target.GetOrAddComponent<CmpClothes>();
         clotheComponent.ReassignAllObjects();
+
+        return true;
     }
 
     public static void InitializeFace(GameObject selectedObject)
     {
     }
 
+    public static void InitializeFurniture(GameObject transformGameObject)
+    {
+        var housingFurniture = transformGameObject.GetOrAddComponent<Housing.ItemComponent>();
+        housingFurniture.InitializeItem();
+    }
 }

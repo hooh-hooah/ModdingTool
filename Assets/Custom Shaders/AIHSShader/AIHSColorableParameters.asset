@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78b2425a2284af743826c689403a4924, type: 3}
+  m_Name: AIHSColorableParameters
+  m_EditorClassIdentifier: 
+  m_functionInfo: "// Made with Amplify Shader Editor\n// Available at the Unity Asset
+    Store - http://u3d.as/y3X \n/*ASEBEGIN\nVersion=17400\n2660;3744;1749;896;2313.711;2083.802;2.982618;True;False\nNode;AmplifyShaderEditor.CommentaryNode;31;17.48352,-675.949;Inherit;False;668.4438;438.1207;Parameters
+    for RendAlpha Renders (Rend Alpha renderers will be active if the Color4's alpha
+    is above 0);6;8;23;30;17;11;5;Rend Alpha Parameters;1,1,1,1;0;0\nNode;AmplifyShaderEditor.CommentaryNode;21;15.79716,-1158.396;Inherit;False;622.9465;400.3414;Adjustable
+    Glossiness;6;6;4;7;19;0;18;Glossiness Group;1,1,1,1;0;0\nNode;AmplifyShaderEditor.CommentaryNode;20;-777.0692,-1182.652;Inherit;False;686.7522;843.8235;Adjustable
+    Colors;6;1;2;3;16;15;10;Color Groups;1,1,1,1;0;0\nNode;AmplifyShaderEditor.CommentaryNode;22;751.7895,-1150.817;Inherit;False;622.9465;400.3414;Adjustable
+    Metallic;6;29;28;27;26;25;24;Metallic Group;1,1,1,1;0;0\nNode;AmplifyShaderEditor.ColorNode;1;-723.0416,-1132.652;Inherit;False;Property;_Color;Color
+    1;1;0;Create;False;0;0;True;0;1,1,1,1;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4\nNode;AmplifyShaderEditor.RangedFloatNode;7;70.17673,-947.0548;Inherit;False;Property;_Glossiness3;Glossiness
+    3;9;0;Create;False;0;0;True;0;0;0;0;1;0;1;FLOAT;0\nNode;AmplifyShaderEditor.RangedFloatNode;6;71.17673,-1026.055;Inherit;False;Property;_Glossiness2;Glossiness
+    2;8;0;Create;False;0;0;True;0;0;0;0;1;0;1;FLOAT;0\nNode;AmplifyShaderEditor.RangedFloatNode;4;65.79716,-1105.013;Inherit;False;Property;_Glossiness;Glossiness;7;0;Create;False;0;0;True;0;0;0;0;1;0;1;FLOAT;0\nNode;AmplifyShaderEditor.RangedFloatNode;26;798.89,-1016.82;Inherit;False;Property;_Metallic2;Metallic
+    2;4;0;Create;False;0;0;True;0;0;0;0;1;0;1;FLOAT;0\nNode;AmplifyShaderEditor.RangedFloatNode;25;801.7895,-1097.433;Inherit;False;Property;_Metallic;Metallic
+    1;5;0;Create;False;0;0;True;0;0;0;0;1;0;1;FLOAT;0\nNode;AmplifyShaderEditor.ColorNode;3;-727.0692,-743.7386;Inherit;False;Property;_Color3;Color
+    3;3;0;Create;False;0;0;True;0;1,1,1,1;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4\nNode;AmplifyShaderEditor.ColorNode;5;67.48352,-444.8284;Inherit;False;Property;_Color4;Color
+    4  (for Rend Alpha Renderers);0;0;Create;False;0;0;True;0;0,0,0,0;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4\nNode;AmplifyShaderEditor.RangedFloatNode;8;69.05925,-625.949;Inherit;False;Property;_Glossiness4;Glossiness
+    4 (for Rend Alpha Renderers);11;0;Create;False;0;0;True;0;0;0;0;1;0;1;FLOAT;0\nNode;AmplifyShaderEditor.ColorNode;2;-724.4989,-938.4781;Inherit;False;Property;_Color2;Color
+    2;2;0;Create;False;0;0;True;0;1,1,1,1;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4\nNode;AmplifyShaderEditor.RangedFloatNode;23;67.7586,-534.6682;Inherit;False;Property;_Metallic4;Metallic
+    4  (for Rend Alpha Renderers);10;0;Create;False;0;0;True;0;0;0;0;1;0;1;FLOAT;0\nNode;AmplifyShaderEditor.RangedFloatNode;24;796.8652,-935.4836;Inherit;False;Property;_Metallic3;Metallic
+    3;6;0;Create;False;0;0;True;0;0;0;0;1;0;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionOutput;11;413.0924,-433.5494;Inherit;False;False;-1;Rend
+    Alpha Color;9;False;1;0;COLOR;0,0,0,0;False;1;COLOR;0\nNode;AmplifyShaderEditor.FunctionOutput;19;435.7436,-1108.396;Inherit;False;False;-1;Glossiness
+    1;3;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionOutput;17;411.9274,-608.8713;Inherit;False;False;-1;Rend
+    Alpha Glossiness;10;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionOutput;10;-253.317,-785.9915;Inherit;False;False;-1;Color
+    3;2;False;1;0;COLOR;0,0,0,0;False;1;COLOR;0\nNode;AmplifyShaderEditor.FunctionOutput;27;1169.145,-1022.712;Inherit;False;False;-1;Metallic
+    2;7;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionOutput;28;1171.736,-1100.816;Inherit;False;False;-1;Metallic
+    1;6;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionOutput;18;436.7436,-954.3959;Inherit;False;False;-1;Glossiness
+    3;5;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionOutput;29;1172.736,-946.8168;Inherit;False;False;-1;Metallic
+    3;8;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionOutput;15;-258.317,-882.9914;Inherit;False;False;-1;Color
+    2;1;False;1;0;COLOR;0,0,0,0;False;1;COLOR;0\nNode;AmplifyShaderEditor.FunctionOutput;0;433.1528,-1030.291;Inherit;False;True;-1;Glossiness
+    2;4;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionOutput;30;415.0453,-524.2653;Inherit;False;False;-1;Rend
+    Alpha Metallic;11;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionOutput;16;-253.317,-966.9914;Inherit;False;False;-1;Color
+    1;0;False;1;0;COLOR;0,0,0,0;False;1;COLOR;0\nWireConnection;11;0;5;0\nWireConnection;19;0;4;0\nWireConnection;17;0;8;0\nWireConnection;10;0;3;0\nWireConnection;27;0;26;0\nWireConnection;28;0;25;0\nWireConnection;18;0;7;0\nWireConnection;29;0;24;0\nWireConnection;15;0;2;0\nWireConnection;0;0;6;0\nWireConnection;30;0;23;0\nWireConnection;16;0;1;0\nASEEND*/\n//CHKSM=9E584E98FBC82E5150A3A0F00C7B41D74784C214"
+  m_functionName: 
+  m_description: 
+  m_additionalIncludes:
+    m_additionalIncludes: []
+    m_outsideIncludes: []
+  m_additionalPragmas:
+    m_additionalPragmas: []
+    m_outsidePragmas: []
+  m_additionalDirectives:
+    m_validData: 0
+    m_isDirty: 0
+    m_moduleName: ' Additional Directives'
+    m_independentModule: 1
+    m_additionalDirectives: []
+    m_shaderFunctionDirectives: []
+    m_nativeDirectives: []
+    m_nativeDirectivesIndex: -1
+    m_nativeDirectivesFoldout: 0
+    m_directivesSaveItems: []
+  m_nodeCategory: 3
+  m_customNodeCategory: 
+  m_previewPosition: 0
+  m_hidden: 0

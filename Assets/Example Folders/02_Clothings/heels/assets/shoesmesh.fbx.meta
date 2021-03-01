@@ -34,6 +34,7 @@ ModelImporter:
     100056: cf_N_height
     100058: mesh_o
     100060: //RootNode
+    100062: heels_mesh
     400000: cf_J_Foot01_L
     400002: cf_J_Foot01_R
     400004: cf_J_Foot02_L
@@ -65,10 +66,17 @@ ModelImporter:
     400056: cf_N_height
     400058: mesh_o
     400060: //RootNode
+    400062: heels_mesh
     2100000: ggmod1.002
+    2100002: ggmod1.003
+    2100004: HeelsMaterial
+    2300000: //RootNode
+    3300000: //RootNode
     4300000: mesh_o
+    4300002: heels_mesh
     9500000: //RootNode
     13700000: mesh_o
+    13700002: heels_mesh
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -108,6 +116,7 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -132,6 +141,9 @@ ModelImporter:
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
   importAnimation: 1
   copyAvatar: 0
   humanDescription:

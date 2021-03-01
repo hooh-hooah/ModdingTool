@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Common;
 using MyBox;
 using UnityEditor;
+using UnityEditor.Graphs;
 using UnityEngine;
 
 public partial class HoohTools : EditorWindow
@@ -26,7 +27,7 @@ public partial class HoohTools : EditorWindow
 
     protected GUIEventAction _guiEventAction;
 
-    private Styles _styles;
+    private static HoohWindowStyles Style => HoohWindowStyles.Instance;
     private GUIStyle bigButton;
     private bool foldoutBundler = true;
 
@@ -43,11 +44,11 @@ public partial class HoohTools : EditorWindow
     private float sliderValue;
     private GUIStyle smallButton;
     private GUIStyle titleStyle;
+    public MenuMode TabSelector;
 
     public void OnEnable()
     {
         _guiEventAction = null;
-        if (_styles == null) _styles = new Styles();
         if (_icons.IsNullOrEmpty())
             _icons = new Dictionary<string, Texture2D>
             {
@@ -94,28 +95,50 @@ public partial class HoohTools : EditorWindow
         LightScaleSize = 9f;
     }
 
+    public enum MenuMode
+    {
+        UnityMacro,
+        ModSetup,
+        ModIntegration,
+    }
+    
     private void OnGUI()
     {
-        _styles.Init();
         var serializedObject = new SerializedObject(this);
 
         EditorGUI.BeginChangeCheck();
         EditorGUILayout.BeginVertical();
         // Draw Top Help/Tutorial Boxes
         GUILayout.BeginHorizontal("box");
+       
+			
         if (GUILayout.Button("Check Updates")) Application.OpenURL("https://github.com/hooh-hooah/ModdingTool/tree/release/");
         if (GUILayout.Button("Tutorials")) Application.OpenURL("https://hooh-hooah.github.io/");
         GUILayout.EndHorizontal();
-        // Draw Separator Lines
-        DrawUILine(new Color(0, 0, 0));
-        // Draw Scroll Positions
+        
+        TabSelector = (MenuMode) GUILayout.Toolbar ((int) TabSelector, new[] {"Useful Macros", "Mod Setup", "Mod Integration"}, Style.ButtonTab);
+
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(0), GUILayout.Height(0));
         {
-            DrawThumbnailUtility(serializedObject);
-            DrawLightProbeSetting(serializedObject);
-            DrawUnityUtility();
-            DrawXMLHelper(serializedObject);
-            DrawModBuilder(serializedObject);
+            switch (TabSelector)
+            {
+                case MenuMode.ModSetup:
+                    DrawModSetup(serializedObject);
+                    DrawXMLGenerator(serializedObject);
+                    break;
+                case MenuMode.ModIntegration:
+                    DrawThumbnailUtility(serializedObject);
+                    DrawXMLHelper(serializedObject);
+                    DrawModBuilder(serializedObject);
+                    break;
+                case MenuMode.UnityMacro:
+                    DrawLightProbeSetting(serializedObject);
+                    DrawUnityUtility(serializedObject);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        
         }
         EditorGUILayout.EndScrollView();
         // End Scroll Positions

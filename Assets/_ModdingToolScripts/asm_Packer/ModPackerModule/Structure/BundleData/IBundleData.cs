@@ -7,6 +7,6 @@ namespace ModPackerModule.Structure.BundleData
     {
         List<AssetBundleBuild> Bundles { get; }
         string AssetPath { get; set; }
-        (bool, string) IsValid();
+        bool IsValid(out string reason);
     }
 }

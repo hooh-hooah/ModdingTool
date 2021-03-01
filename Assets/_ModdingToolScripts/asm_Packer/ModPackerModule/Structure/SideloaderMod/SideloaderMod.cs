@@ -50,7 +50,7 @@ namespace ModPackerModule.Structure.SideloaderMod
         private const string BuildTargetName = "build";
         private readonly Dictionary<string, int> _autoPathIndex = new Dictionary<string, int>();
         private readonly List<BundleBase> _bundleTargets;
-        private readonly Dictionary<string, GameInfo> _gameItems;
+        public readonly Dictionary<string, GameInfo> GameItems;
         private readonly XDocument _inputDocumentObject;
         private readonly List<IManifestData> _manifestData;
         public readonly string AssetDirectory;
@@ -93,11 +93,12 @@ namespace ModPackerModule.Structure.SideloaderMod
                 MainData,
                 DependencyData,
                 new HeelsData(),
-                new MaterialEditorData()
+                new MaterialEditorData(),
+                new AIMapData()
             };
 
             _bundleTargets = new List<BundleBase>();
-            _gameItems = new Dictionary<string, GameInfo>();
+            GameItems = new Dictionary<string, GameInfo>();
             Assets = new AssetInfo();
 
             ParseDocument(_inputDocumentObject.Root);
@@ -162,6 +163,7 @@ namespace ModPackerModule.Structure.SideloaderMod
             foreach (var target in _bundleTargets.Where(x => x.AutoPath)) target.ResolveAutoPath();
             ParseListData(rootNode?.Element(BuildTargetName)); // parse list data
             ParseManifest(rootNode);
+            ValidateBundleData();
             ValidateListData();
             if (_outputFileName.IsNullOrEmpty())
                 _outputFileName = !MainData.UniqueId.IsNullOrEmpty() ? MainData.UniqueId : MainData.Guid.SanitizeNonCharacters();
@@ -219,7 +221,7 @@ namespace ModPackerModule.Structure.SideloaderMod
         {
             var target = element.Attr("target", AssetInfo.BundleTargetDefault);
             Assets.RememberTarget(target);
-            var dictItemList = _gameItems.ContainsKey(target) ? _gameItems[target] : new GameInfo(target);
+            var dictItemList = GameItems.ContainsKey(target) ? GameItems[target] : new GameInfo(target);
 
             foreach (var item in element.Elements("item"))
                 switch (type)
@@ -255,8 +257,10 @@ namespace ModPackerModule.Structure.SideloaderMod
                     case "hairext":
                         dictItemList.Insert(typeof(ListHair), new ListHair(this, item, type));
                         break;
-                    case "accnone":
                     case "acchead":
+                        dictItemList.Insert(typeof(ListAccessoryHead), new ListAccessoryHead(this, item, type));
+                        break;
+                    case "accnone":
                     case "accear":
                     case "accglasses":
                     case "accface":
@@ -333,7 +337,7 @@ namespace ModPackerModule.Structure.SideloaderMod
                         throw new Exception($"\"{type}\" is a not valid category.");
                 }
 
-            _gameItems[target] = dictItemList;
+            GameItems[target] = dictItemList;
         }
 
         private void ParseListData(in XElement document)

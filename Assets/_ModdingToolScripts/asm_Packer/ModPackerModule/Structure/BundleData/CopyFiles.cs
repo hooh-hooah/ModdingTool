@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Xml.Linq;
 using ModPackerModule.Utility;
+using MyBox;
 
 namespace ModPackerModule.Structure.BundleData
 {
@@ -17,6 +18,22 @@ namespace ModPackerModule.Structure.BundleData
 
         public string From { get; set; }
         public string Filter { get; set; }
+
+        public override bool IsValid(out string reason)
+        {
+            if (To.IsNullOrEmpty())
+            {
+                reason = "Destination cannot be empty. Please add 'to=\"DESTINATION\"' within the move or copy tag.";
+                return false;
+            }
+
+            if (To.IsBadPath())
+            {
+                reason = "Destination contains invalid character. Please remove any special characters that is not '/' or '_' from the path.";
+            }
+
+            return base.IsValid(out reason);
+        }
 
         public override void ResolveAutoPath()
         {

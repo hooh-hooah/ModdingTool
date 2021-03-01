@@ -41,6 +41,11 @@ namespace ModPackerModule.Utility
             }
         }
 
+        public static bool IsBadPath(this string path)
+        {
+            return badPathName.IsMatch(path);
+        }
+        
         public static string EscapePath(string path)
         {
             return badPathName.Replace(path, "");

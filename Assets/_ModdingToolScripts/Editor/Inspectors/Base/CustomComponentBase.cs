@@ -47,8 +47,8 @@ public abstract class CustomComponentBase : Editor
 
     protected virtual void UpdateInspector()
     {
-        serializedObject.ApplyModifiedProperties();
         Repaint();
+        serializedObject.ApplyModifiedProperties();
     }
 
     public override void OnInspectorGUI()
