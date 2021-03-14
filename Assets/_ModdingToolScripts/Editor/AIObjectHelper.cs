@@ -72,11 +72,7 @@ public class AIObjectHelper
 
     private static bool IsRootBone(Transform transform)
     {
-        for (var i = transform.childCount - 1; i >= 0; i--)
-            if (transform.GetChild(i).name == "cf_N_height")
-                return true;
-
-        return false;
+        return Enumerable.Range(0, transform.childCount).Any(x => transform.GetChild(x).name == "cf_N_height");
     }
 
     public static bool InitializeSkinnedAccessory(GameObject selectedObject)
@@ -90,7 +86,10 @@ public class AIObjectHelper
         foreach (var animator in gameObject.GetComponentsInChildren<Animator>()) Object.DestroyImmediate(animator);
 
         skinnedComponent.meshRenderers = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
-        skinnedComponent.skeleton = gameObject.GetComponentsInChildren<Transform>().FirstOrDefault(IsRootBone)?.gameObject;
+        var selectedTransform = selectedObject.transform;
+        skinnedComponent.skeleton = Enumerable.Range(0, selectedTransform.childCount)
+            .Select(x => selectedTransform.GetChild(x))
+            .FirstOrDefault(IsRootBone)?.gameObject;
 
         if (skinnedComponent.skeleton == null)
             return EditorUtility.DisplayDialog("Warning", "This model does not seems a model for skinned accessory.\nPlease check the model has basic character armature rig.",
