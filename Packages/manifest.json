@@ -1,11 +1,9 @@
 {
   "dependencies": {
-    "com.domybest.mybox": "https://github.com/Deadcows/MyBox.git",
     "com.unity.package-manager-ui": "2.0.12",
     "com.unity.postprocessing": "2.3.0",
     "com.unity.probuilder": "4.2.3",
     "com.unity.progrids": "3.0.3-preview.6",
-    "com.yasirkula.runtimepreviewgenerator": "https://github.com/yasirkula/UnityRuntimePreviewGenerator.git",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.assetbundle": "1.0.0",
@@ -28,8 +26,18 @@
     "com.unity.modules.unitywebrequestwww": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0"
+    "com.unity.modules.xr": "1.0.0",
+    "com.domybest.mybox": "https://github.com/Deadcows/MyBox.git",
+    "com.yasirkula.runtimepreviewgenerator": "https://github.com/yasirkula/UnityRuntimePreviewGenerator.git"
   },
   "lock": {
+    "com.domybest.mybox": {
+      "hash": "1c9857f6651fe55fad155bc38025cbea3fea196f",
+      "revision": "ca5ef18438730a4d1b9c34d573d85d0d2550ac2b"
+    },
+    "com.yasirkula.runtimepreviewgenerator": {
+      "hash": "338015b2a1a5679e6babc1d9b733225122197eca",
+      "revision": "HEAD"
+    }
   }
 }
