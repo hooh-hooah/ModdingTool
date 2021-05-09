@@ -77,7 +77,7 @@ _External/sb3/SB3UtilityGUI.exe.Config
 _External/sb3/SB3UtilityGUI.autosavescript.txt
 
 
-.idea
+.idea/
 *.log
 *.Config
 *.autosavescript.txt
