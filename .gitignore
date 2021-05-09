@@ -78,3 +78,12 @@ _External/sb3/SB3UtilityGUI.autosavescript.txt
 
 
 .idea
+*.log
+*.Config
+*.autosavescript.txt
+*.swp
+*.swo
+Assets/_HooahExtensions/UnityAsset/Aura2/*
+Assets/_HooahExtensions/UnityAsset/LightShaft/*
+Assets/_HooahExtensions/UnityAsset/Volumetric/*
+Assets/_HooahExtensions/UnityAsset/VolumetricEditor/*
