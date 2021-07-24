@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: cc4f227e516bfb243910682a8947da52
+ScriptedImporter:
+  fileIDToRecycleName:
+    4900000: source
+    11400000: asset
+  externalObjects: {}
+  userData: 'Last Version: 1.0.0
+
+    Last build time: 2021-07-22 PM 9:05:51 '
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 9bb79fba752d2dc418f29a2294cacf68, type: 3}
+  Message: 

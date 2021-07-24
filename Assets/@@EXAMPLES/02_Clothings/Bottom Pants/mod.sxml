@@ -1,0 +1,21 @@
+<packer>
+    <!-- This will be copied as manifest.xml -->
+    <guid>modbuilder.example.dpants</guid>
+    <name>MODBUILDER SUIT EXAMPLE</name>
+    <version>1.0.0</version>
+    <author>hooh</author>
+    <description>This is modbuilder example.</description>
+    <!-- This section will contain bundle information -->
+    <bundles>
+        <folder auto-path="prefabs" from="outfit00" />
+        <folder auto-path="thumbs" from="thumbs" />
+    </bundles>
+    <!-- This section will contain build information -->
+    <build>
+        <list type="fbottom">
+            <item kind="0" possess="1" name="[hooh] HS Dolphin Pants" en_us="0" state="0" mesh-manifest="abdata" mesh-bundle="example/dpants.unity3d" mesh-a="clothmesh" breakmask-tex="0" innermask-tb-bundle="chara/00/ft_shortsmask_00.unity3d" innermask-tb-tex="cf_shortsmask_short" innermask-b-bundle="chara/00/ft_shortsmask_00.unity3d" innermask-b-tex="cf_shortsmask_short" panstmask-bundle="0" panstmask-tex="0" bodymask-b-bundle="0" bodymask-b-tex="0" tex-main="diffuse" tex-mask="colormask" tex-main2="0" tex-mask2="0" tex-main3="0" tex-mask3="0" hide-bottom="0" thumb-bundle="example/dpants_thumb.unity3d" thumb="thumb_clothmesh" />
+            <item kind="0" possess="1" name="[hooh] HS Dolphin Pants Pocket" en_us="0" state="0" mesh-manifest="abdata" mesh-bundle="example/dpants.unity3d" mesh-a="clothmesh" breakmask-tex="0" innermask-tb-bundle="chara/00/ft_shortsmask_00.unity3d" innermask-tb-tex="cf_shortsmask_short" innermask-b-bundle="chara/00/ft_shortsmask_00.unity3d" innermask-b-tex="cf_shortsmask_short" panstmask-bundle="0" panstmask-tex="0" bodymask-b-bundle="0" bodymask-b-tex="0" tex-main="diffuse_pocket" tex-mask="colormask_pocket" tex-main2="0" tex-mask2="0" tex-main3="0" tex-mask3="0" hide-bottom="0" thumb-bundle="example/dpants_thumb.unity3d" thumb="thumb_clothmesh" />
+        </list>
+    </build>
+    <last-build time="2021-07-22 PM 10:46:58" version="1.0.0" />
+</packer>

@@ -1,0 +1,21 @@
+<packer>
+    <!-- This will be copied as manifest.xml -->
+    <guid>modbuilder.example.map</guid>
+    <name>MODBUILDER MAP EXAMPLE</name>
+    <version>1.0.0</version>
+    <author>hooh</author>
+    <description>This is modbuilder example.</description>
+    <!-- This section will contain bundle information -->
+    <bundles>
+        <!-- An assetbundle contains mesh objects. -->
+        <folder auto-path="maps" from="scene" />
+    </bundles>
+    <!-- This section will contain build information -->
+    <!-- Index is automatically generated. That means ORDER matters! -->
+    <build>
+        <list type="map">
+            <item name="@@EXAMPLE MAP" bundle="example/map.unity3d" scene="map" />
+        </list>
+    </build>
+    <last-build time="2021-07-22 PM 10:53:04" version="1.0.0" />
+</packer>

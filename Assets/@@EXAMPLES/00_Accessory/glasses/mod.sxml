@@ -1,0 +1,21 @@
+<packer>
+	<!-- This will be copied as manifest.xml -->
+	<guid>modbuilder.example.accessory</guid>
+	<name>MODBUILDER ACCESSORY EXAMPLE</name>
+	<version>1.0.0</version>
+	<author>hooh</author>
+	<description>This is modbuilder example.</description>
+
+	<!-- This section will contain bundle information -->
+	<bundles>
+		<folder auto-path="prefabs" from="prefab"/>
+		<folder auto-path="thumbs" from="thumbs"/>
+	</bundles>
+
+	<!-- This section will contain build information -->
+	<build>
+		<list type="accglasses">
+			<item name="@@EXAMPLE ACCESSORY" mesh-a="rayben" parent="N_Megane" thumb="thumb_image" />
+		</list>
+	</build>
+</packer>

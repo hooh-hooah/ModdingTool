@@ -1,0 +1,36 @@
+<packer>
+    <!-- This will be copied as manifest.xml -->
+    <guid>modbuilder.example.stditem</guid>
+    <name>MODBUILDER STUDIO ITEM EXAMPLE</name>
+    <version>1.0.0</version>
+    <author>hooh</author>
+    <description>This is house furniture pack.</description>
+    <!-- This section will contain bundle information -->
+    <bundles>
+        <folder auto-path="prefabs" from="prefabs" />
+        <move auto-path="studiothumb" from="thumbs" />
+    </bundles>
+    <!-- Index is automatically generated. That means ORDER matters! -->
+    <build>
+        <list type="bigcategory">
+            <item id="1001" name="@Example" />
+        </list>
+        <list type="midcategory">
+            <item id="10" name="@Example Items" />
+        </list>
+        <list type="studioitem">
+            <item big-category="1001" mid-category="10" name="@Example Item 00" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Large_A" />
+            <item big-category="1001" mid-category="10" name="@Example Item 01" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Large_B" />
+            <item big-category="1001" mid-category="10" name="@Example Item 02" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Large_C" />
+            <item big-category="1001" mid-category="10" name="@Example Item 03" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Photo_A" />
+            <item big-category="1001" mid-category="10" name="@Example Item 04" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Photo_B" />
+            <item big-category="1001" mid-category="10" name="@Example Item 05" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Photo_C" />
+            <item big-category="1001" mid-category="10" name="@Example Item 06" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Small_A" />
+            <item big-category="1001" mid-category="10" name="@Example Item 07" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Small_B" />
+            <item big-category="1001" mid-category="10" name="@Example Item 08" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Small_C" />
+            <item big-category="1001" mid-category="10" name="@Example Item 09" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Stand_A" />
+            <item big-category="1001" mid-category="10" name="@Example Item 10" manifest="furn" bundle="hooh/furniture.unity3d" object="Painting_Stand_B" />
+        </list>
+    </build>
+    <last-build time="2021-07-22 PM 10:55:18" version="1.0.0" />
+</packer>

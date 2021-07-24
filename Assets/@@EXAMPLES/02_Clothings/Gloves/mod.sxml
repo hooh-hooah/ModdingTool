@@ -1,0 +1,23 @@
+<packer type="fclothe">
+    <!-- This will be copied as manifest.xml -->
+    <guid>modbuilder.example.gloveandshoes</guid>
+    <name>MODBUILDER GLOVE AND SHOES EXAMPLE</name>
+    <version>1.0.0</version>
+    <author>hooh</author>
+    <description>This is modbuilder example.</description>
+    <!-- This section will contain bundle information -->
+    <bundles>
+        <folder auto-path="prefabs" from="prefabs" />
+        <folder auto-path="thumbs" from="thumbs" />
+    </bundles>
+    <!-- This section will contain build information -->
+    <build>
+        <list type="fgloves">
+            <item name="[hooh] Cat Gloves" mesh-a="gloves" tex-main="diffuse" tex-mask="colormask" thumb="thumb_gloves" />
+        </list>
+        <list type="fshoes">
+            <item name="[hooh] Cat Shoes" en_us="" mesh-a="shoes" tex-main="diffuse" tex-mask="colormask" thumb="thumb_shoes" />
+        </list>
+    </build>
+    <last-build time="2021-07-22 PM 10:47:32" version="1.0.0" />
+</packer>
