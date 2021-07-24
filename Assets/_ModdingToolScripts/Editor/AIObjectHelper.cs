@@ -82,24 +82,24 @@ public class AIObjectHelper
         if (gameObject == null) return false;
 
         var accComponent = gameObject.GetOrAddComponent<CmpAccessory>();
-        var skinnedComponent = gameObject.GetOrAddComponent<SkinnedAccessory>();
-        foreach (var animator in gameObject.GetComponentsInChildren<Animator>()) Object.DestroyImmediate(animator);
-
-        skinnedComponent.meshRenderers = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
-        var selectedTransform = selectedObject.transform;
-        skinnedComponent.skeleton = Enumerable.Range(0, selectedTransform.childCount)
-            .Select(x => selectedTransform.GetChild(x))
-            .FirstOrDefault(IsRootBone)?.gameObject;
-
-        if (skinnedComponent.skeleton == null)
-            return EditorUtility.DisplayDialog("Warning", "This model does not seems a model for skinned accessory.\nPlease check the model has basic character armature rig.",
-                "OK");
-
-        if (skinnedComponent.meshRenderers.Count <= 0)
-            return EditorUtility.DisplayDialog("Warning", "This model does not seems have any SkinnedMeshRenderer.\nPlease check if the model is rigged/imported properly.", "OK");
-
-        skinnedComponent.skeleton.name = "cf_J_Root";
-        accComponent.ReassignAllObjects();
+        // var skinnedComponent = gameObject.GetOrAddComponent<SkinnedAccessory>();
+        // foreach (var animator in gameObject.GetComponentsInChildren<Animator>()) Object.DestroyImmediate(animator);
+        //
+        // skinnedComponent.meshRenderers = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
+        // var selectedTransform = selectedObject.transform;
+        // skinnedComponent.skeleton = Enumerable.Range(0, selectedTransform.childCount)
+        //     .Select(x => selectedTransform.GetChild(x))
+        //     .FirstOrDefault(IsRootBone)?.gameObject;
+        //
+        // if (skinnedComponent.skeleton == null)
+        //     return EditorUtility.DisplayDialog("Warning", "This model does not seems a model for skinned accessory.\nPlease check the model has basic character armature rig.",
+        //         "OK");
+        //
+        // if (skinnedComponent.meshRenderers.Count <= 0)
+        //     return EditorUtility.DisplayDialog("Warning", "This model does not seems have any SkinnedMeshRenderer.\nPlease check if the model is rigged/imported properly.", "OK");
+        //
+        // skinnedComponent.skeleton.name = "cf_J_Root";
+        // accComponent.ReassignAllObjects();
 
         return true;
     }

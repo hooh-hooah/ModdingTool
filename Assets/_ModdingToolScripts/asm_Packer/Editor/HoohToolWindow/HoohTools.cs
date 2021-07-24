@@ -93,6 +93,7 @@ public partial class HoohTools : EditorWindow
         GameExportPath = EditorPrefs.GetString("hoohTool_exportPath");
         sliderValue = EditorPrefs.GetFloat("hoohTool_probeStrength");
         LightScaleSize = 9f;
+
     }
 
     public enum MenuMode

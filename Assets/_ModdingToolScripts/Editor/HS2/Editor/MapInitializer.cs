@@ -8,9 +8,9 @@ using Object = UnityEngine.Object;
 
 public static partial class MapInitializer
 {
-    private static readonly string[] ppStrings = {"default", "user", "color"};
+    private static readonly string[] PpStrings = {"default", "user", "color"};
 
-    private static readonly List<HPointType> hPointTypes = new List<HPointType>
+    private static readonly List<HPointType> HPointTypes = new List<HPointType>
     {
         new HPointType
         {
@@ -170,8 +170,14 @@ public static partial class MapInitializer
         return gameObject;
     }
 
+    [MenuItem("hooh Tools/Initialize AI Map", false)]
+    public static void InitializeAIMap()
+    {
+        
+    }
+
     [MenuItem("hooh Tools/Initialize HS2 Map", false)]
-    public static void WrapObject()
+    public static void InitializeHS2Map()
     {
         var allMapObjects = Object.FindObjectsOfType<Transform>();
 
@@ -197,7 +203,7 @@ public static partial class MapInitializer
 
         // HPoint Groups
         var hPointList = hPointGroup.AddComponent<HPointList>();
-        foreach (var hpointType in hPointTypes)
+        foreach (var hpointType in HPointTypes)
         {
             var hPointLocationGroup = new GameObject {name = $"hpoint_{hpointType.KeyName}_gp"};
             hPointLocationGroup.transform.parent = hPointGroup.transform;

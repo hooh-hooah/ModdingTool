@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEditor;
+using UnityEditor.Presets;
 using UnityEngine;
 
 struct BlenderExportMesh
@@ -34,18 +35,18 @@ struct BlenderExportInfo
 
 public class BlenderAssetProcessor : AssetPostprocessor
 {
-    // TODO: Make some sort of generic rule to process 
+    // TODO: Make some sort of generic rule to process
+
     private void OnPreprocessModel()
     {
-        /*
-         * Rules
-         */
         var fileName = Path.GetFileNameWithoutExtension(assetPath).ToLower();
+        var extName = Path.GetExtension(assetPath);
         var folderName = Path.GetDirectoryName(assetPath);
 
         // TODO: will be used for automatic prefab/mod construction from the scratch
-        // var exportDataPath = Path.Combine(folderName ?? string.Empty, fileName + ".json");
+        var exportDataPath = Path.Combine(folderName ?? string.Empty, fileName + ".json");
 
+        if (!File.Exists(exportDataPath)) return;
         if (!(assetImporter is ModelImporter modelImporter)) return;
         modelImporter.isReadable = true;
         modelImporter.importCameras = false;

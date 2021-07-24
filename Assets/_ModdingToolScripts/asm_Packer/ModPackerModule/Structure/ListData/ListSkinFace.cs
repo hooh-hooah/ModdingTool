@@ -9,7 +9,7 @@ namespace ModPackerModule.Structure.ListData
     {
         public ListSkinFace(in SideloaderMod.SideloaderMod sideloaderMod, in XElement element, string category) : base(in sideloaderMod, in element, category)
         {
-            HeadID = element.Attr("head-id", 0).Clamp(0, 1);
+            HeadID = element.Attr("head-id", 0).Clamp(0, 5);
             Texture = element.Attr("tex-a", "0");
             TextureOcclusion = element.Attr("tex-o", "0");
             TextureNormal = element.Attr("tex-n", "0");
@@ -39,7 +39,7 @@ namespace ModPackerModule.Structure.ListData
 
         public override string ToString()
         {
-            return ToCsvLine(Index, Kind, Possess, Name, EN_US, TextureBundle, Texture, ThumbBundle, ThumbAsset);
+            return ToCsvLine(Index, HeadID, Kind, Possess, Name, EN_US, Manifest, TextureBundle, Texture, TextureOcclusion, TextureNormal, ThumbBundle, ThumbAsset);
         }
 
         public new static string GetOutputHeader()

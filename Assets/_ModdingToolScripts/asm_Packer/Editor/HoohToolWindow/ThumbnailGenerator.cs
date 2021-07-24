@@ -106,6 +106,7 @@ public partial class HoohTools
                 ProcessTexture(image, outputPath, false);
                 EditorUtility.DisplayProgressBar("Generating", "Generating the image...", ++index / (float) total);
             }
+
             EditorApplication.Beep();
         }
         catch (Exception e)
@@ -124,22 +125,30 @@ public partial class HoohTools
     private void GenerateThumbnail()
     {
         var assetPath = Path.Combine(Directory.GetCurrentDirectory(), PathUtils.GetProjectPath());
-        var thumbnailTargetPath = Path.Combine(assetPath, "thumbs");
+        GenerateThumbnail(
+            thumbnailTargets.OfType<GameObject>().ToArray(),
+            Path.Combine(assetPath, "thumbs")
+        );
+    }
+
+    public void GenerateThumbnail(GameObject[] targets, string thumbnailTargetPath)
+    {
         if (!Directory.Exists(thumbnailTargetPath)) Directory.CreateDirectory(thumbnailTargetPath);
 
         SetupThumbnailGenerator();
         var index = 0;
-        var total = thumbnailTargets.Length;
+        var total = targets.Length;
 
         try
         {
             EditorUtility.DisplayProgressBar("Generating", "Generating the image...", 0);
-            foreach (var thumbnailTarget in thumbnailTargets.OfType<GameObject>())
+            foreach (var thumbnailTarget in targets)
             {
                 var outputPath = Path.Combine(thumbnailTargetPath, $"thumb_{thumbnailTarget.name.ToLower().Replace(" ", "_")}.png");
                 GenerateTexture(thumbnailTarget, outputPath, false);
                 EditorUtility.DisplayProgressBar("Generating", "Generating the image...", ++index / (float) total);
             }
+
             EditorApplication.Beep();
         }
         catch (Exception e)
@@ -178,6 +187,7 @@ public partial class HoohTools
                 GenerateTexture(thumbnailTarget, outputPath, true);
                 EditorUtility.DisplayProgressBar("Generating", "Generating and Compressing the image...", ++index / (float) total);
             }
+
             EditorApplication.Beep();
         }
         catch (Exception e)

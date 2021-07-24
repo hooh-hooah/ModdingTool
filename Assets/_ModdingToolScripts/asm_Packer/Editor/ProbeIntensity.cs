@@ -142,7 +142,7 @@ public class ProbeIntensity : Editor
         lightProbes.bakedProbes = probeData;
         LightmapSettings.lightProbes = lightProbes;
         EditorUtility.SetDirty(lightProbes);
-        SceneView.RepaintAll();
+        // SceneView.RepaintAll();
     }
 }
 #endif

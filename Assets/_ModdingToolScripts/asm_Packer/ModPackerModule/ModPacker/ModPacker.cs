@@ -20,6 +20,7 @@ namespace ModPackerModule
             EditorApplication.Beep();
             if (EditorUtility.DisplayDialog("Alert", "Build Successful!", "Open Folder", "Okay"))
                 PathUtils.OpenPath(HoohTools.GameExportPath);
+
             else EditorUtility.DisplayDialog("FAILED!", message, "Dismiss");
         }
 
@@ -29,7 +30,7 @@ namespace ModPackerModule
         }
 
 
-        public static void PackMod(TextAsset[] assets, string exportGamePath, bool isDryRun = false)
+        public static void PackMod(List<TextAsset> assets, string exportGamePath, bool isDryRun = false)
         {
             if (!Directory.Exists(exportGamePath))
             {
@@ -39,7 +40,7 @@ namespace ModPackerModule
             }
 
             var isFolderTarget = assets.IsNullOrEmpty();
-            assets = isFolderTarget ? GetProjectDirectoryTextAssets() : assets;
+            assets = isFolderTarget ? GetProjectDirectoryTextAssets().ToList() : assets;
             if (isFolderTarget)
                 Debug.LogWarning("Target is empty! Attempting to get all xml files from current project folder.");
 

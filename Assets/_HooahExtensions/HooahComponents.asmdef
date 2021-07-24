@@ -2,7 +2,8 @@
     "name": "HooahComponents",
     "references": [
         "Unity.Postprocessing.Runtime",
-        "MyBox"
+        "MyBox",
+        "UniRx"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],

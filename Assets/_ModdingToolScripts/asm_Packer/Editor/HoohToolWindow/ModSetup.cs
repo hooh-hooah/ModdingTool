@@ -25,7 +25,10 @@ public partial class HoohTools
     {
         WindowUtility.VerticalLayout(() =>
         {
-            WindowUtility.Button("Initialize HS2 Map", () => { });
+            WindowUtility.Button("Initialize HS2 Map", () =>
+            {
+                InitializeObject(Command.HS2Map);
+            });
             WindowUtility.Button("Setup Mod Folder", () => { });
         });
 
@@ -36,33 +39,66 @@ public partial class HoohTools
             {
                 WindowUtility.Dropdown("Common", new[]
                 {
-                    new WindowUtility.DropDownItem {Name = "Hair", On = false, Callback = InitializeObject, Parameter = Command.Hair},
-                    new WindowUtility.DropDownItem {Name = "Clothing", On = false, Callback = InitializeObject, Parameter = Command.Clothing},
-                    new WindowUtility.DropDownItem {Name = "Accessory/Initialize with Existing N_Move", On = false, Callback = InitializeObject, Parameter = Command.Accessory},
                     new WindowUtility.DropDownItem
-                        {Name = "Accessory/Initialize with New N_Move", On = false, Callback = InitializeObject, Parameter = Command.AccessoryWithTransform},
-                    new WindowUtility.DropDownItem {Name = "Accessory/Skinned Accessory", On = false, Callback = InitializeObject, Parameter = Command.AccessorySkinned},
-                    new WindowUtility.DropDownItem {Name = "Studio Item", On = false, Callback = InitializeObject, Parameter = Command.StudioItem},
-                    new WindowUtility.DropDownItem {Name = "Remove All Mod Related Components", On = false, Callback = InitializeObject, Parameter = Command.RemoveAll},
+                        {Name = "Hair", On = false, Callback = InitializeObject, Parameter = Command.Hair},
+                    new WindowUtility.DropDownItem
+                        {Name = "Clothing", On = false, Callback = InitializeObject, Parameter = Command.Clothing},
+                    new WindowUtility.DropDownItem
+                    {
+                        Name = "Accessory/Initialize with Existing N_Move", On = false, Callback = InitializeObject,
+                        Parameter = Command.Accessory
+                    },
+                    new WindowUtility.DropDownItem
+                    {
+                        Name = "Accessory/Initialize with New N_Move", On = false, Callback = InitializeObject,
+                        Parameter = Command.AccessoryWithTransform
+                    },
+                    new WindowUtility.DropDownItem
+                    {
+                        Name = "Accessory/Skinned Accessory", On = false, Callback = InitializeObject,
+                        Parameter = Command.AccessorySkinned
+                    },
+                    new WindowUtility.DropDownItem
+                        {Name = "Studio Item", On = false, Callback = InitializeObject, Parameter = Command.StudioItem},
+                    new WindowUtility.DropDownItem
+                    {
+                        Name = "Remove All Mod Related Components", On = false, Callback = InitializeObject,
+                        Parameter = Command.RemoveAll
+                    },
                 });
 
                 WindowUtility.Dropdown("HS2", new[]
                 {
-                    new WindowUtility.DropDownItem {Name = "Playable Map", On = false, Callback = InitializeObject, Parameter = Command.HS2Map},
+                    new WindowUtility.DropDownItem
+                        {Name = "Playable Map", On = false, Callback = InitializeObject, Parameter = Command.HS2Map},
                 });
 
                 WindowUtility.Dropdown("AI", new[]
                 {
-                    new WindowUtility.DropDownItem {Name = "Furniture Data", On = false, Callback = InitializeObject, Parameter = Command.AIFurniture},
-                    new WindowUtility.DropDownItem {Name = "Playable Map", On = false, Callback = InitializeObject, Parameter = Command.AIMap},
+                    new WindowUtility.DropDownItem
+                    {
+                        Name = "Furniture Data", On = false, Callback = InitializeObject,
+                        Parameter = Command.AIFurniture
+                    },
+                    new WindowUtility.DropDownItem
+                        {Name = "Playable Map", On = false, Callback = InitializeObject, Parameter = Command.AIMap},
                 });
             }, false);
         });
     }
 
-    public void CallHelper(string functionName, params object[] parameters)
+    public void CallHelper(string functionName, params object[] parameters) => CallFromEditor("AIObjectHelper", functionName, parameters);
+    public void MapHelper(string functionName, params object[] parameters) => CallFromEditor("MapInitializer", functionName, parameters);
+
+    public void CallFromEditor(string className, string functionName, params object[] parameters)
     {
-        Type.GetType("AIObjectHelper, Assembly-CSharp-Editor")?.GetMethod(functionName)?.Invoke(null, parameters);
+        var type = Type.GetType($"{className}, Assembly-CSharp-Editor");
+        if (ReferenceEquals(null, type))
+            throw new NullReferenceException("Failed to find MapInitializer in Unity Editor.");
+        var method = type.GetMethod(functionName);
+        if (ReferenceEquals(null, method))
+            throw new NullReferenceException($"Failed to find method {functionName}");
+        method.Invoke(null, parameters);
     }
 
     private void InitializeObject(object _command)
@@ -82,7 +118,7 @@ public partial class HoohTools
                     CallHelper("InitializeClothes", transform.gameObject);
                     break;
                 case Command.Accessory:
-                    CallHelper("InitializeAccessory", transform.gameObject);
+                    CallHelper("InitializeAccessory", transform.gameObject, false);
                     break;
                 case Command.AccessoryWithTransform:
                     CallHelper("InitializeAccessory", transform.gameObject, true);
@@ -100,8 +136,10 @@ public partial class HoohTools
                     CallHelper("RemoveAllModRelatedObjects", transform.gameObject);
                     break;
                 case Command.AIMap:
+                    MapHelper("InitializeAIMap");
                     break;
                 case Command.HS2Map:
+                    MapHelper("InitializeHS2Map");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
