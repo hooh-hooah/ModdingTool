@@ -36,5 +36,27 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
+  },
+  "lock": {
+    "com.domybest.mybox": {
+      "hash": "f8b702ef4468ebe168067d07d0cbde7247d5cebc",
+      "revision": "HEAD"
+    },
+    "com.hooah.moddingtool": {
+      "hash": "c28f36ac402aa8c8c5009bbcb5718dfc746a0db3",
+      "revision": "HEAD"
+    },
+    "com.hooah.moddingtool.examples": {
+      "hash": "909f9a13f30258fb5ce949ce6691b4f676de5d14",
+      "revision": "HEAD"
+    },
+    "com.neuecc.unirx": {
+      "hash": "ded49824f4b1e531d535392425802b2a2a6dcf31",
+      "revision": "HEAD"
+    },
+    "com.yasirkula.runtimepreviewgenerator": {
+      "hash": "7a3b44b07949f712010b680b9f2c499e5aa2ebc1",
+      "revision": "HEAD"
+    }
   }
 }
