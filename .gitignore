@@ -17,6 +17,12 @@
 /_[Tt]emporary/*
 /_[Bb]undleCache/abdata/*
 !/_[Bb]undleCache/abdata/README.md
+!/_[Bb]undleCache/abdata/.keep
+!/_[Bb]undleCache/.keep
+/[Aa]ssets/*
+!/[Aa]ssets/Modding Tool Runtime/*
+!/[Aa]ssets/csc*	
+!/[Aa]ssets/mcs*
 
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
