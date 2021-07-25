@@ -17,6 +17,12 @@
 /_[Tt]emporary/*
 /_[Bb]undleCache/abdata/*
 !/_[Bb]undleCache/abdata/README.md
+!/_[Bb]undleCache/abdata/.keep
+!/_[Bb]undleCache/.keep
+/[Aa]ssets/*
+!/[Aa]ssets/Modding Tool Runtime/*
+!/[Aa]ssets/csc*	
+!/[Aa]ssets/mcs*
 
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
@@ -33,6 +39,7 @@
 [Aa]ssets/Plugins/Editor/JetBrains*
 # Visual Studio cache directory
 .vs/
+.idea/
 *WIP_*
 # Gradle cache directory
 .gradle/
@@ -91,3 +98,5 @@ Assets/_HooahExtensions/UnityAsset/Aura2*
 Assets/_HooahExtensions/UnityAsset/LightShaft*
 Assets/_HooahExtensions/UnityAsset/Volumetric*
 Assets/_HooahExtensions/UnityAsset/VolumetricEditor*
+debug.log
+debug.log.meta

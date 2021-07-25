@@ -1,5 +1,78 @@
 # Changelog
 
+## 0.7.0
+
+### 2021-07-26
+
+![](https://github.com/IL-Modding-Tool/Public-Resources/blob/master/edgy-breaking-changes.gif?raw=true)
+
+#### :warning: ​**BREAKING CHANGES** :warning:
+
+* ***Overall structure of the Modding Tool has changed!***
+  
+  * How to migrate?
+  
+    **You can't. Please download new version as new project.**
+  
+  * Why?
+  
+    To prevent things like this happen again, I've separated most of the editor codes into multiple Unity Packages. So we can update the codes separately later without screwing up everything agian.
+  
+* ***Modding Tool .xml file's Extension has changed!***
+  ![](https://github.com/IL-Modding-Tool/Public-Resources/blob/master/xml-to-sxml.png?raw=true)
+  
+  * Why?
+  
+    **Because Unity won't let me to add Scripted Importer for .xml files:** so I had no choice.
+  
+  * How to migrate?
+  
+    Fortunately, the process is easy.
+    **Just change *.xml files to *.sxml file.**
+
+#### General Changes
+
+* Improved mod validation
+  * **Now mod validation check is automated.** Which means you don't have to constantly press check to see if the mod will be compile or not. Neat, Isn't it?
+* Changed `SideloaderMod` class as `SerializedObject`. This object will be automatically imported if the mod.xml file is marked as sxml. (Related with the breaking changes.)
+* Fixed most of the Package Issues by fixing everything as separate fork. Since the engine version is "Fixed", We really don't have to worry about the future supports. (Actually, I will take care of it mostly.)
+* Fixed some Issues related with List Generation
+  * Fixed that few male clothing list generation not working correctly.
+  * Fixed that few female clothing list generation not working correctly. 
+* Removed various unused code.
+* Now you can build the mod with the sxml files.
+* Countless of bug fixes.
+
+## 0.6.0
+
+### 2021-03-01
+
+- Fixed Issues with Mod Packers
+  - Added Mod XML Bundle Target Validation and Exception is now more helpful
+  - Trimming main manifest data elements to prevent dumb auto formatting
+  - Additional Fool-proof Asset Building Code
+  - Fixed HPointList is not saving changed data sometimes
+  - Fixed animation list generation issue
+- Added More Preview Features
+  - Heels Preview Components
+  - Added Body Preset Types & Fixed Test Animations
+- New Modding Features
+  - Skinned Accessory Support
+- New Assets
+  - Added RMA Shader Set (Unreal Format), Modularized AIHS Shader Parameters
+  - Reorganized base files, Added Male Clothing base
+- Basic In-Game Modding Supports
+  - Added helper method for the AI Furnitures and Optimized the FindAssist
+  - Added AI Main-game map support.
+  - Reworked Heels workflow - Added Heels Preview and New Heels Example file
+- Added Few Developer Features
+  - Added ADVCommandParser/Dumper
+  - Added Command Enum
+- Fixed ItemComponent Animation Initialization
+- Now Thumbnail Generator add overlay/underlay on existing image.
+
+If there is some issues, I'll try to fix those bugs within a month. Feel free to report if therer is any issues with the modding tools.
+
 ## 0.5.0
 
 ### 2020-09-27
